@@ -1,0 +1,62 @@
+table _Param_Story
+	lineageTag: bf0df91d-84d1-415b-90c2-cb51cde383c8
+
+	column ChapterID
+		dataType: int64
+		formatString: 0
+		lineageTag: d06e48e8-24e2-43e4-af3c-79f057e08e92
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ChapterID]
+
+	column ChapterName
+		dataType: string
+		lineageTag: c810227f-f0f6-41ed-8546-621a3c5deba6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ChapterName]
+		sortByColumn: ChapterID
+
+	column Timeframe
+		dataType: string
+		lineageTag: e610faba-183f-4bd2-ab97-19c968d1df1c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Timeframe]
+
+	column Headline
+		dataType: string
+		lineageTag: 8d258c54-b1bb-43bd-b8ab-691bb39dc014
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Headline]
+
+	column Commentary
+		dataType: string
+		lineageTag: d1b35eed-6053-4287-adeb-da2063ab2080
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Commentary]
+
+	column StartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ec861149-beb6-4f5b-bee6-031cb1a877ce
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [StartDate]
+
+	column EndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: faa9e782-6db4-4927-903d-b475c5935d9b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [EndDate]
+
+	partition _Param_Story = calculated
+		mode: import
+		source = DATATABLE("ChapterID", INTEGER, "ChapterName", STRING, "Timeframe", STRING, "Headline", STRING, "Commentary", STRING, "StartDate", DATETIME, "EndDate", DATETIME, {{0, "All 3 Years", "Mar 2012 – Mar 2015", "3-Year Historical Growth Journey (Mar 2012 – Mar 2015)", "Scaled from a single-product bootstrap (3.5% CVR) into an omnichannel brand with 40K+ orders, 8.44% peak CVR, and $1.85M+ net revenue.", dt"2012-03-19", dt"2015-03-19"}, {1, "Ch1 Search Launch", "Mar 2012 – Aug 2012", "Bootstrapping on Google Paid Search (Mar 2012 – Aug 2012)", "Single product (Mr. Fuzzy), high desktop dependency, baseline conversion ~3.5%.", dt"2012-03-19", dt"2012-08-31"}, {2, "Ch2 Billing Breakthrough", "Sep 2012 – Dec 2012", "Fixing the Leaky Checkout Bucket (Sep 2012 – Dec 2012)", "Billing-2 A/B test launched, lifting checkout completion from 44.8% to 63.4%.", dt"2012-09-01", dt"2012-12-31"}, {3, "Ch3 Diversification", "Jan 2013 – Jan 2014", "Expanding Search & Introducing Love Bear (Jan 2013 – Jan 2014)", "Bing paid search launched, Love Bear added, conversion crossed 6.6%.", dt"2013-01-01", dt"2014-01-31"}, {4, "Ch4 Cross-Sell Revolution", "Feb 2014 – Dec 2014", "The Hudson Mini Bear Basket Multiplier (Feb 2014 – Dec 2014)", "Mini Bear launched as cross-sell add-on, lifting AOV from $50 to $60 and pushing revenue past $1M.", dt"2014-02-01", dt"2014-12-31"}, {5, "Ch5 Scaled Maturity", "Jan 2015 – Mar 2015", "The Omnichannel High-Conversion Machine (Jan 2015 – Mar 2015)", "Conversion peaks at 8.44%, organic/direct traffic compounds, $1.85M net revenue reached.", dt"2015-01-01", dt"2015-03-19"}})
+
+	annotation PBI_Id = ab0d9d67-de32-4fdc-b1fe-8bcf8bd64491
+

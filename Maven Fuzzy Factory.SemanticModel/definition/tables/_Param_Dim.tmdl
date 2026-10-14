@@ -1,0 +1,33 @@
+table _Param_Dim
+	lineageTag: 7345b86f-a895-4cc5-9791-86088486565c
+
+	column DimensionID
+		dataType: int64
+		formatString: 0
+		lineageTag: 51523009-4758-496c-808a-218fdd9af8a8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DimensionID]
+
+	column DimensionName
+		dataType: string
+		lineageTag: f97be56a-9bfe-44d3-858a-7f7eaa5c34e2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DimensionName]
+		sortByColumn: SortOrder
+
+	column SortOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: f83ee1e7-ebba-43fc-8580-33921a510101
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+	partition _Param_Dim = calculated
+		mode: import
+		source = DATATABLE("DimensionID", INTEGER, "DimensionName", STRING, "SortOrder", INTEGER, {{1, "Channel", 1}, {2, "Device", 2}, {3, "Product", 3}, {4, "Landing page", 4}, {5, "Campaign", 5}})
+
+	annotation PBI_Id = 182586bd-6e60-4c4d-9c63-91ffb29147bf
+

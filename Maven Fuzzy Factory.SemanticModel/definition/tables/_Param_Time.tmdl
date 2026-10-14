@@ -1,0 +1,40 @@
+table _Param_Time
+	lineageTag: 59bb64b4-868c-45f0-9e6e-0135afadd363
+
+	column TimeModeID
+		dataType: int64
+		formatString: 0
+		lineageTag: af89486c-a4fd-410a-9a78-d8a8c8c3d13e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [TimeModeID]
+
+	column TimeModeName
+		dataType: string
+		lineageTag: e25465e5-f31b-4d67-aa8d-f60c704d22b4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [TimeModeName]
+		sortByColumn: SortOrder
+
+	column Description
+		dataType: string
+		lineageTag: b7b8676f-6fd1-45c0-912b-958b5fafba24
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Description]
+
+	column SortOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: 43104713-ac10-4a91-aee5-edc6b1d14d84
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+	partition _Param_Time = calculated
+		mode: import
+		source = DATATABLE("TimeModeID", INTEGER, "TimeModeName", STRING, "Description", STRING, "SortOrder", INTEGER, {{1, "Current Actuals", "Base period actuals", 1}, {2, "Previous Period (PoP)", "Comparison vs prior period", 2}, {3, "Previous Year (YoY)", "Comparison vs same period prior year", 3}, {4, "YoY Variance (abs)", "Absolute difference vs prior year", 4}, {5, "YoY Variance %", "Percentage variance vs prior year", 5}, {6, "Rolling 30D (3M here)", "3-month smoothed moving average", 6}})
+
+	annotation PBI_Id = 76015243-dd41-4db9-b3ad-b295fb6f59f6
+

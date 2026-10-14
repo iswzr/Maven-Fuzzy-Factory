@@ -1,0 +1,211 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "name": "dataset"
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Segoe UI, -apple-system, BlinkMacSystemFont, sans-serif",
+    "padding": {
+      "top": 15,
+      "left": 15,
+      "right": 15,
+      "bottom": 10
+    }
+  },
+  "resolve": {
+    "scale": {
+      "y": "independent"
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum['Year'] >= 2012 && datum['Year'] <= 2015"
+    }
+  ],
+  "layer": [
+    {
+      "name": "revenue_bars",
+      "mark": {
+        "type": "bar",
+        "width": {
+          "band": 0.58
+        },
+        "cornerRadiusTopLeft": 3,
+        "cornerRadiusTopRight": 3,
+        "color": "#4F83CC",
+        "opacity": 0.9
+      },
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "ordinal",
+          "axis": {
+            "title": null,
+            "labelAngle": 0,
+            "labelColor": "#8B95B0",
+            "labelFontSize": 12,
+            "labelFontWeight": 600,
+            "tickColor": "#1A2342",
+            "domainColor": "#1A2342",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "Gross Revenue",
+          "type": "quantitative",
+          "scale": {
+            "domainMin": 0,
+            "domainMax": 1240000,
+            "zero": true
+          },
+          "axis": {
+            "title": null,
+            "values": [
+              0,
+              412000,
+              825000,
+              1240000
+            ],
+            "labelColor": "#8B95B0",
+            "labelFontSize": 11,
+            "tickColor": "#1A2342",
+            "domainColor": "#1A2342",
+            "gridColor": "#1A2342",
+            "gridDash": [
+              3,
+              3
+            ],
+            "labelExpr": "datum.value == 0 ? '$0' : datum.value >= 1000000 ? ('$' + format(datum.value / 1000000, '.2f') + 'M') : ('$' + format(round(datum.value / 1000), '.0f') + 'K')"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "Gross Revenue",
+            "type": "quantitative",
+            "format": "$,.2f",
+            "title": "Gross Revenue"
+          },
+          {
+            "field": "Conversion Rate %",
+            "type": "quantitative",
+            "format": ".2%",
+            "title": "Conversion Rate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "cvr_line",
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5,
+        "color": "#FBBF24"
+      },
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Conversion Rate %",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              0.115
+            ],
+            "zero": true
+          },
+          "axis": null
+        }
+      }
+    },
+    {
+      "name": "cvr_points",
+      "mark": {
+        "type": "circle",
+        "size": 55,
+        "color": "#FBBF24",
+        "fill": "#FBBF24"
+      },
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Conversion Rate %",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              0.115
+            ],
+            "zero": true
+          },
+          "axis": null
+        },
+        "tooltip": [
+          {
+            "field": "Year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "Conversion Rate %",
+            "type": "quantitative",
+            "format": ".2%",
+            "title": "Conversion Rate %"
+          },
+          {
+            "field": "Gross Revenue",
+            "type": "quantitative",
+            "format": "$,.2f",
+            "title": "Gross Revenue"
+          }
+        ]
+      }
+    },
+    {
+      "name": "cvr_labels",
+      "mark": {
+        "type": "text",
+        "dy": -12,
+        "fontWeight": 700,
+        "fontSize": 12,
+        "color": "#FBBF24"
+      },
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Conversion Rate %",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              0.115
+            ],
+            "zero": true
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "Conversion Rate %",
+          "type": "quantitative",
+          "format": ".2%"
+        }
+      }
+    }
+  ]
+}

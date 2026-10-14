@@ -1,0 +1,76 @@
+table order_item_refunds
+	lineageTag: b737ca2f-82bc-4c5b-9826-20e8486ee93c
+
+	column order_item_refund_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 19a9ebd4-8b80-4143-ad66-27f1f53edcc9
+		summarizeBy: none
+		sourceColumn: order_item_refund_id
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 89ca3c86-7625-4375-8dda-e1a3fe2431ce
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 780db2d4-117d-491d-a3de-5f36d98d6a5d
+			defaultHierarchy: LocalDateTable_1580720a-eb97-4948-bb47-5b731dcf40a7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 30660060-d142-48cb-8305-fb2263f125db
+		summarizeBy: none
+		sourceColumn: order_item_id
+
+	column order_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 738c3c26-54d7-41c2-8e96-48a1c4c2c13a
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column refund_amount_usd
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: e202a8aa-1000-46bb-9e6b-c0d538970bbc
+		summarizeBy: none
+		sourceColumn: refund_amount_usd
+
+	column 'Lag Days' = DATEDIFF(LOOKUPVALUE(orders[created_at], orders[order_id], [order_id]), [created_at], DAY)
+		dataType: int64
+		formatString: 0
+		lineageTag: bb78b423-306d-4010-bff8-342de7f8b2cf
+		summarizeBy: none
+
+	column 'Lag Bucket' = SWITCH(TRUE(), [Lag Days] <= 5, "2-5 Days", [Lag Days] <= 10, "6-10 Days", "11-16 Days")
+		dataType: string
+		lineageTag: 9086f657-525f-43e4-bfc6-96da279733f5
+		summarizeBy: none
+
+	column 'Refund Date'
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 626290c2-55df-4077-a666-0c3f42a272c8
+		summarizeBy: none
+		sourceColumn: Refund Date
+
+	partition order_item_refunds = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\order_item_refunds.csv"), [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"order_item_refund_id", Int64.Type}, {"created_at", type datetime}, {"order_item_id", Int64.Type}, {"order_id", Int64.Type}, {"refund_amount_usd", type number}}),
+				  #"Added Refund Date" = Table.AddColumn(#"Changed column type", "Refund Date", each DateTime.Date([created_at]), type date)
+				in
+				  #"Added Refund Date"
+
+	annotation PBI_ResultType = Table
+

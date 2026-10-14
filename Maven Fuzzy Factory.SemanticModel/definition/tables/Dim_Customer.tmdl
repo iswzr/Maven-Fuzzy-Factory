@@ -1,0 +1,51 @@
+table Dim_Customer
+	lineageTag: ca57e865-42ab-4ac0-a47f-2d9d791b8d7d
+
+	column FirstVisit
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c9ec6626-5cb3-455d-b532-a291c0e17023
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FirstVisit]
+
+	column TotalVisits
+		dataType: int64
+		formatString: 0
+		lineageTag: 09580dbd-130f-4184-87de-20fc862a694f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [TotalVisits]
+
+	column 'Cohort Month'
+		dataType: string
+		lineageTag: 6d030f3b-7caa-4a2b-9afc-fbc382dabc42
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cohort Month]
+
+	column 'Cohort Quarter'
+		dataType: string
+		lineageTag: 75af8157-a040-4d5a-bacf-0f6b6eb2c7f4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cohort Quarter]
+
+	column 'Is Repeater'
+		dataType: string
+		lineageTag: 31996677-677b-46b9-8506-f5b6e6d9e64b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Is Repeater]
+
+	column user_id
+		lineageTag: 1e5e9392-dc1f-4c9e-8896-f94258ef0dbd
+		isNameInferred
+		sourceColumn: website_sessions[user_id]
+
+	partition Dim_Customer = calculated
+		mode: import
+		source = ADDCOLUMNS(SUMMARIZE(website_sessions, website_sessions[user_id], "FirstVisit", MIN(website_sessions[created_at]), "TotalVisits", COUNTROWS(website_sessions)), "Cohort Month", FORMAT([FirstVisit], "yyyy-MM"), "Cohort Quarter", YEAR([FirstVisit]) & " Q" & QUARTER([FirstVisit]), "Is Repeater", IF([TotalVisits] > 1, "Repeat Visitor", "One-Time Visitor"))
+
+	annotation PBI_Id = b9f8b8a0-d951-42ad-ba91-b2cf7b7226e5
+

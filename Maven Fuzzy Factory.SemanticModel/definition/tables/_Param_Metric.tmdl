@@ -1,0 +1,46 @@
+table _Param_Metric
+	lineageTag: 81f42202-549f-4be4-b958-ebf958df3eea
+
+	column MetricID
+		dataType: int64
+		formatString: 0
+		lineageTag: fe5bd679-4421-42aa-8d64-fd178b1f8233
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MetricID]
+
+	column MetricName
+		dataType: string
+		lineageTag: 30c07a3c-1d5b-4d3e-8f97-c2bfe4b9f95d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MetricName]
+
+	column Category
+		dataType: string
+		lineageTag: 25933e08-11b3-4428-980d-7b5ae1a39d29
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Category]
+
+	column FormatType
+		dataType: string
+		lineageTag: 7a4dace5-d400-426f-b527-a529cc273a51
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FormatType]
+
+	column SortOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: ff37e083-75a4-4a84-a418-79823575791a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+	partition _Param_Metric = calculated
+		mode: import
+		source = DATATABLE("MetricID", INTEGER, "MetricName", STRING, "Category", STRING, "FormatType", STRING, "SortOrder", INTEGER, {{1, "Gross Revenue ($)", "Financial", "Currency", 1}, {2, "Net Revenue ($)", "Financial", "Currency", 2}, {3, "Gross Margin ($)", "Financial", "Currency", 3}, {4, "Gross Margin %", "Financial", "Percentage", 4}, {5, "Total Orders", "Volume", "Integer", 5}, {6, "Total Sessions", "Volume", "Integer", 6}, {7, "Conversion Rate %", "Efficiency", "Percentage", 7}, {8, "Average Order Value ($)", "Basket", "Currency", 8}, {9, "Cross-Sell Attach %", "Basket", "Percentage", 9}, {10, "Refund Rate %", "Quality", "Percentage", 10}})
+
+	annotation PBI_Id = 3241d92b-9cdb-464d-8373-c331f5153736
+

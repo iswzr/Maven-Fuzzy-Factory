@@ -1,0 +1,17 @@
+table _Param_CVR_Lift
+	lineageTag: 307852c6-ff2d-4fa0-9ecb-8be8c7ba1ddd
+
+	column Value
+		dataType: double
+		formatString: 0.00%
+		lineageTag: f27b38fe-2019-4faa-a62b-c89690e89c6e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Param_CVR_Lift = calculated
+		mode: import
+		source = GENERATESERIES(-0.20, 0.50, 0.01)
+
+	annotation PBI_Id = b54f4acc-10a0-42dd-90bb-f18493b24d2c
+

@@ -1,0 +1,500 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "name": "dataset"
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Segoe UI, -apple-system, BlinkMacSystemFont, sans-serif",
+    "padding": {
+      "top": 10,
+      "left": 10,
+      "right": 20,
+      "bottom": 40
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum['Chapter ID'] != null && datum['Chapter ID'] >= 1 && datum['Chapter ID'] <= 5"
+    },
+    {
+      "calculate": "datum['Selected Time Mode ID'] != null ? datum['Selected Time Mode ID'] : 1",
+      "as": "mode_id"
+    },
+    {
+      "calculate": "datum.mode_id == 4 || datum.mode_id == 5 ? datum['Time Mode Value'] : (datum.mode_id == 6 ? datum['Time Mode Value'] : datum['Dynamic Selected Metric'])",
+      "as": "primary_val"
+    },
+    {
+      "calculate": "datum.mode_id == 2 || datum.mode_id == 3 ? datum['Time Mode Value'] : (datum.mode_id == 6 ? datum['Dynamic Selected Metric'] : null)",
+      "as": "secondary_val"
+    },
+    {
+      "calculate": "datum.mode_id == 6 ? 'Rolling avg' : (datum.mode_id == 4 ? 'YoY Variance' : (datum.mode_id == 5 ? 'YoY Variance %' : 'Current'))",
+      "as": "primary_label"
+    },
+    {
+      "calculate": "datum.mode_id == 2 ? 'Previous period' : (datum.mode_id == 3 ? 'Previous year' : (datum.mode_id == 6 ? 'Monthly' : null))",
+      "as": "secondary_label"
+    },
+    {
+      "calculate": "datum.mode_id == 5 ? format(datum.primary_val, '+0.1%') : (datum['Selected Metric ID'] == 4 || datum['Selected Metric ID'] == 7 || datum['Selected Metric ID'] == 9 || datum['Selected Metric ID'] == 10 ? format(datum.primary_val, '0.00%') : (datum['Selected Metric ID'] == 5 || datum['Selected Metric ID'] == 6 ? format(datum.primary_val, ',.0f') : ('$' + format(datum.primary_val, ',.2f'))))",
+      "as": "primary_val_formatted"
+    },
+    {
+      "calculate": "datum.secondary_val != null ? (datum['Selected Metric ID'] == 4 || datum['Selected Metric ID'] == 7 || datum['Selected Metric ID'] == 9 || datum['Selected Metric ID'] == 10 ? format(datum.secondary_val, '0.00%') : (datum['Selected Metric ID'] == 5 || datum['Selected Metric ID'] == 6 ? format(datum.secondary_val, ',.0f') : ('$' + format(datum.secondary_val, ',.2f')))) : ''",
+      "as": "secondary_val_formatted"
+    }
+  ],
+  "layer": [
+    {
+      "name": "chapter_bands",
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "min",
+              "field": "Month Start",
+              "as": "band_start"
+            },
+            {
+              "op": "max",
+              "field": "Month Start",
+              "as": "band_max"
+            },
+            {
+              "op": "max",
+              "field": "Is Selected Chapter",
+              "as": "is_sel"
+            }
+          ],
+          "groupby": [
+            "Chapter Name",
+            "Chapter Color",
+            "Chapter ID"
+          ]
+        },
+        {
+          "calculate": "timeOffset('month', datum.band_max, 1)",
+          "as": "band_end"
+        }
+      ],
+      "mark": {
+        "type": "rect"
+      },
+      "encoding": {
+        "x": {
+          "field": "band_start",
+          "type": "temporal"
+        },
+        "x2": {
+          "field": "band_end"
+        },
+        "color": {
+          "field": "Chapter Color",
+          "type": "nominal",
+          "scale": null
+        },
+        "opacity": {
+          "condition": [
+            {
+              "test": "datum.is_sel == 1",
+              "value": 0.38
+            },
+            {
+              "test": "datum.is_sel == 2",
+              "value": 0.12
+            }
+          ],
+          "value": 0.035
+        }
+      }
+    },
+    {
+      "name": "chapter_labels",
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "min",
+              "field": "Month Start",
+              "as": "band_start"
+            },
+            {
+              "op": "max",
+              "field": "Month Start",
+              "as": "band_max"
+            },
+            {
+              "op": "max",
+              "field": "Is Selected Chapter",
+              "as": "is_sel"
+            }
+          ],
+          "groupby": [
+            "Chapter Name",
+            "Chapter Color",
+            "Chapter ID"
+          ]
+        },
+        {
+          "calculate": "toDate((time(datum.band_start) + time(datum.band_max)) / 2)",
+          "as": "mid_date"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "y": 14,
+        "fontWeight": 700,
+        "baseline": "top"
+      },
+      "encoding": {
+        "x": {
+          "field": "mid_date",
+          "type": "temporal"
+        },
+        "text": {
+          "field": "Chapter Name"
+        },
+        "color": {
+          "field": "Chapter Color",
+          "type": "nominal",
+          "scale": null
+        },
+        "fontSize": {
+          "condition": [
+            {
+              "test": "datum.is_sel == 1",
+              "value": 13
+            }
+          ],
+          "value": 11
+        },
+        "opacity": {
+          "condition": [
+            {
+              "test": "datum.is_sel == 1",
+              "value": 1.0
+            },
+            {
+              "test": "datum.is_sel == 2",
+              "value": 0.85
+            }
+          ],
+          "value": 0.2
+        }
+      }
+    },
+    {
+      "name": "primary_area",
+      "transform": [
+        {
+          "filter": "datum.primary_val != null && isValid(datum.primary_val)"
+        }
+      ],
+      "mark": {
+        "type": "area",
+        "interpolate": "monotone",
+        "line": false,
+        "color": {
+          "gradient": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "rgba(45, 212, 191, 0.22)"
+            },
+            {
+              "offset": 1,
+              "color": "rgba(45, 212, 191, 0.01)"
+            }
+          ],
+          "x1": 0,
+          "y1": 0,
+          "x2": 0,
+          "y2": 1
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "Month Start",
+          "type": "temporal",
+          "axis": {
+            "title": null,
+            "format": "%b '%y",
+            "labelColor": "#8B95B0",
+            "tickColor": "#1A2342",
+            "domainColor": "#1A2342",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "primary_val",
+          "type": "quantitative",
+          "axis": {
+            "title": null,
+            "labelColor": "#8B95B0",
+            "tickColor": "#1A2342",
+            "domainColor": "#1A2342",
+            "gridColor": "#1A2342",
+            "gridDash": [
+              3,
+              3
+            ],
+            "labelExpr": "data('dataset') && data('dataset')[0] && data('dataset')[0]['Selected Time Mode ID'] == 5 ? (datum.value == 0 ? '0%' : (datum.value > 0 ? '+' : '') + format(datum.value, '.0%')) : (data('dataset') && data('dataset')[0] && data('dataset')[0]['Selected Time Mode ID'] == 4 ? (data('dataset')[0]['Selected Metric ID'] == 4 || data('dataset')[0]['Selected Metric ID'] == 7 || data('dataset')[0]['Selected Metric ID'] == 9 || data('dataset')[0]['Selected Metric ID'] == 10 ? (datum.value == 0 ? '0%' : (datum.value > 0 ? '+' : '') + format(datum.value, '.1%')) : (data('dataset')[0]['Selected Metric ID'] == 5 || data('dataset')[0]['Selected Metric ID'] == 6 ? (datum.value == 0 ? '0' : (datum.value > 0 ? '+' : '-') + replace(format(abs(datum.value), '~s'), 'k', 'K')) : (datum.value == 0 ? '$0' : (datum.value > 0 ? '+$' : '-$') + replace(format(abs(datum.value), '~s'), 'k', 'K')))) : (data('dataset') && data('dataset')[0] && (data('dataset')[0]['Selected Metric ID'] == 4 || data('dataset')[0]['Selected Metric ID'] == 7 || data('dataset')[0]['Selected Metric ID'] == 9 || data('dataset')[0]['Selected Metric ID'] == 10) ? (datum.value == 0 ? '0%' : (datum.value < 0.2 ? format(datum.value, '.1%') : format(datum.value, '.0%'))) : (data('dataset') && data('dataset')[0] && (data('dataset')[0]['Selected Metric ID'] == 5 || data('dataset')[0]['Selected Metric ID'] == 6) ? replace(format(datum.value, '~s'), 'k', 'K') : (domain('y')[1] <= 1 && domain('y')[0] >= -1 ? (datum.value == 0 ? '0%' : format(datum.value, '.0%')) : (domain('y')[1] < 150 ? ('$' + format(datum.value, '.0f')) : (datum.value < 0 ? ('-$' + replace(format(abs(datum.value), '~s'), 'k', 'K')) : ('$' + replace(format(datum.value, '~s'), 'k', 'K'))))))))"
+          }
+        }
+      }
+    },
+    {
+      "name": "secondary_line",
+      "transform": [
+        {
+          "filter": "datum.secondary_val != null && isValid(datum.secondary_val)"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "monotone",
+        "strokeWidth": 2,
+        "strokeDash": [
+          4,
+          4
+        ]
+      },
+      "encoding": {
+        "x": {
+          "field": "Month Start",
+          "type": "temporal"
+        },
+        "y": {
+          "field": "secondary_val",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "secondary_label",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Current",
+              "Rolling avg",
+              "YoY Variance",
+              "YoY Variance %",
+              "Previous period",
+              "Previous year",
+              "Monthly"
+            ],
+            "range": [
+              "#2DD4BF",
+              "#2DD4BF",
+              "#2DD4BF",
+              "#2DD4BF",
+              "#94A3B8",
+              "#FBBF24",
+              "#94A3B8"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "secondary_points",
+      "transform": [
+        {
+          "filter": "datum.secondary_val != null && isValid(datum.secondary_val)"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 24
+      },
+      "encoding": {
+        "x": {
+          "field": "Month Start",
+          "type": "temporal"
+        },
+        "y": {
+          "field": "secondary_val",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "secondary_label",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Current",
+              "Rolling avg",
+              "YoY Variance",
+              "YoY Variance %",
+              "Previous period",
+              "Previous year",
+              "Monthly"
+            ],
+            "range": [
+              "#2DD4BF",
+              "#2DD4BF",
+              "#2DD4BF",
+              "#2DD4BF",
+              "#94A3B8",
+              "#FBBF24",
+              "#94A3B8"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "Month Start",
+            "type": "temporal",
+            "format": "%B %Y",
+            "title": "Month"
+          },
+          {
+            "field": "secondary_label",
+            "type": "nominal",
+            "title": "Series"
+          },
+          {
+            "field": "secondary_val_formatted",
+            "type": "nominal",
+            "title": "Value"
+          }
+        ]
+      }
+    },
+    {
+      "name": "primary_line",
+      "transform": [
+        {
+          "filter": "datum.primary_val != null && isValid(datum.primary_val)"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "monotone",
+        "strokeWidth": 2.5
+      },
+      "encoding": {
+        "x": {
+          "field": "Month Start",
+          "type": "temporal"
+        },
+        "y": {
+          "field": "primary_val",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "primary_label",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Current",
+              "Rolling avg",
+              "YoY Variance",
+              "YoY Variance %",
+              "Previous period",
+              "Previous year",
+              "Monthly"
+            ],
+            "range": [
+              "#2DD4BF",
+              "#2DD4BF",
+              "#2DD4BF",
+              "#2DD4BF",
+              "#94A3B8",
+              "#FBBF24",
+              "#94A3B8"
+            ]
+          },
+          "legend": {
+            "orient": "bottom-left",
+            "direction": "horizontal",
+            "title": null,
+            "labelColor": "#CBD5E1",
+            "labelFont": "Segoe UI, sans-serif",
+            "labelFontSize": 11,
+            "labelFontWeight": 600,
+            "symbolType": "circle",
+            "symbolSize": 70,
+            "offset": 12
+          }
+        }
+      }
+    },
+    {
+      "name": "primary_points",
+      "transform": [
+        {
+          "filter": "datum.primary_val != null && isValid(datum.primary_val)"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "color": "#2DD4BF",
+        "fill": "#0F1730",
+        "stroke": "#2DD4BF",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "Month Start",
+          "type": "temporal"
+        },
+        "y": {
+          "field": "primary_val",
+          "type": "quantitative"
+        },
+        "size": {
+          "condition": [
+            {
+              "test": "datum['Is Selected Chapter'] == 1",
+              "value": 54
+            },
+            {
+              "test": "datum['Is Selected Chapter'] == 2",
+              "value": 38
+            }
+          ],
+          "value": 26
+        },
+        "opacity": {
+          "condition": [
+            {
+              "test": "datum['Is Selected Chapter'] == 1",
+              "value": 1.0
+            },
+            {
+              "test": "datum['Is Selected Chapter'] == 2",
+              "value": 0.85
+            }
+          ],
+          "value": 0.25
+        },
+        "tooltip": [
+          {
+            "field": "Month Start",
+            "type": "temporal",
+            "format": "%B %Y",
+            "title": "Month"
+          },
+          {
+            "field": "Chapter Name",
+            "type": "nominal",
+            "title": "Chapter"
+          },
+          {
+            "field": "primary_label",
+            "type": "nominal",
+            "title": "Series"
+          },
+          {
+            "field": "primary_val_formatted",
+            "type": "nominal",
+            "title": "Value"
+          }
+        ]
+      }
+    }
+  ]
+}

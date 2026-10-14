@@ -1,0 +1,57 @@
+table website_pageviews
+	lineageTag: b862cb8a-5bb2-493e-837b-f1744a424900
+
+	column website_pageview_id
+		dataType: int64
+		formatString: 0
+		lineageTag: b3d347f0-d93e-42a3-810e-9a5b8d7c873d
+		summarizeBy: none
+		sourceColumn: website_pageview_id
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d7e76e1d-a4ee-4c27-875c-074887b13d6b
+		summarizeBy: none
+		sourceColumn: created_at
+
+	column website_session_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 8c50d3ac-84b7-45ff-adb6-bc206c246a0f
+		summarizeBy: none
+		sourceColumn: website_session_id
+
+	column pageview_url
+		dataType: string
+		lineageTag: d6444185-700d-4e64-aa56-91876bfe5b71
+		summarizeBy: none
+		sourceColumn: pageview_url
+
+	column 'Pageview Date'
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 36842860-eeeb-4360-9a34-d3ad405cda64
+		summarizeBy: none
+		sourceColumn: Pageview Date
+
+	column 'Page Category'
+		dataType: string
+		lineageTag: 4a94e6e9-ae35-4e29-a19d-abe3a6db38e6
+		summarizeBy: none
+		sourceColumn: Page Category
+
+	partition website_pageviews = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\website_pageviews.csv"), [Delimiter = ",", Columns = 4, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"website_pageview_id", Int64.Type}, {"created_at", type datetime}, {"website_session_id", Int64.Type}, {"pageview_url", type text}}),
+				  #"Added Pageview Date" = Table.AddColumn(#"Changed column type", "Pageview Date", each DateTime.Date([created_at]), type date),
+				  #"Added Page Category" = Table.AddColumn(#"Added Pageview Date", "Page Category", each if List.Contains({"/home", "/lander-1", "/lander-2", "/lander-3", "/lander-4", "/lander-5"}, [pageview_url]) then "Landing Page" else if [pageview_url] = "/products" then "Catalog" else if List.Contains({"/the-original-mr-fuzzy", "/the-forever-love-bear", "/the-birthday-sugar-panda", "/the-hudson-river-mini-bear"}, [pageview_url]) then "Product Detail" else if List.Contains({"/cart", "/shipping", "/billing", "/billing-2"}, [pageview_url]) then "Checkout Funnel" else if [pageview_url] = "/thank-you-for-your-order" then "Conversion" else "Other", type text)
+				in
+				  #"Added Page Category"
+
+	annotation PBI_ResultType = Table
+

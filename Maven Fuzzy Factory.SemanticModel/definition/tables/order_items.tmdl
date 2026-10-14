@@ -1,0 +1,95 @@
+table order_items
+	lineageTag: 4032c9c0-20a7-49b8-a8f4-1090f02fc052
+
+	column order_item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 737ea87b-6730-4324-ad0a-9374a0d813bc
+		summarizeBy: none
+		sourceColumn: order_item_id
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5de47439-5542-4b5c-af6a-d2cbcc799d72
+		summarizeBy: none
+		sourceColumn: created_at
+
+	column order_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d7d11cd-4f92-4848-a60e-5b830713e071
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d4c7c88-ef9f-4fb9-8c6f-e817e8a70b18
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column is_primary_item
+		dataType: int64
+		formatString: 0
+		lineageTag: 90fd07eb-9399-4c6a-a25c-6eeaeef43beb
+		summarizeBy: none
+		sourceColumn: is_primary_item
+
+	column price_usd
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: df277504-71d3-4192-bcec-9bd9c371fb7f
+		summarizeBy: none
+		sourceColumn: price_usd
+
+	column cogs_usd
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: a2d2f0f0-5f33-46e1-bd17-eed3b070e989
+		summarizeBy: none
+		sourceColumn: cogs_usd
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 0d4a422f-da0c-4b99-badd-e46861e8dcc5
+		summarizeBy: none
+		sourceColumn: Order Date
+
+	column 'Item Role'
+		dataType: string
+		lineageTag: bf120493-df35-4de7-8d2b-d9758028f900
+		summarizeBy: none
+		sourceColumn: Item Role
+
+	column 'Margin $'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 20e480e8-0795-4605-be83-4d01bd44652b
+		summarizeBy: none
+		sourceColumn: Margin $
+
+	column 'Margin %'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 3e41f27a-6142-4784-8ae5-8f536d581260
+		summarizeBy: none
+		sourceColumn: Margin %
+
+	partition order_items = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\order_items.csv"), [Delimiter = ",", Columns = 7, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"order_item_id", Int64.Type}, {"created_at", type datetime}, {"order_id", Int64.Type}, {"product_id", Int64.Type}, {"is_primary_item", Int64.Type}, {"price_usd", type number}, {"cogs_usd", type number}}),
+				  #"Added Order Date" = Table.AddColumn(#"Changed column type", "Order Date", each DateTime.Date([created_at]), type date),
+				  #"Added Item Role" = Table.AddColumn(#"Added Order Date", "Item Role", each if [is_primary_item] = 1 then "Primary Item" else "Cross-Sell Item", type text),
+				  #"Added Margin $" = Table.AddColumn(#"Added Item Role", "Margin $", each [price_usd] - [cogs_usd], type number),
+				  #"Added Margin %" = Table.AddColumn(#"Added Margin $", "Margin %", each if [price_usd] = 0 or [price_usd] = null then 0 else ([price_usd] - [cogs_usd]) / [price_usd], type number)
+				in
+				  #"Added Margin %"
+
+	annotation PBI_ResultType = Table
+

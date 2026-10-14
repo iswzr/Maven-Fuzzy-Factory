@@ -1,0 +1,34 @@
+relationship 780db2d4-117d-491d-a3de-5f36d98d6a5d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: order_item_refunds.created_at
+	toColumn: LocalDateTable_1580720a-eb97-4948-bb47-5b731dcf40a7.Date
+
+relationship a8cf723e-6d02-432f-ba4c-966071ad1f9c
+	fromColumn: orders.'Order Date'
+	toColumn: Dim_Date.Date
+
+relationship 2bafe54c-5c02-4356-ba19-0d58dd7dc48c
+	isActive: false
+	fromColumn: order_items.'Order Date'
+	toColumn: Dim_Date.Date
+
+relationship 4bd25228-3ca4-47ff-b348-4a8d4f9d342c
+	fromColumn: website_sessions.'Session Date'
+	toColumn: Dim_Date.Date
+
+relationship c24f02f9-9b54-4dfb-8374-3acc93142004
+	fromColumn: order_item_refunds.'Refund Date'
+	toColumn: Dim_Date.Date
+
+relationship 524d2a74-9d82-4241-b122-ae3bed8afac4
+	fromColumn: order_items.product_id
+	toColumn: products.product_id
+
+relationship 2b779b9b-9022-4c32-8ada-83f2ad961a7d
+	fromColumn: order_items.order_id
+	toColumn: orders.order_id
+
+relationship 27b17217-9af4-46a8-a4ff-32a963261e9b
+	fromColumn: website_pageviews.website_session_id
+	toColumn: website_sessions.website_session_id
+

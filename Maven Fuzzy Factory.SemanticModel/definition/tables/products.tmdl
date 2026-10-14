@@ -1,0 +1,74 @@
+table products
+	lineageTag: dd9d7cf9-2928-483f-b18c-95020c6a8489
+
+	column product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: e1fdf3b2-6a9a-4a63-a9aa-83a1442afe3a
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 09cc6abf-b61f-437e-a97a-628ba4094964
+		summarizeBy: none
+		sourceColumn: created_at
+
+	column product_name
+		dataType: string
+		lineageTag: 545eb3b8-a119-4cb9-9543-9aaa558b98fb
+		summarizeBy: none
+		sourceColumn: product_name
+
+	column 'Retail Price'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: a1f20295-b8ed-4590-bc3f-feef25dd335a
+		summarizeBy: none
+		sourceColumn: Retail Price
+
+	column 'Unit COGS'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 42264049-8021-4548-bb7c-9dc649e77437
+		summarizeBy: none
+		sourceColumn: Unit COGS
+
+	column 'Margin $'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: bccc451d-f179-4f04-b787-15ac417cc724
+		summarizeBy: none
+		sourceColumn: Margin $
+
+	column 'Margin %'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 6314a016-906e-4212-88f4-dce9e042111d
+		summarizeBy: none
+		sourceColumn: Margin %
+
+	column 'Product Role'
+		dataType: string
+		lineageTag: d04fda88-cde5-4117-a6d1-6039439c21a2
+		summarizeBy: none
+		sourceColumn: Product Role
+
+	partition products = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\products.csv"), [Delimiter = ",", Columns = 3, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"product_id", Int64.Type}, {"created_at", type datetime}, {"product_name", type text}}),
+				  #"Added Retail Price" = Table.AddColumn(#"Changed column type", "Retail Price", each if [product_id] = 1 then 49.99 else if [product_id] = 2 then 59.99 else if [product_id] = 3 then 45.99 else 29.99, type number),
+				  #"Added Unit COGS" = Table.AddColumn(#"Added Retail Price", "Unit COGS", each if [product_id] = 1 then 19.49 else if [product_id] = 2 then 22.49 else if [product_id] = 3 then 14.49 else 9.49, type number),
+				  #"Added Margin $" = Table.AddColumn(#"Added Unit COGS", "Margin $", each [Retail Price] - [Unit COGS], type number),
+				  #"Added Margin %" = Table.AddColumn(#"Added Margin $", "Margin %", each [#"Margin $"] / [Retail Price], type number),
+				  #"Added Product Role" = Table.AddColumn(#"Added Margin %", "Product Role", each if [product_id] = 1 then "Flagship Launch Bear" else if [product_id] = 2 then "Premium Valentine's" else if [product_id] = 3 then "Birthday Gift" else "Cross-Sell Add-on", type text)
+				in
+				  #"Added Product Role"
+
+	annotation PBI_ResultType = Table
+

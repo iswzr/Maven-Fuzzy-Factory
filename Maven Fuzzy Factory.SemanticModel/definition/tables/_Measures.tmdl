@@ -1,0 +1,810 @@
+table _Measures
+	lineageTag: ef4d4fee-ad52-49bc-b025-37449181eb79
+
+	measure 'Total Sessions' = COUNTROWS(website_sessions)
+		formatString: #,0
+		lineageTag: 91f19f0e-c096-406f-9e5c-1ff5c689092a
+
+	measure 'Total Orders' = COUNTROWS(orders)
+		formatString: #,0
+		lineageTag: 25ee9512-6c26-479c-a694-3942fd59cbd1
+
+	measure 'Gross Revenue' = SUM(order_items[price_usd])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: c86b7eea-8b42-4610-8940-4efcf83643f5
+
+	measure 'Total COGS' = SUM(order_items[cogs_usd])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: b6166148-f267-4c8f-9114-ce93504d76ef
+
+	measure 'Gross Profit' = [Gross Revenue] - [Total COGS]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 6dd4756a-e7ab-480b-a161-10ca8b290746
+
+	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Gross Revenue], 0)
+		formatString: 0.00%
+		lineageTag: 997ce250-9015-45e7-a1e2-2e27b2dd6774
+
+	measure 'Total Refunds' = SUM(order_item_refunds[refund_amount_usd])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 54db0c6b-e06f-4230-84f7-72fdaf9cd208
+
+	measure 'Net Revenue' = [Gross Revenue] - [Total Refunds]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 85cd4d39-8f45-422f-aec0-a4d205dbc68b
+
+	measure 'Net Profit' = [Gross Profit] - [Total Refunds]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 635c1580-49b9-4901-8ce1-6248c13503bc
+
+	measure 'Net Margin %' = DIVIDE([Net Profit], [Net Revenue], 0)
+		formatString: 0.00%
+		lineageTag: b7b90b42-7b98-47fb-9e88-ed554ac23989
+
+	measure 'Conversion Rate %' = DIVIDE([Total Orders], [Total Sessions], 0)
+		formatString: 0.00%
+		lineageTag: a2bc80a7-100f-48aa-8573-4abc478b13f4
+
+	measure 'Average Order Value' = DIVIDE([Gross Revenue], [Total Orders], 0)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: d009fea1-b290-447c-8255-b0d51812f61a
+
+	measure 'Cross-Sell Attach %' = DIVIDE(CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 0), [Total Orders], 0)
+		formatString: 0.00%
+		lineageTag: aa991bbe-7d9a-4402-8de0-b7b277b544fb
+
+	measure 'Refund Rate %' = DIVIDE(COUNTROWS(order_item_refunds), COUNTROWS(order_items), 0)
+		formatString: 0.00%
+		lineageTag: b67b9762-6e40-44fd-b4c1-66aa9ab11c6e
+
+	measure 'Bounce Rate %' = DIVIDE(CALCULATE(COUNTROWS(website_sessions), website_sessions[Is Bounce] = 1), [Total Sessions], 0)
+		formatString: 0.00%
+		lineageTag: 60ea540a-a566-407a-afd8-ec4130426fe7
+
+	measure 'Repeat Sessions' = CALCULATE(COUNTROWS(website_sessions), website_sessions[is_repeat_session] = 1)
+		formatString: #,0
+		lineageTag: e3b7e711-d949-44ec-982c-7e90dceba0e1
+
+	measure 'Repeat Session %' = DIVIDE([Repeat Sessions], [Total Sessions], 0)
+		formatString: 0.00%
+		lineageTag: f5b352df-4566-4436-8afa-336ceaa79b95
+
+	measure 'Dynamic Selected Metric' =
+			VAR SelectedMetricID = SELECTEDVALUE(_Param_Metric[MetricID], 1)
+			RETURN
+				SWITCH(
+					SelectedMetricID,
+					1, [Gross Revenue],
+					2, [Net Revenue],
+					3, [Gross Profit],
+					4, [Gross Margin %],
+					5, [Total Orders],
+					6, [Total Sessions],
+					7, [Conversion Rate %],
+					8, [Average Order Value],
+					9, [Cross-Sell Attach %],
+					10, [Refund Rate %],
+					[Gross Revenue]
+				)
+		lineageTag: e4612243-cf4f-403a-9572-d64ef51bc93b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Story Headline Text' = SELECTEDVALUE(_Param_Story[Headline], "3-Year Historical Growth Journey (Mar 2012 – Mar 2015)")
+		lineageTag: 157b1283-104a-47f1-aa67-409a6133fdd0
+
+	measure 'Story Narrative Commentary' = SELECTEDVALUE(_Param_Story[Commentary], "Scaled from a single-product bootstrap (3.5% CVR) into an omnichannel brand with 40K+ orders, 8.44% peak CVR, and $1.85M+ net revenue.")
+		lineageTag: d92c1adb-1267-4a83-af56-e24f6a555ba9
+
+	measure 'Revenue (Chapter)' =
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			RETURN CALCULATE([Gross Revenue], DATESBETWEEN(Dim_Date[Date], s, e))
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: a3f1e98d-294b-4b11-9a7f-7193dc5e1823
+
+	measure 'Is Selected Chapter' =
+			VAR _chId = SELECTEDVALUE(Dim_Date[Chapter ID])
+			VAR _selId = SELECTEDVALUE(_Param_Story[ChapterID], 0)
+			RETURN
+				IF(
+					ISBLANK(_chId) || _chId <= 0,
+					0,
+					IF(_selId = 0, 2, IF(_chId = _selId, 1, 0))
+				)
+		formatString: 0
+		lineageTag: b4c2e81a-9831-4192-ba78-6593dc5e1944
+
+	measure 'Page Title P1' =
+			VAR ch = SELECTEDVALUE(_Param_Story[ChapterName], "The 3-Year Growth Story")
+			RETURN "Maven Fuzzy Factory · " & IF(ch = "All 3 Years" || ISBLANK(ch), "The 3-Year Growth Story", ch)
+		lineageTag: c5d3e72b-8712-4293-8b89-5493dc5e1055
+
+	measure 'Story Narrative HTML' =
+			VAR Eyebrow =
+				VAR ch = SELECTEDVALUE(_Param_Story[ChapterName], "All 3 Years")
+				RETURN IF(ch = "All 3 Years" || ISBLANK(ch), "MAVEN FUZZY FACTORY", UPPER(ch))
+			VAR Headline =
+				SELECTEDVALUE(_Param_Story[Headline], "3-Year Historical Growth Journey (Mar 2012 – Mar 2015)")
+			VAR Commentary =
+				SELECTEDVALUE(_Param_Story[Commentary], "Scaled from a single-product bootstrap (3.5% CVR) into an omnichannel brand with 40K+ orders, 8.44% peak CVR, and $1.85M+ net revenue.")
+			RETURN
+				"<style>html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:transparent; font-family:'Segoe UI', -apple-system, sans-serif; }</style>" &
+				"<div style='display: flex; flex-direction: column; justify-content: center; height: 100%; box-sizing: border-box; padding: 6px 10px;'>" &
+					"<div style='font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #2DD4BF; margin-bottom: 4px;'>" &
+						Eyebrow &
+					"</div>" &
+					"<div style='font-size: 18px; font-weight: 700; line-height: 1.25; color: #FFFFFF; margin-bottom: 6px;'>" &
+						Headline &
+					"</div>" &
+					"<div style='font-size: 12px; line-height: 1.45; color: #B5C0DC;'>" &
+						Commentary &
+					"</div>" &
+				"</div>"
+		lineageTag: e8d4c91a-7b23-41a6-89de-3619ea458b21
+
+	measure 'Orders (Chapter)' =
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			RETURN CALCULATE([Total Orders], DATESBETWEEN(Dim_Date[Date], s, e))
+		formatString: #,0
+		lineageTag: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d
+
+	measure 'Sessions (Chapter)' =
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			RETURN CALCULATE([Total Sessions], DATESBETWEEN(Dim_Date[Date], s, e))
+		formatString: #,0
+		lineageTag: 8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e
+
+	measure 'Conversion Rate % (Chapter)' =
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			RETURN CALCULATE([Conversion Rate %], DATESBETWEEN(Dim_Date[Date], s, e))
+		formatString: 0.00%
+		lineageTag: 9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f
+
+	measure 'AOV (Chapter)' =
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			RETURN CALCULATE([Average Order Value], DATESBETWEEN(Dim_Date[Date], s, e))
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a
+
+	measure 'Gross Margin % (Chapter)' =
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			RETURN CALCULATE([Gross Margin %], DATESBETWEEN(Dim_Date[Date], s, e))
+		formatString: 0.00%
+		lineageTag: 1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b
+
+	measure 'KPI Strip HTML' =
+			
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			VAR ch = SELECTEDVALUE(_Param_Story[ChapterName], "All 3 Years")
+			VAR isAll = (ch = "All 3 Years" || ch = "All 3 years" || ISBLANK(ch))
+			
+			VAR rev  = CALCULATE([Gross Revenue], DATESBETWEEN(Dim_Date[Date], s, e))
+			VAR ord  = CALCULATE([Total Orders], DATESBETWEEN(Dim_Date[Date], s, e))
+			VAR sess = CALCULATE([Total Sessions], DATESBETWEEN(Dim_Date[Date], s, e))
+			VAR cogs = CALCULATE([Total COGS], DATESBETWEEN(Dim_Date[Date], s, e))
+			VAR gp   = rev - cogs
+			VAR cvr  = DIVIDE(ord, sess, 0)
+			VAR aov  = DIVIDE(rev, ord, 0)
+			VAR gm   = DIVIDE(gp, rev, 0)
+			
+			VAR allRev  = CALCULATE([Gross Revenue], ALL(Dim_Date))
+			VAR allOrd  = CALCULATE([Total Orders], ALL(Dim_Date))
+			VAR allSess = CALCULATE([Total Sessions], ALL(Dim_Date))
+			VAR allCvr  = DIVIDE(allOrd, allSess, 0)
+			VAR cvrDiff = (cvr - allCvr) * 100
+			
+			VAR revStr  = IF(rev >= 1000000, "$" & FORMAT(rev / 1000000, "0.00") & "M", IF(rev >= 1000, "$" & FORMAT(rev / 1000, "0.0") & "K", "$" & FORMAT(rev, "#,0")))
+			VAR ordStr  = IF(ord >= 10000, FORMAT(ord / 1000, "0.0") & "K", FORMAT(ord, "#,0"))
+			VAR sessStr = IF(sess >= 1000000, FORMAT(sess / 1000000, "0.00") & "M", IF(sess >= 1000, FORMAT(sess / 1000, "0.0") & "K", FORMAT(sess, "#,0")))
+			VAR cvrStr  = FORMAT(cvr, "0.00%")
+			VAR aovStr  = FORMAT(aov, "$0.00")
+			VAR gmStr   = FORMAT(gm, "0.0%")
+			VAR gpStr   = IF(gp >= 1000000, "$" & FORMAT(gp / 1000000, "0.00") & "M", "$" & FORMAT(gp / 1000, "0.0") & "K")
+			
+			VAR subRev  = IF(isAll, "Net: $1.85M (-4.4% Ref)", FORMAT(DIVIDE(rev, allRev, 0), "0.0%") & " of 3-Yr Rev")
+			VAR subOrd  = IF(isAll, FORMAT(ord, "#,0") & " Converted", FORMAT(DIVIDE(ord, allOrd, 0), "0.0%") & " of 3-Yr Orders")
+			VAR subSess = IF(isAll, "394.3K Unique Users", FORMAT(DIVIDE(sess, allSess, 0), "0.0%") & " of Traffic")
+			VAR subCvr  = IF(isAll, "4.14% ('12) → 8.44% ('15)", IF(cvrDiff >= 0, "▲ +" & FORMAT(cvrDiff, "0.00") & "pp vs 3-Yr Avg", "▼ " & FORMAT(cvrDiff, "0.00") & "pp vs 3-Yr Avg"))
+			VAR cvrCls  = IF(isAll, "", IF(cvrDiff >= 0, "up", "dn"))
+			VAR subAov  = IF(isAll, "23.9% 2-Item Attach", "vs $59.99 3-Yr Avg")
+			VAR subGm   = "Gross Profit: " & gpStr
+			
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100vh; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; width: 100%; height: 100vh; }
+			  .kpi-card {
+			    position: relative; overflow: hidden; min-width: 0; height: 100%;
+			    padding: 11px 13px 9px 13px; border-radius: 12px;
+			    display: flex; flex-direction: column; justify-content: space-between;
+			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
+			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
+			    border: 1px solid rgba(255,255,255,0.07);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 20px rgba(0,0,0,0.35);
+			    opacity: 0; animation: rise .5s ease forwards;
+			    transition: border-color .2s ease, box-shadow .2s ease;
+			  }
+			  .kpi-card:nth-child(2){animation-delay:.05s} .kpi-card:nth-child(3){animation-delay:.1s}
+			  .kpi-card:nth-child(4){animation-delay:.15s} .kpi-card:nth-child(5){animation-delay:.2s}
+			  .kpi-card:nth-child(6){animation-delay:.25s}
+			  @keyframes rise { from {opacity:0; transform:translateY(6px);} to {opacity:1; transform:none;} }
+			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
+			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
+			  .kpi-card:hover { border-color: var(--acc); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
+			  .kpi-top { display:flex; align-items:center; gap:7px; }
+			  .kpi-ico { width:20px; height:20px; border-radius:6px; flex-shrink:0;
+			    display:flex; align-items:center; justify-content:center;
+			    font-size:11px; font-weight:700; color:var(--acc);
+			    background: var(--glow); border:1px solid var(--glow); }
+			  .kpi-label { font-size:9.5px; color:#8FA0BC; font-weight:600; text-transform:uppercase;
+			    letter-spacing:.9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-value { font-size: clamp(20px, 2vw, 27px); font-weight:700; color:#F8FAFC; line-height:1.05;
+			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
+			    overflow:hidden; text-overflow:ellipsis; margin:3px 0 2px;
+			    text-shadow: 0 0 18px var(--glow); }
+			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:9px; font-weight:600; color:var(--acc);
+			    background: var(--glow); border-radius:20px; padding:2px 8px;
+			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-sub.up { color:#34D399; background:rgba(52,211,153,.14); }
+			  .kpi-sub.dn { color:#F87171; background:rgba(248,113,113,.14); }
+			</style>
+			<div class='kpi-grid'>
+			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);'>
+			    <div class='kpi-top'><span class='kpi-ico'>$</span><span class='kpi-label'>Gross Revenue</span></div>
+			    <div class='kpi-value'>" & revStr & "</div>
+			    <div class='kpi-sub'>" & subRev & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);'>
+			    <div class='kpi-top'><span class='kpi-ico'>✓</span><span class='kpi-label'>Orders</span></div>
+			    <div class='kpi-value'>" & ordStr & "</div>
+			    <div class='kpi-sub'>" & subOrd & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#22D3EE;--glow:rgba(34,211,238,.16);'>
+			    <div class='kpi-top'><span class='kpi-ico'>◎</span><span class='kpi-label'>Sessions</span></div>
+			    <div class='kpi-value'>" & sessStr & "</div>
+			    <div class='kpi-sub'>" & subSess & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);'>
+			    <div class='kpi-top'><span class='kpi-ico'>↗</span><span class='kpi-label'>Conv. Rate</span></div>
+			    <div class='kpi-value'>" & cvrStr & "</div>
+			    <div class='kpi-sub " & cvrCls & "'>" & subCvr & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#A78BFA;--glow:rgba(167,139,250,.18);'>
+			    <div class='kpi-top'><span class='kpi-ico'>◈</span><span class='kpi-label'>Order AOV</span></div>
+			    <div class='kpi-value'>" & aovStr & "</div>
+			    <div class='kpi-sub'>" & subAov & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#2DD4BF;--glow:rgba(45,212,191,.16);'>
+			    <div class='kpi-top'><span class='kpi-ico'>%</span><span class='kpi-label'>Gross Margin</span></div>
+			    <div class='kpi-value'>" & gmStr & "</div>
+			    <div class='kpi-sub'>" & subGm & "</div>
+			  </div>
+			</div>"
+		lineageTag: f9e5d82b-9842-4217-91ef-4729fb569c32
+
+	measure 'Trajectory Chart Title' =
+			VAR SelectedMetric = SELECTEDVALUE(_Param_Metric[MetricName], "Conversion Rate %")
+			VAR SelectedChapter = SELECTEDVALUE(_Param_Story[ChapterName], "All 3 Years")
+			VAR SelectedTimeMode = SELECTEDVALUE(_Param_Time[TimeModeName], "Current Actuals")
+			VAR TimeText =
+				IF(
+					SelectedTimeMode = "Current Actuals" || ISBLANK(SelectedTimeMode),
+					"",
+					" · " & SelectedTimeMode
+				)
+			VAR ChapterText =
+				IF(
+					SelectedChapter = "All 3 Years" || ISBLANK(SelectedChapter),
+					"All 3 Years · 37-Month Timeline",
+					SelectedChapter & " Highlighted"
+				)
+			RETURN
+				"Growth Trajectory · " & SelectedMetric & TimeText & " (" & ChapterText & ")"
+		lineageTag: d6e7f8a9-0b1c-2d3e-4f5a-6b7c8d9e0f1a
+
+	measure 'Dynamic Selected Metric Formatted' =
+			VAR mId = SELECTEDVALUE(_Param_Metric[MetricID], 1)
+			VAR val = [Dynamic Selected Metric]
+			RETURN
+				SWITCH(
+					mId,
+					1, FORMAT(val, "$#,##0"),
+					2, FORMAT(val, "$#,##0"),
+					3, FORMAT(val, "$#,##0"),
+					4, FORMAT(val, "0.0%"),
+					5, FORMAT(val, "#,##0"),
+					6, FORMAT(val, "#,##0"),
+					7, FORMAT(val, "0.00%"),
+					8, FORMAT(val, "$#,##0.00"),
+					9, FORMAT(val, "0.0%"),
+					10, FORMAT(val, "0.0%"),
+					FORMAT(val, "#,##0")
+				)
+		lineageTag: e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b
+
+	measure 'Selected Metric ID' = SELECTEDVALUE(_Param_Metric[MetricID], 1)
+		formatString: 0
+		lineageTag: a1b2c3d4-e5f6-4789-0123-456789abcdef
+
+	measure 'Time Mode Value' =
+			
+			VAR CurrentVal = [Dynamic Selected Metric]
+			VAR SelectedMode = SELECTEDVALUE(_Param_Time[TimeModeID], 1)
+			VAR MetricID = SELECTEDVALUE(_Param_Metric[MetricID], 1)
+			VAR PriorMonthVal =
+				CALCULATE(
+					[Dynamic Selected Metric],
+					DATEADD(Dim_Date[Date], -1, MONTH)
+				)
+			VAR PriorYearVal =
+				CALCULATE(
+					[Dynamic Selected Metric],
+					SAMEPERIODLASTYEAR(Dim_Date[Date])
+				)
+			VAR WindowMonths =
+				CALCULATE(
+					DISTINCTCOUNT(Dim_Date[Month Start]),
+					DATESINPERIOD(Dim_Date[Date], MAX(Dim_Date[Date]), -3, MONTH),
+					NOT(ISBLANK(Dim_Date[Chapter ID]))
+				)
+			VAR RollingSum =
+				CALCULATE(
+					[Dynamic Selected Metric],
+					DATESINPERIOD(Dim_Date[Date], MAX(Dim_Date[Date]), -3, MONTH)
+				)
+			VAR Rolling3MVal =
+				IF(
+					MetricID IN {4, 7, 8, 9, 10},
+					RollingSum,
+					COALESCE(
+						DIVIDE(RollingSum, IF(WindowMonths > 0, WindowMonths, 3)),
+						CurrentVal
+					)
+				)
+			RETURN
+				SWITCH(
+					SelectedMode,
+					1, CurrentVal,
+					2, PriorMonthVal,
+					3, PriorYearVal,
+					4, CurrentVal - PriorYearVal,
+					5, DIVIDE(CurrentVal - PriorYearVal, PriorYearVal, 0),
+					6, Rolling3MVal,
+					CurrentVal
+				)
+		lineageTag: b8c9d0e1-2f3a-4b5c-6d7e-8f9a0b1c2d3e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Selected Time Mode ID' = SELECTEDVALUE(_Param_Time[TimeModeID], 1)
+		formatString: 0
+		lineageTag: c1d2e3f4-a5b6-4789-0123-456789abcdef
+
+	measure 'Time Mode Value Formatted' =
+			VAR mId = SELECTEDVALUE(_Param_Metric[MetricID], 1)
+			VAR tMode = SELECTEDVALUE(_Param_Time[TimeModeID], 1)
+			VAR val = [Time Mode Value]
+			RETURN
+				IF(
+					ISBLANK(val),
+					BLANK(),
+					SWITCH(
+						tMode,
+						5, FORMAT(val, "+0.0%;-0.0%;0.0%"),
+						4, SWITCH(
+							mId,
+							1, FORMAT(val, "+$#,##0;-$#,##0;$0"),
+							2, FORMAT(val, "+$#,##0;-$#,##0;$0"),
+							3, FORMAT(val, "+$#,##0;-$#,##0;$0"),
+							4, FORMAT(val, "+0.0% pts;-0.0% pts;0.0% pts"),
+							5, FORMAT(val, "+#,##0;-#,##0;0"),
+							6, FORMAT(val, "+#,##0;-#,##0;0"),
+							7, FORMAT(val, "+0.00% pts;-0.00% pts;0.00% pts"),
+							8, FORMAT(val, "+$#,##0.00;-$#,##0.00;$0.00"),
+							9, FORMAT(val, "+0.0% pts;-0.0% pts;0.0% pts"),
+							10, FORMAT(val, "+0.0% pts;-0.0% pts;0.0% pts"),
+							FORMAT(val, "+#,##0;-#,##0;0")
+						),
+						/* Default modes: Current Actuals, PoP, YoY, Rolling 3M */
+						SWITCH(
+							mId,
+							1, FORMAT(val, "$#,##0"),
+							2, FORMAT(val, "$#,##0"),
+							3, FORMAT(val, "$#,##0"),
+							4, FORMAT(val, "0.0%"),
+							5, FORMAT(val, "#,##0"),
+							6, FORMAT(val, "#,##0"),
+							7, FORMAT(val, "0.00%"),
+							8, FORMAT(val, "$#,##0.00"),
+							9, FORMAT(val, "0.0%"),
+							10, FORMAT(val, "0.0%"),
+							FORMAT(val, "#,##0")
+						)
+					)
+				)
+		lineageTag: d2e3f4a5-b6c7-4890-1234-56789abcdef0
+
+	measure 'Active Time Mode Label' =
+			VAR tm = SELECTEDVALUE(_Param_Time[TimeModeName], "Current Actuals")
+			RETURN "Mode: " & tm
+		lineageTag: e1a2b3c4-d5e6-4789-0123-456789abcdef
+
+	measure 'Metric Slicer Subtitle' =
+			VAR MetricID = SELECTEDVALUE(_Param_Metric[MetricID])
+			VAR TimeMode = SELECTEDVALUE(_Param_Time[TimeModeID], 1)
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			VAR CurVal =
+				CALCULATE(
+					SWITCH(
+						MetricID,
+						1, [Gross Revenue],
+						2, [Net Revenue],
+						3, [Gross Profit],
+						4, [Gross Margin %],
+						5, [Total Orders],
+						6, [Total Sessions],
+						7, [Conversion Rate %],
+						8, [Average Order Value],
+						9, [Cross-Sell Attach %],
+						10, [Refund Rate %]
+					),
+					DATESBETWEEN(Dim_Date[Date], s, e)
+				)
+			VAR MaxDt = e
+			VAR LatestMStart = DATE(YEAR(MaxDt), MONTH(MaxDt), 1)
+			VAR LatestMEnd   = EOMONTH(MaxDt, 0)
+			VAR CurMonthVal =
+				CALCULATE(
+					SWITCH(
+						MetricID,
+						1, [Gross Revenue], 2, [Net Revenue], 3, [Gross Profit], 4, [Gross Margin %],
+						5, [Total Orders], 6, [Total Sessions], 7, [Conversion Rate %], 8, [Average Order Value],
+						9, [Cross-Sell Attach %], 10, [Refund Rate %]
+					),
+					DATESBETWEEN(Dim_Date[Date], LatestMStart, LatestMEnd)
+				)
+			VAR PrevMonthVal =
+				CALCULATE(
+					SWITCH(
+						MetricID,
+						1, [Gross Revenue], 2, [Net Revenue], 3, [Gross Profit], 4, [Gross Margin %],
+						5, [Total Orders], 6, [Total Sessions], 7, [Conversion Rate %], 8, [Average Order Value],
+						9, [Cross-Sell Attach %], 10, [Refund Rate %]
+					),
+					DATEADD(DATESBETWEEN(Dim_Date[Date], LatestMStart, LatestMEnd), -1, MONTH)
+				)
+			VAR PrevYearVal =
+				CALCULATE(
+					SWITCH(
+						MetricID,
+						1, [Gross Revenue], 2, [Net Revenue], 3, [Gross Profit], 4, [Gross Margin %],
+						5, [Total Orders], 6, [Total Sessions], 7, [Conversion Rate %], 8, [Average Order Value],
+						9, [Cross-Sell Attach %], 10, [Refund Rate %]
+					),
+					SAMEPERIODLASTYEAR(DATESBETWEEN(Dim_Date[Date], LatestMStart, LatestMEnd))
+				)
+			VAR Roll3MVal =
+				CALCULATE(
+					SWITCH(
+						MetricID,
+						1, DIVIDE([Gross Revenue], 3), 2, DIVIDE([Net Revenue], 3), 3, DIVIDE([Gross Profit], 3), 4, [Gross Margin %],
+						5, DIVIDE([Total Orders], 3), 6, DIVIDE([Total Sessions], 3), 7, [Conversion Rate %], 8, [Average Order Value],
+						9, [Cross-Sell Attach %], 10, [Refund Rate %]
+					),
+					DATESINPERIOD(Dim_Date[Date], LatestMEnd, -3, MONTH)
+				)
+			VAR IsRate = MetricID IN {4, 7, 9, 10}
+			VAR IsCurr = MetricID IN {1, 2, 3, 8}
+			VAR ActStr =
+				SWITCH(
+					TRUE(),
+					MetricID = 8, FORMAT(CurVal, "$#,0.00"),
+					IsCurr && ABS(CurVal) >= 1000000, "$" & FORMAT(CurVal / 1000000, "0.00") & "M",
+					IsCurr && ABS(CurVal) >= 1000, "$" & FORMAT(CurVal / 1000, "0.1") & "K",
+					IsCurr, FORMAT(CurVal, "$#,0"),
+					IsRate, FORMAT(CurVal, "0.00%"),
+					ABS(CurVal) >= 1000, FORMAT(CurVal / 1000, "0.1") & "K",
+					FORMAT(CurVal, "#,0")
+				)
+			VAR PoPDiff = CurMonthVal - PrevMonthVal
+			VAR PoPPct  = DIVIDE(PoPDiff, PrevMonthVal)
+			VAR YoYDiff = CurMonthVal - PrevYearVal
+			VAR YoYPct  = DIVIDE(YoYDiff, PrevYearVal)
+			VAR R3MDiff = CurMonthVal - Roll3MVal
+			VAR DiffStr =
+				SWITCH(
+					TimeMode,
+					1, "Actual",
+					2, "PoP: " & IF(IsRate, FORMAT(PoPDiff * 100, "+0.00;-0.00;0.00") & " pp", FORMAT(PoPPct, "+0.0%;-0.0%;0.0%")),
+					3, "YoY: " & IF(IsRate, FORMAT(YoYDiff * 100, "+0.00;-0.00;0.00") & " pp", FORMAT(YoYPct, "+0.0%;-0.0%;0.0%")),
+					4, "Δ YoY: " & IF(IsRate, FORMAT(YoYDiff * 100, "+0.00;-0.00") & " pp", IF(IsCurr, FORMAT(YoYDiff, "+$#,0;-$#,0"), FORMAT(YoYDiff, "+#,0;-#,0"))),
+					5, "YoY %: " & FORMAT(YoYPct, "+0.0%;-0.0%;0.0%"),
+					6, "vs 3M Avg: " & IF(IsRate, FORMAT(R3MDiff * 100, "+0.00;-0.00") & " pp", FORMAT(DIVIDE(R3MDiff, Roll3MVal), "+0.0%;-0.0%")),
+					"Actual"
+				)
+			RETURN
+				ActStr & "  ·  " & DiffStr
+		lineageTag: f2b3c4d5-e6f7-4890-1234-56789abcdef0
+
+	measure 'Metric Slicer Subtitle Color' =
+			VAR MetricID = SELECTEDVALUE(_Param_Metric[MetricID])
+			VAR TimeMode = SELECTEDVALUE(_Param_Time[TimeModeID], 1)
+			VAR s = SELECTEDVALUE(_Param_Story[StartDate], DATE(2012, 3, 19))
+			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
+			VAR MaxDt = e
+			VAR LatestMStart = DATE(YEAR(MaxDt), MONTH(MaxDt), 1)
+			VAR LatestMEnd   = EOMONTH(MaxDt, 0)
+			VAR CurMonthVal =
+				CALCULATE(
+					SWITCH(
+						MetricID,
+						1, [Gross Revenue], 2, [Net Revenue], 3, [Gross Profit], 4, [Gross Margin %],
+						5, [Total Orders], 6, [Total Sessions], 7, [Conversion Rate %], 8, [Average Order Value],
+						9, [Cross-Sell Attach %], 10, [Refund Rate %]
+					),
+					DATESBETWEEN(Dim_Date[Date], LatestMStart, LatestMEnd)
+				)
+			VAR CompVal =
+				SWITCH(
+					TimeMode,
+					2, CALCULATE(
+						SWITCH(MetricID, 1, [Gross Revenue], 2, [Net Revenue], 3, [Gross Profit], 4, [Gross Margin %], 5, [Total Orders], 6, [Total Sessions], 7, [Conversion Rate %], 8, [Average Order Value], 9, [Cross-Sell Attach %], 10, [Refund Rate %]),
+						DATEADD(DATESBETWEEN(Dim_Date[Date], LatestMStart, LatestMEnd), -1, MONTH)
+					),
+					3, CALCULATE(
+						SWITCH(MetricID, 1, [Gross Revenue], 2, [Net Revenue], 3, [Gross Profit], 4, [Gross Margin %], 5, [Total Orders], 6, [Total Sessions], 7, [Conversion Rate %], 8, [Average Order Value], 9, [Cross-Sell Attach %], 10, [Refund Rate %]),
+						SAMEPERIODLASTYEAR(DATESBETWEEN(Dim_Date[Date], LatestMStart, LatestMEnd))
+					),
+					4, CALCULATE(
+						SWITCH(MetricID, 1, [Gross Revenue], 2, [Net Revenue], 3, [Gross Profit], 4, [Gross Margin %], 5, [Total Orders], 6, [Total Sessions], 7, [Conversion Rate %], 8, [Average Order Value], 9, [Cross-Sell Attach %], 10, [Refund Rate %]),
+						SAMEPERIODLASTYEAR(DATESBETWEEN(Dim_Date[Date], LatestMStart, LatestMEnd))
+					),
+					5, CALCULATE(
+						SWITCH(MetricID, 1, [Gross Revenue], 2, [Net Revenue], 3, [Gross Profit], 4, [Gross Margin %], 5, [Total Orders], 6, [Total Sessions], 7, [Conversion Rate %], 8, [Average Order Value], 9, [Cross-Sell Attach %], 10, [Refund Rate %]),
+						SAMEPERIODLASTYEAR(DATESBETWEEN(Dim_Date[Date], LatestMStart, LatestMEnd))
+					),
+					6, CALCULATE(
+						SWITCH(MetricID, 1, DIVIDE([Gross Revenue], 3), 2, DIVIDE([Net Revenue], 3), 3, DIVIDE([Gross Profit], 3), 4, [Gross Margin %], 5, DIVIDE([Total Orders], 3), 6, DIVIDE([Total Sessions], 3), 7, [Conversion Rate %], 8, [Average Order Value], 9, [Cross-Sell Attach %], 10, [Refund Rate %]),
+						DATESINPERIOD(Dim_Date[Date], LatestMEnd, -3, MONTH)
+					),
+					CurMonthVal
+				)
+			VAR Delta = CurMonthVal - CompVal
+			VAR IsGood = IF(MetricID = 10, Delta <= 0, Delta >= 0)
+			RETURN
+				IF(TimeMode = 1, "#94A3B8", IF(IsGood, "#34D399", "#FB7185"))
+		lineageTag: a3b4c5d6-e7f8-4901-2345-6789abcdef01
+
+	measure 'Active Metric Label' =
+			VAR m = SELECTEDVALUE(_Param_Metric[MetricName], "Gross Revenue ($)")
+			RETURN "Metric: " & m
+		lineageTag: f2b3c4d5-e6f7-4890-1234-56789abcdef1
+
+	measure 'Page Title P2' =
+			"Acquisition " & UNICHAR(183) & " " &
+			IF(ISFILTERED(Dim_Date[Year]), SELECTEDVALUE(Dim_Date[Year], "multi-year"), "2012" & UNICHAR(8211) & "2015")
+			  & " " & UNICHAR(183) & " grouped by " &
+			SELECTEDVALUE(_Param_Dim[DimensionName], "Marketing Channel")
+		lineageTag: 3a776cdd-b206-4849-8ed8-8511e45293b2
+
+	measure 'Unpaid Sessions' = CALCULATE([Total Sessions], KEEPFILTERS(website_sessions[Traffic Type] IN {"Organic", "Direct"}))
+		formatString: #,0
+		lineageTag: 82f819f7-2624-4e17-81f3-3560836e7c8a
+
+	measure 'Unpaid Session %' = DIVIDE([Unpaid Sessions], [Total Sessions], 0)
+		formatString: 0.0%
+		lineageTag: c9a634f1-e6d7-4d86-a9fc-19f86b52ccf1
+
+	measure 'Unpaid Revenue' =
+			CALCULATE(
+				[Gross Revenue],
+				TREATAS(
+					CALCULATETABLE(
+						VALUES(website_sessions[website_session_id]),
+						KEEPFILTERS(website_sessions[Traffic Type] IN {"Organic", "Direct"})
+					),
+					orders[website_session_id]
+				)
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 80b57353-75f3-4904-ad5b-fef9a070b36b
+
+	measure 'Mobile Traffic %' = DIVIDE(CALCULATE([Total Sessions], website_sessions[device_type] = "mobile"), [Total Sessions], 0)
+		formatString: 0.0%
+		lineageTag: faf9ab1d-2120-4102-89cb-827e8f196553
+
+	measure 'Mobile Order %' =
+			DIVIDE(
+				CALCULATE(
+					[Total Orders],
+					TREATAS(
+						CALCULATETABLE(
+							VALUES(website_sessions[website_session_id]),
+							website_sessions[device_type] = "mobile"
+						),
+						orders[website_session_id]
+					)
+				),
+				[Total Orders],
+				0
+			)
+		formatString: 0.0%
+		lineageTag: 4b4cc316-fea4-41cd-aafb-1ca244e6540d
+
+	measure 'CVR Desktop' =
+			DIVIDE(
+				CALCULATE(
+					[Total Orders],
+					TREATAS(
+						CALCULATETABLE(
+							VALUES(website_sessions[website_session_id]),
+							website_sessions[device_type] = "desktop"
+						),
+						orders[website_session_id]
+					)
+				),
+				CALCULATE([Total Sessions], website_sessions[device_type] = "desktop"),
+				0
+			)
+		formatString: 0.00%
+		lineageTag: 71ba181b-432c-4c85-a7ea-c9600eedeedb
+
+	measure 'CVR Mobile' =
+			DIVIDE(
+				CALCULATE(
+					[Total Orders],
+					TREATAS(
+						CALCULATETABLE(
+							VALUES(website_sessions[website_session_id]),
+							website_sessions[device_type] = "mobile"
+						),
+						orders[website_session_id]
+					)
+				),
+				CALCULATE([Total Sessions], website_sessions[device_type] = "mobile"),
+				0
+			)
+		formatString: 0.00%
+		lineageTag: cddeb816-1ebc-4e9e-aa69-3f535d4d2615
+
+	measure 'Header P2 HTML' =
+			VAR titleText = [Page Title P2]
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .hdr-wrap { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 2px 4px; }
+			  .hdr-title { font-size: 22px; font-weight: 800; color: #F8FAFC; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 3px; }
+			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
+			</style>
+			<div class='hdr-wrap'>
+			  <div class='hdr-title'>" & titleText & "</div>
+			  <div class='hdr-sub'>Sample output of the dynamic title measure " & UNICHAR(183) & " data through 19 Mar 2015</div>
+			</div>"
+		lineageTag: 15409b23-1d64-47c5-8bc7-cbcb4f4a4c19
+
+	measure 'KPI Strip P2 HTML' =
+			VAR sess = [Total Sessions]
+			VAR unpSess = [Unpaid Sessions]
+			VAR unpPct = [Unpaid Session %]
+			VAR unpRev = [Unpaid Revenue]
+			VAR mobPct = [Mobile Traffic %]
+			VAR mobOrdPct = [Mobile Order %]
+			VAR cvrDesk = [CVR Desktop]
+			VAR cvrMob = [CVR Mobile]
+			VAR cvrRatio = DIVIDE(cvrDesk, cvrMob, 0)
+			
+			VAR sessStr = FORMAT(sess, "#,0")
+			VAR unpPctStr = IF(ISBLANK(unpPct) || unpPct = 0, "0.0%", FORMAT(unpPct, "0.0%"))
+			VAR unpSessStr = IF(ISBLANK(unpSess) || unpSess = 0, "0 sessions", FORMAT(unpSess, "#,0") & " sessions")
+			VAR unpRevStr = IF(ISBLANK(unpRev) || unpRev = 0, "$0", IF(unpRev >= 1000000, "$" & FORMAT(unpRev / 1000000, "0.00") & "M", "$" & FORMAT(unpRev / 1000, "0.0") & "K"))
+			VAR mobPctStr = IF(ISBLANK(mobPct), "0.0%", FORMAT(mobPct, "0.0%"))
+			VAR mobSubStr = "but " & FORMAT(mobOrdPct, "0.0%") & " of orders"
+			VAR cvrStr = FORMAT(cvrDesk, "0.00%") & " | " & FORMAT(cvrMob, "0.00%")
+			VAR cvrSubStr = IF(cvrRatio > 0, FORMAT(cvrRatio, "0.0") & UNICHAR(215) & " gap", "—")
+			
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; width: 100%; height: 100%; }
+			  .kpi-card {
+			    position: relative; overflow: hidden; min-width: 0; height: 100%;
+			    padding: 12px 16px 10px 16px; border-radius: 10px;
+			    display: flex; flex-direction: column; justify-content: space-between;
+			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
+			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
+			    border: 1px solid rgba(255,255,255,0.08);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 20px rgba(0,0,0,0.35);
+			    transition: border-color .2s ease, box-shadow .2s ease;
+			  }
+			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
+			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
+			  .kpi-card:hover { border-color: var(--acc); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
+			  .kpi-label { font-size:10px; color:#8FA0BC; font-weight:700; text-transform:uppercase;
+			    letter-spacing:0.8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-value { font-size: clamp(21px, 2.1vw, 27px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.1;
+			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
+			    overflow:hidden; text-overflow:ellipsis; margin:3px 0 2px;
+			    text-shadow: 0 0 18px var(--glow); }
+			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:9.5px; font-weight:600; color:#94A3B8;
+			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			</style>
+			<div class='kpi-grid'>
+			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--val-col:#38BDF8;'>
+			    <div class='kpi-label'>TOTAL SESSIONS</div>
+			    <div class='kpi-value'>" & sessStr & "</div>
+			    <div class='kpi-sub'>&nbsp;</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--val-col:#34D399;'>
+			    <div class='kpi-label'>UNPAID TRAFFIC</div>
+			    <div class='kpi-value'>" & unpPctStr & "</div>
+			    <div class='kpi-sub'>" & unpSessStr & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--val-col:#34D399;'>
+			    <div class='kpi-label'>UNPAID REVENUE</div>
+			    <div class='kpi-value'>" & unpRevStr & "</div>
+			    <div class='kpi-sub'>zero ad spend</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#FB7185;--glow:rgba(251,113,133,.16);--val-col:#FB7185;'>
+			    <div class='kpi-label'>MOBILE SHARE OF TRAFFIC</div>
+			    <div class='kpi-value'>" & mobPctStr & "</div>
+			    <div class='kpi-sub'>" & mobSubStr & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);--val-col:#FBBF24;'>
+			    <div class='kpi-label'>CVR DESKTOP | MOBILE</div>
+			    <div class='kpi-value'>" & cvrStr & "</div>
+			    <div class='kpi-sub'>" & cvrSubStr & "</div>
+			  </div>
+			</div>"
+		lineageTag: 045956e6-807a-48a0-a554-34b3caf6b4ff
+
+	measure 'Channel Orders' =
+			CALCULATE(
+				[Total Orders],
+				TREATAS(
+					CALCULATETABLE(VALUES(website_sessions[website_session_id])),
+					orders[website_session_id]
+				)
+			)
+		formatString: #,0
+		lineageTag: e996cf63-4ee5-457c-89f8-0db4c5af2cf9
+
+	measure 'Channel Revenue' =
+			CALCULATE(
+				[Gross Revenue],
+				TREATAS(
+					CALCULATETABLE(VALUES(website_sessions[website_session_id])),
+					orders[website_session_id]
+				)
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 70108808-f46a-436c-949e-b29f487bf3ef
+
+	measure 'Channel CVR' = DIVIDE([Channel Orders], [Total Sessions], 0)
+		formatString: 0.0%
+		lineageTag: b21c9b4f-b7bc-4b8f-89ea-b65c620a7837
+
+	column Dummy
+		lineageTag: 3ce5026e-32f8-4521-831e-9fe6f7d36d85
+		isNameInferred
+		sourceColumn: [Dummy]
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW("Dummy", 1)
+
+	annotation PBI_Id = df809e40-3777-4b37-9982-dd29e3d502c8
+

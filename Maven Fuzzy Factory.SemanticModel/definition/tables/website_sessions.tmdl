@@ -1,0 +1,153 @@
+table website_sessions
+	lineageTag: 9669fdbb-9864-4859-9126-3ac9a930c426
+
+	column website_session_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 690a02b4-ce70-48f5-841d-d85d5f726224
+		summarizeBy: none
+		sourceColumn: website_session_id
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a7da0aba-5fe9-4473-839b-4421c795089c
+		summarizeBy: none
+		sourceColumn: created_at
+
+	column user_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e7b3bbb-1463-46c9-83a6-d1a01a54b7ce
+		summarizeBy: none
+		sourceColumn: user_id
+
+	column is_repeat_session
+		dataType: int64
+		formatString: 0
+		lineageTag: 26f825d2-ead6-4401-bc5f-9d02d51e6e8d
+		summarizeBy: none
+		sourceColumn: is_repeat_session
+
+	column utm_source
+		dataType: string
+		lineageTag: 9f5fd23c-39ae-42b9-b5d6-3b2fe887ddb5
+		summarizeBy: none
+		sourceColumn: utm_source
+
+	column utm_campaign
+		dataType: string
+		lineageTag: a28835e4-0288-40c5-8c3a-c73e8f064586
+		summarizeBy: none
+		sourceColumn: utm_campaign
+
+	column utm_content
+		dataType: string
+		lineageTag: 4f262111-7239-46e5-b051-6cd14cf28ae1
+		summarizeBy: none
+		sourceColumn: utm_content
+
+	column device_type
+		dataType: string
+		lineageTag: b6f34bf9-c1d8-49bf-9217-d55d9cf025c7
+		summarizeBy: none
+		sourceColumn: device_type
+
+	column http_referer
+		dataType: string
+		lineageTag: 8e0373d6-e300-4396-b30b-f22c7aacfd15
+		summarizeBy: none
+		sourceColumn: http_referer
+
+	column Pageviews = COUNTROWS(RELATEDTABLE(website_pageviews))
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b85f0a4-4ce1-4229-8b62-4916c8b26bfe
+		summarizeBy: none
+
+	column 'Is Bounce' = IF([Pageviews] = 1, 1, 0)
+		dataType: int64
+		formatString: 0
+		lineageTag: 197b101a-2964-462f-ba8c-0652369fe0ff
+		summarizeBy: none
+
+	column 'Session Date'
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: cf9c1161-f4cc-4f5d-93c6-6e02067a55c9
+		summarizeBy: none
+		sourceColumn: Session Date
+
+	column 'Channel Grouping'
+		dataType: string
+		lineageTag: bdefff95-449f-4eb0-83da-80aed524d745
+		summarizeBy: none
+		sourceColumn: Channel Grouping
+
+	column 'Traffic Type'
+		dataType: string
+		lineageTag: ab0ece60-e765-45bd-9791-b52f74e8ad0b
+		summarizeBy: none
+		sourceColumn: Traffic Type
+
+	column 'Chapter ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0463d132-ff31-428e-aa3e-5b3c6ec84ec8
+		summarizeBy: none
+		sourceColumn: Chapter ID
+
+	column Device = IF(website_sessions[device_type] = "mobile", "Mobile", "Desktop")
+		dataType: string
+		lineageTag: e8d7c6b5-a4f3-4210-9876-543210fedcba
+		summarizeBy: none
+
+	column 'Channel Sort' =
+			SWITCH(
+				TRUE(),
+				website_sessions[utm_source] = "gsearch" && website_sessions[utm_campaign] = "nonbrand", 1,
+				website_sessions[utm_source] = "bsearch" && website_sessions[utm_campaign] = "nonbrand", 2,
+				website_sessions[utm_campaign] = "brand", 3,
+				(ISBLANK(website_sessions[utm_source]) || website_sessions[utm_source] = "") && NOT(ISBLANK(website_sessions[http_referer])) && website_sessions[http_referer] <> "", 4,
+				(ISBLANK(website_sessions[utm_source]) || website_sessions[utm_source] = "") && (ISBLANK(website_sessions[http_referer]) || website_sessions[http_referer] = ""), 5,
+				website_sessions[utm_source] = "socialbook", 6,
+				7
+			)
+		dataType: int64
+		formatString: 0
+		lineageTag: d0a01034-97e9-4889-a1cf-10fe2430a124
+		summarizeBy: none
+
+	column Channel =
+			SWITCH(
+				TRUE(),
+				website_sessions[utm_source] = "gsearch" && website_sessions[utm_campaign] = "nonbrand", "Google Nonbrand",
+				website_sessions[utm_source] = "bsearch" && website_sessions[utm_campaign] = "nonbrand", "Bing Nonbrand",
+				website_sessions[utm_campaign] = "brand", "Brand (G+B)",
+				(ISBLANK(website_sessions[utm_source]) || website_sessions[utm_source] = "") && NOT(ISBLANK(website_sessions[http_referer])) && website_sessions[http_referer] <> "", "Organic",
+				(ISBLANK(website_sessions[utm_source]) || website_sessions[utm_source] = "") && (ISBLANK(website_sessions[http_referer]) || website_sessions[http_referer] = ""), "Direct",
+				website_sessions[utm_source] = "socialbook", "Paid Social",
+				"Direct"
+			)
+		dataType: string
+		lineageTag: 811a34b5-7f3b-498d-9caa-828331d61157
+		summarizeBy: none
+		sortByColumn: 'Channel Sort'
+
+	partition website_sessions = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\website_sessions.csv"), [Delimiter = ",", Columns = 9, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"website_session_id", Int64.Type}, {"created_at", type datetime}, {"user_id", Int64.Type}, {"is_repeat_session", Int64.Type}, {"utm_source", type text}, {"utm_campaign", type text}, {"utm_content", type text}, {"device_type", type text}, {"http_referer", type text}}),
+				  #"Replaced NULLs" = Table.ReplaceValue(#"Changed column type", "NULL", null, Replacer.ReplaceValue, {"utm_source", "utm_campaign", "utm_content", "http_referer"}),
+				  #"Added Session Date" = Table.AddColumn(#"Replaced NULLs", "Session Date", each DateTime.Date([created_at]), type date),
+				  #"Added Channel Grouping" = Table.AddColumn(#"Added Session Date", "Channel Grouping", each if [utm_source] = null and [http_referer] = null then "Direct Type-In" else if [utm_source] = null and [http_referer] <> null then "Organic Search" else if [utm_source] = "gsearch" and [utm_campaign] = "brand" then "Paid: Google Brand" else if [utm_source] = "gsearch" and [utm_campaign] = "nonbrand" then "Paid: Google Nonbrand" else if [utm_source] = "bsearch" and [utm_campaign] = "brand" then "Paid: Bing Brand" else if [utm_source] = "bsearch" and [utm_campaign] = "nonbrand" then "Paid: Bing Nonbrand" else if [utm_source] = "socialbook" then "Paid Social" else "Other", type text),
+				  #"Added Traffic Type" = Table.AddColumn(#"Added Channel Grouping", "Traffic Type", each if [utm_source] = null then (if [http_referer] = null then "Direct" else "Organic") else "Paid", type text),
+				  #"Added Chapter ID" = Table.AddColumn(#"Added Traffic Type", "Chapter ID", each if [created_at] >= #datetime(2015, 1, 1, 0, 0, 0) then 5 else if [created_at] >= #datetime(2014, 2, 1, 0, 0, 0) then 4 else if [created_at] >= #datetime(2013, 1, 1, 0, 0, 0) then 3 else if [created_at] >= #datetime(2012, 9, 1, 0, 0, 0) then 2 else 1, Int64.Type)
+				in
+				  #"Added Chapter ID"
+
+	annotation PBI_ResultType = Table
+

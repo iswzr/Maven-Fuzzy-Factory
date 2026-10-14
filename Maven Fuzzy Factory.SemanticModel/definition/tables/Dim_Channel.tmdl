@@ -1,0 +1,29 @@
+table Dim_Channel
+	lineageTag: c0cfc52e-20bc-455b-b901-1468cc7a5350
+
+	column 'Channel Grouping'
+		lineageTag: 265424da-6e3a-4011-b67a-59dc2acebb3e
+		isNameInferred
+		sourceColumn: website_sessions[Channel Grouping]
+
+	column 'Traffic Type'
+		lineageTag: 8cccabd9-eb30-46a6-af2c-4671df81252e
+		isNameInferred
+		sourceColumn: website_sessions[Traffic Type]
+
+	column utm_source
+		lineageTag: 7b63abe4-4995-41bd-95fe-aadb60d9a675
+		isNameInferred
+		sourceColumn: website_sessions[utm_source]
+
+	column utm_campaign
+		lineageTag: 4c4cec96-fddb-46df-8ff8-da4dec3b2531
+		isNameInferred
+		sourceColumn: website_sessions[utm_campaign]
+
+	partition Dim_Channel = calculated
+		mode: import
+		source = SUMMARIZE(website_sessions, website_sessions[Channel Grouping], website_sessions[Traffic Type], website_sessions[utm_source], website_sessions[utm_campaign])
+
+	annotation PBI_Id = 0db3b345-8cb5-41ca-84a5-bfc7aaa60573
+

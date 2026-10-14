@@ -1,0 +1,102 @@
+table orders
+	lineageTag: ce27160a-e27b-4de3-9afa-45f40aaedc31
+
+	column order_id
+		dataType: int64
+		formatString: 0
+		lineageTag: d2050ef4-fa16-43c1-8f73-c5d20433b0bc
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c73e4bb4-bab7-4977-8a33-ed2d9125ba5e
+		summarizeBy: none
+		sourceColumn: created_at
+
+	column website_session_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e599738-f60f-4d53-919e-e4271a7ea782
+		summarizeBy: none
+		sourceColumn: website_session_id
+
+	column user_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 52c8899c-9b8b-403c-badc-9360d66861ed
+		summarizeBy: none
+		sourceColumn: user_id
+
+	column primary_product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9d4f789a-21ab-46ac-8774-48591ef6a5ff
+		summarizeBy: none
+		sourceColumn: primary_product_id
+
+	column items_purchased
+		dataType: int64
+		formatString: 0
+		lineageTag: 480f2bab-f0c9-4661-adfb-5b65a5b15e1a
+		summarizeBy: none
+		sourceColumn: items_purchased
+
+	column price_usd
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: d50b19cb-0a6d-46b1-ae9b-44cf2d6ec61c
+		summarizeBy: none
+		sourceColumn: price_usd
+
+	column cogs_usd
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 260e2d70-394c-4d1b-8332-6251edde3d6f
+		summarizeBy: none
+		sourceColumn: cogs_usd
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: af3f0555-7c9c-4b5d-a497-e754b8c1589a
+		summarizeBy: none
+		sourceColumn: Order Date
+
+	column 'Basket Type'
+		dataType: string
+		lineageTag: b851a37f-ee24-43e6-b21c-135b75910973
+		summarizeBy: none
+		sourceColumn: Basket Type
+
+	column 'Margin $'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: bd51db18-3768-41ae-ab1d-0ca65456af93
+		summarizeBy: none
+		sourceColumn: Margin $
+
+	column 'Margin %'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 05751810-3c36-41d4-92bc-e7a7c0582500
+		summarizeBy: none
+		sourceColumn: Margin %
+
+	partition orders = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\orders.csv"), [Delimiter = ",", Columns = 8, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"order_id", Int64.Type}, {"created_at", type datetime}, {"website_session_id", Int64.Type}, {"user_id", Int64.Type}, {"primary_product_id", Int64.Type}, {"items_purchased", Int64.Type}, {"price_usd", type number}, {"cogs_usd", type number}}),
+				  #"Added Order Date" = Table.AddColumn(#"Changed column type", "Order Date", each DateTime.Date([created_at]), type date),
+				  #"Added Basket Type" = Table.AddColumn(#"Added Order Date", "Basket Type", each if [items_purchased] = 1 then "Single" else "Bundle", type text),
+				  #"Added Margin $" = Table.AddColumn(#"Added Basket Type", "Margin $", each [price_usd] - [cogs_usd], type number),
+				  #"Added Margin %" = Table.AddColumn(#"Added Margin $", "Margin %", each if [price_usd] = 0 or [price_usd] = null then 0 else ([price_usd] - [cogs_usd]) / [price_usd], type number)
+				in
+				  #"Added Margin %"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,44 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["products", "orders", "order_items", "order_item_refunds", "website_sessions", "website_pageviews"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table order_item_refunds
+ref table DateTableTemplate_8db2fcea-d869-4f95-b4fe-14aa543cfd33
+ref table LocalDateTable_1580720a-eb97-4948-bb47-5b731dcf40a7
+ref table products
+ref table orders
+ref table order_items
+ref table website_sessions
+ref table website_pageviews
+ref table Dim_Date
+ref table Dim_Channel
+ref table Dim_Lander
+ref table Dim_Customer
+ref table Basket_Pairs
+ref table _Param_Metric
+ref table _Param_Time
+ref table _Param_Dim
+ref table _Param_Story
+ref table _Param_CVR_Lift
+ref table _Param_Refund_Cut
+ref table _Param_Attach
+ref table _Param_Target
+ref table _Param_LanderA
+ref table _Param_LanderB
+ref table _Param_CohortAge
+ref table _Dim_FunnelStep
+ref table _Measures
+
+ref cultureInfo en-US
+

@@ -1,0 +1,31 @@
+table _Dim_FunnelStep
+	lineageTag: 98f67d4c-c6a1-4ca9-9808-2d339bf78711
+
+	column StepNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 0ffbdccb-2fe6-4a0e-b168-22038f4b044b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [StepNumber]
+
+	column StepName
+		dataType: string
+		lineageTag: 2561f41b-264c-408c-8b4a-528f729e5b59
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [StepName]
+
+	column PageURL
+		dataType: string
+		lineageTag: 543a6c94-09a2-4f1c-9b5b-f60f13d00a43
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [PageURL]
+
+	partition _Dim_FunnelStep = calculated
+		mode: import
+		source = DATATABLE("StepNumber", INTEGER, "StepName", STRING, "PageURL", STRING, {{1, "1. Entry Landing Page", "/lander"}, {2, "2. Browse Products", "/products"}, {3, "3. Product Detail View", "/detail"}, {4, "4. Add to Cart", "/cart"}, {5, "5. Shipping Details", "/shipping"}, {6, "6. Billing & Payment", "/billing"}, {7, "7. Purchase Confirmation", "/thank-you-for-your-order"}})
+
+	annotation PBI_Id = 788e0644-43a6-4282-b701-2f2c935d38ae
+

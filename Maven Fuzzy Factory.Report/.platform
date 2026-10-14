@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Maven Fuzzy Factory"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f3074d93-7875-463c-81d4-042162f36504"
+  }
+}

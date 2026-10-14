@@ -1,0 +1,17 @@
+table _Param_Refund_Cut
+	lineageTag: 383c4980-9c6f-4f16-812e-ee028c407f40
+
+	column Value
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 0b15cb43-8d3c-4418-9bcb-b38537dcc65f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Param_Refund_Cut = calculated
+		mode: import
+		source = GENERATESERIES(-0.50, 0.00, 0.01)
+
+	annotation PBI_Id = dab63cef-4af0-456c-942b-7da22cc8c170
+

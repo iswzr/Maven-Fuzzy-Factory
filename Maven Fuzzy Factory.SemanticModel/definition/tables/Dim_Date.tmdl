@@ -1,0 +1,139 @@
+table Dim_Date
+	lineageTag: fecfbb54-b3b3-4d97-a7f9-77a738845d4f
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: b7fdb637-e9b5-4237-b783-fa09c047873b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b79379b-cd77-4d6c-b81c-97b854746be8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+	column YearMonth
+		dataType: string
+		lineageTag: fd813f61-b709-47d7-807e-dce8bc1684e8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonth]
+		sortByColumn: MonthSort
+
+	column MonthName
+		dataType: string
+		lineageTag: 914928c3-8c63-4348-8a73-1ab4e0ac789a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthName]
+
+	column MonthNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: b9621fef-e606-4d48-a30a-c6956611a6c5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthNumber]
+
+	column MonthSort
+		dataType: int64
+		formatString: 0
+		lineageTag: af23c714-d1de-4065-abe2-317c11ae1c6a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthSort]
+
+	column Quarter
+		dataType: string
+		lineageTag: 25d6c66d-36e3-4966-b937-aed971f2feb1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+	column YearQuarter
+		dataType: string
+		lineageTag: af9f8d01-1473-4586-8c26-1f055df037ef
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearQuarter]
+
+	column DayOfWeek
+		dataType: string
+		lineageTag: c44e7351-06c7-4bd0-87de-5439c6af8adf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayOfWeek]
+
+	column DayOfWeekNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: e8f8914b-3076-4544-bebf-04fe3f2e3ac6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayOfWeekNumber]
+
+	column IsWeekend
+		dataType: string
+		lineageTag: 93136486-49e0-4157-b488-f81667eb9fd4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [IsWeekend]
+
+	column WeekOfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: aa869297-36cf-4509-9c8f-58d55105dd7a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [WeekOfYear]
+
+	column 'Chapter ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 372e16e0-747f-4340-8e18-2e131259e754
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Chapter ID]
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 94e5a2c1-3d7f-4a21-9860-2649a1d12345
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Start]
+
+	column 'Chapter Name'
+		dataType: string
+		lineageTag: c3e4b5a6-7d8e-4f90-1234-56789abcdef0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Chapter Name]
+
+	column 'Chapter Color'
+		dataType: string
+		lineageTag: f0e1d2c3-b4a5-4967-8899-aabbccddeeff
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Chapter Color]
+
+	column 'Year Label'
+		dataType: string
+		lineageTag: a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year Label]
+		sortByColumn: Year
+
+	partition Dim_Date = calculated
+		mode: import
+		source = ADDCOLUMNS(CALENDAR(DATE(2012, 1, 1), DATE(2015, 12, 31)), "Year", YEAR([Date]), "Year Label", SWITCH(YEAR([Date]), 2012, "2012*", 2015, "2015 YTD", FORMAT(YEAR([Date]), "0")), "YearMonth", FORMAT([Date], "yyyy-MM"), "MonthName", FORMAT([Date], "mmm"), "MonthNumber", MONTH([Date]), "MonthSort", YEAR([Date]) * 100 + MONTH([Date]), "Quarter", "Q" & QUARTER([Date]), "YearQuarter", YEAR([Date]) & " Q" & QUARTER([Date]), "DayOfWeek", FORMAT([Date], "ddd"), "DayOfWeekNumber", WEEKDAY([Date], 2), "IsWeekend", IF(WEEKDAY([Date], 2) >= 6, "Weekend", "Weekday"), "WeekOfYear", WEEKNUM([Date], 2), "Month Start", DATE(YEAR([Date]), MONTH([Date]), 1), "Chapter ID", SWITCH(TRUE(), [Date] > DATE(2015, 3, 31), BLANK(), [Date] >= DATE(2015, 1, 1), 5, [Date] >= DATE(2014, 2, 1), 4, [Date] >= DATE(2013, 1, 1), 3, [Date] >= DATE(2012, 9, 1), 2, [Date] >= DATE(2012, 3, 1), 1, BLANK()), "Chapter Name", SWITCH(TRUE(), [Date] > DATE(2015, 3, 31), BLANK(), [Date] >= DATE(2015, 1, 1), "Ch 5", [Date] >= DATE(2014, 2, 1), "Ch 4", [Date] >= DATE(2013, 1, 1), "Ch 3", [Date] >= DATE(2012, 9, 1), "Ch 2", [Date] >= DATE(2012, 3, 1), "Ch 1", BLANK()), "Chapter Color", SWITCH(TRUE(), [Date] > DATE(2015, 3, 31), BLANK(), [Date] >= DATE(2015, 1, 1), "#34D399", [Date] >= DATE(2014, 2, 1), "#FBBF24", [Date] >= DATE(2013, 1, 1), "#A78BFA", [Date] >= DATE(2012, 9, 1), "#22D3EE", [Date] >= DATE(2012, 3, 1), "#38BDF8", BLANK()))
+
+	annotation PBI_Id = 3063e0fb-fc29-4a47-85cd-84ed68664955
+
