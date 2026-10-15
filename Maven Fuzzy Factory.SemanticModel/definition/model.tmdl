@@ -41,6 +41,7 @@ ref table _Dim_FunnelStep
 ref table _Measures
 ref table LocalDateTable_4629f3af-df82-46a6-a425-58d9212e98cf
 ref table LocalDateTable_991d05b5-666d-41f3-ba9b-9bc9a1eeb268
+ref table _Dim_BillingVariant
 
 ref cultureInfo en-US
 

@@ -55,6 +55,15 @@ table products
 		summarizeBy: none
 		sourceColumn: Product Role
 
+	column 'Short Name'
+		dataType: string
+		lineageTag: 354e7e20-a753-4a01-a36b-aaeabef49190
+		summarizeBy: none
+		sourceColumn: Short Name
+		sortByColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
 	partition products = m
 		mode: import
 		source =
@@ -68,9 +77,10 @@ table products
 				  #"Added Unit COGS" = Table.AddColumn(#"Added Retail Price", "Unit COGS", each if [product_id] = 1 then 19.49 else if [product_id] = 2 then 22.49 else if [product_id] = 3 then 14.49 else 9.49, type number),
 				  #"Added Margin $" = Table.AddColumn(#"Added Unit COGS", "Margin $", each [Retail Price] - [Unit COGS], type number),
 				  #"Added Margin %" = Table.AddColumn(#"Added Margin $", "Margin %", each [#"Margin $"] / [Retail Price], type number),
-				  #"Added Product Role" = Table.AddColumn(#"Added Margin %", "Product Role", each if [product_id] = 1 then "Flagship Launch Bear" else if [product_id] = 2 then "Premium Valentine's" else if [product_id] = 3 then "Birthday Gift" else "Cross-Sell Add-on", type text)
+				  #"Added Product Role" = Table.AddColumn(#"Added Margin %", "Product Role", each if [product_id] = 1 then "Flagship Launch Bear" else if [product_id] = 2 then "Premium Valentine's" else if [product_id] = 3 then "Birthday Gift" else "Cross-Sell Add-on", type text),
+				  #"Added Short Name" = Table.AddColumn(#"Added Product Role", "Short Name", each if [product_id] = 1 then "Mr. Fuzzy" else if [product_id] = 2 then "Love Bear" else if [product_id] = 3 then "Sugar Panda" else "Mini Bear", type text)
 				in
-				  #"Added Product Role"
+				  #"Added Short Name"
 
 	annotation PBI_ResultType = Table
 

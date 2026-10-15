@@ -1,0 +1,25 @@
+table _Dim_BillingVariant
+	lineageTag: b8728824-86ae-4744-93e3-f7c28027f9bf
+
+	column VariantID
+		dataType: int64
+		formatString: 0
+		lineageTag: c7b4074c-5711-4c73-a6a5-cce73bd21e95
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [VariantID]
+
+	column 'Billing Variant'
+		dataType: string
+		lineageTag: e62b00e1-f232-47a6-9808-07b426571c31
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Billing Variant]
+		sortByColumn: VariantID
+
+	partition _Dim_BillingVariant = calculated
+		mode: import
+		source = DATATABLE("Billing Variant", STRING, "VariantID", INTEGER, {{"/billing", 1}, {"/billing-2", 2}})
+
+	annotation PBI_Id = b37a678f-e126-4c67-aced-8a50037c88b6
+

@@ -5,7 +5,7 @@
     "x": 9.6485182632667126,
     "y": 151.61957270847691,
     "z": 5000,
-    "height": 119.91729841488628,
+    "height": 152.99793246037214,
     "width": 1980.7029634734665,
     "tabOrder": 5000
   },
@@ -32,6 +32,21 @@
           ]
         }
       }
+    },
+    "objects": {
+      "compatibility": [
+        {
+          "properties": {
+            "legacyRendering": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

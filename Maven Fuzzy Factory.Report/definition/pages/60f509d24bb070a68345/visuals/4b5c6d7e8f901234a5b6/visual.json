@@ -1,0 +1,420 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "4b5c6d7e8f901234a5b6",
+  "position": {
+    "x": 525.32046864231563,
+    "y": 326.83666436940041,
+    "z": 6000,
+    "height": 371.8263266712612,
+    "width": 779.37973811164716,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "website_sessions"
+                    }
+                  },
+                  "Property": "Landing Page"
+                }
+              },
+              "queryRef": "website_sessions.Landing Page",
+              "nativeQueryRef": "Landing Page"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-04 START DATE"
+                }
+              },
+              "queryRef": "_Measures.VIZ-04 START DATE",
+              "nativeQueryRef": "VIZ-04 START DATE"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-04 END DATE"
+                }
+              },
+              "queryRef": "_Measures.VIZ-04 END DATE",
+              "nativeQueryRef": "VIZ-04 END DATE"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-04 MID DATE"
+                }
+              },
+              "queryRef": "_Measures.VIZ-04 MID DATE",
+              "nativeQueryRef": "VIZ-04 MID DATE"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-04 CVR"
+                }
+              },
+              "queryRef": "_Measures.VIZ-04 CVR",
+              "nativeQueryRef": "VIZ-04 CVR"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-04 CVR LABEL"
+                }
+              },
+              "queryRef": "_Measures.VIZ-04 CVR LABEL",
+              "nativeQueryRef": "VIZ-04 CVR LABEL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-04 SESSIONS"
+                }
+              },
+              "queryRef": "_Measures.VIZ-04 SESSIONS",
+              "nativeQueryRef": "VIZ-04 SESSIONS"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-04 COLOR"
+                }
+              },
+              "queryRef": "_Measures.VIZ-04 COLOR",
+              "nativeQueryRef": "VIZ-04 COLOR"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "stateManagement": [
+        {
+          "properties": {
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "765D"
+                }
+              }
+            },
+            "denebMetaVersion": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2'"
+                }
+              }
+            },
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "302D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "vega": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.4.3'"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": {\n    \"step\": 32\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, BlinkMacSystemFont, sans-serif\",\n    \"background\": \"transparent\",\n    \"axis\": {\n      \"domain\": false,\n      \"ticks\": false,\n      \"labelColor\": \"#8B95B0\",\n      \"labelFont\": \"Segoe UI\"\n    }\n  },\n  \"encoding\": {\n    \"y\": {\n      \"field\": \"Landing Page\",\n      \"type\": \"nominal\",\n      \"sort\": null,\n      \"axis\": {\n        \"title\": null,\n        \"labelFontSize\": 11,\n        \"labelFontWeight\": 600,\n        \"labelPadding\": 12\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"gantt_pills\",\n      \"mark\": {\n        \"type\": \"bar\",\n        \"cornerRadius\": 6,\n        \"height\": {\n          \"band\": 0.65\n        },\n        \"opacity\": 0.92\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-04 START DATE\",\n          \"type\": \"temporal\",\n          \"scale\": {\n            \"nice\": \"month\"\n          },\n          \"axis\": {\n            \"title\": null,\n            \"orient\": \"bottom\",\n            \"format\": \"%b ''%y\",\n            \"tickCount\": 8,\n            \"grid\": true,\n            \"gridColor\": \"#1A2342\",\n            \"gridDash\": [\n              3,\n              3\n            ],\n            \"labelFontSize\": 10,\n            \"labelPadding\": 10\n          }\n        },\n        \"x2\": {\n          \"field\": \"VIZ-04 END DATE\"\n        },\n        \"color\": {\n          \"field\": \"VIZ-04 COLOR\",\n          \"type\": \"nominal\",\n          \"scale\": null,\n          \"legend\": null\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"Landing Page\",\n            \"title\": \"Landing Page\"\n          },\n          {\n            \"field\": \"VIZ-04 START DATE\",\n            \"title\": \"Launch Date\",\n            \"type\": \"temporal\",\n            \"format\": \"%b %d, %Y\"\n          },\n          {\n            \"field\": \"VIZ-04 END DATE\",\n            \"title\": \"Retired Date\",\n            \"type\": \"temporal\",\n            \"format\": \"%b %d, %Y\"\n          },\n          {\n            \"field\": \"VIZ-04 CVR LABEL\",\n            \"title\": \"Conversion Rate\"\n          },\n          {\n            \"field\": \"VIZ-04 SESSIONS\",\n            \"title\": \"Total Sessions\",\n            \"format\": \",d\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"cvr_labels\",\n      \"mark\": {\n        \"type\": \"text\",\n        \"align\": \"center\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 11,\n        \"fontWeight\": 700,\n        \"font\": \"Segoe UI\",\n        \"color\": \"#0B1020\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-04 MID DATE\",\n          \"type\": \"temporal\"\n        },\n        \"text\": {\n          \"field\": \"VIZ-04 CVR LABEL\"\n        }\n      }\n    }\n  ]\n}'"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "developer": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2.0.0.0'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E9F2'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lander lifecycle (Gantt)'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0F1730'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1D2749'"
+                    }
+                  }
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Testing timeline, active durations & conversion rates across landers'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9.5D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8B95B0'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,421 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "3c4d5e6f7a8b901234cd",
+  "position": {
+    "x": 9.2625775327360422,
+    "y": 309.63473466574766,
+    "z": 3000,
+    "height": 354.62439696760856,
+    "width": 939.49000689179877,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "products"
+                    }
+                  },
+                  "Property": "product_name"
+                }
+              },
+              "queryRef": "products.product_name",
+              "nativeQueryRef": "product_name"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-Timeline Product Short"
+                }
+              },
+              "queryRef": "_Measures.VIZ-Timeline Product Short",
+              "nativeQueryRef": "VIZ-Timeline Product Short"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-Timeline Launch Date"
+                }
+              },
+              "queryRef": "_Measures.VIZ-Timeline Launch Date",
+              "nativeQueryRef": "VIZ-Timeline Launch Date"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-Timeline End Date"
+                }
+              },
+              "queryRef": "_Measures.VIZ-Timeline End Date",
+              "nativeQueryRef": "VIZ-Timeline End Date"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-Timeline Mid Date"
+                }
+              },
+              "queryRef": "_Measures.VIZ-Timeline Mid Date",
+              "nativeQueryRef": "VIZ-Timeline Mid Date"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-Timeline Launch Label"
+                }
+              },
+              "queryRef": "_Measures.VIZ-Timeline Launch Label",
+              "nativeQueryRef": "VIZ-Timeline Launch Label"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-Timeline Color"
+                }
+              },
+              "queryRef": "_Measures.VIZ-Timeline Color",
+              "nativeQueryRef": "VIZ-Timeline Color"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-Timeline Units"
+                }
+              },
+              "queryRef": "_Measures.VIZ-Timeline Units",
+              "nativeQueryRef": "VIZ-Timeline Units"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "stateManagement": [
+        {
+          "properties": {
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "913D"
+                }
+              }
+            },
+            "denebMetaVersion": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2'"
+                }
+              }
+            },
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "281D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "vega": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.4.3'"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": {\n    \"step\": 56\n  },\n  \"padding\": {\n    \"left\": 10,\n    \"right\": 20,\n    \"top\": 12,\n    \"bottom\": 8\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, BlinkMacSystemFont, sans-serif\",\n    \"background\": \"transparent\",\n    \"axis\": {\n      \"domain\": false,\n      \"ticks\": false,\n      \"labelColor\": \"#8B95B0\",\n      \"labelFont\": \"Segoe UI\"\n    }\n  },\n  \"transform\": [\n    {\n      \"filter\": \"datum['VIZ-Timeline Launch Date'] != null && datum['VIZ-Timeline Product Short'] != null\"\n    }\n  ],\n  \"encoding\": {\n    \"y\": {\n      \"field\": \"VIZ-Timeline Product Short\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"Mr. Fuzzy\",\n        \"Love Bear\",\n        \"Sugar Panda\",\n        \"Mini Bear\"\n      ],\n      \"axis\": {\n        \"title\": null,\n        \"labelFontSize\": 12.5,\n        \"labelFontWeight\": 600,\n        \"labelColor\": \"#E2E8F0\",\n        \"labelPadding\": 16\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"gantt_pills\",\n      \"mark\": {\n        \"type\": \"bar\",\n        \"cornerRadius\": 6,\n        \"height\": {\n          \"band\": 0.7\n        },\n        \"opacity\": 0.9\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Launch Date\",\n          \"type\": \"temporal\",\n          \"scale\": {\n            \"domain\": [\n              \"2012-02-01\",\n              \"2015-04-15\"\n            ]\n          },\n          \"axis\": {\n            \"title\": null,\n            \"orient\": \"bottom\",\n            \"format\": \"%b '%y\",\n            \"tickCount\": 8,\n            \"grid\": true,\n            \"gridColor\": \"#1D2749\",\n            \"gridDash\": [\n              3,\n              3\n            ],\n            \"labelFontSize\": 11,\n            \"labelColor\": \"#8B95B0\",\n            \"labelPadding\": 12\n          }\n        },\n        \"x2\": {\n          \"field\": \"VIZ-Timeline End Date\"\n        },\n        \"color\": {\n          \"field\": \"VIZ-Timeline Color\",\n          \"type\": \"nominal\",\n          \"scale\": null,\n          \"legend\": null\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"VIZ-Timeline Product Short\",\n            \"title\": \"Product\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Launch Date\",\n            \"title\": \"Launch Date\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          },\n          {\n            \"field\": \"VIZ-Timeline End Date\",\n            \"title\": \"Active Through\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Units\",\n            \"title\": \"Units Sold (Filtered Context)\",\n            \"format\": \",d\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"milestone_diamonds\",\n      \"mark\": {\n        \"type\": \"point\",\n        \"shape\": \"diamond\",\n        \"filled\": true,\n        \"fill\": \"#FFFFFF\",\n        \"stroke\": \"#FFFFFF\",\n        \"strokeWidth\": 2,\n        \"size\": 280\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Launch Date\",\n          \"type\": \"temporal\"\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"VIZ-Timeline Product Short\",\n            \"title\": \"Product\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Launch Date\",\n            \"title\": \"Launch Milestone\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"inbar_labels\",\n      \"mark\": {\n        \"type\": \"text\",\n        \"align\": \"center\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 11.5,\n        \"fontWeight\": 700,\n        \"font\": \"Segoe UI\",\n        \"color\": \"#0B132B\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Mid Date\",\n          \"type\": \"temporal\"\n        },\n        \"text\": {\n          \"field\": \"VIZ-Timeline Launch Label\"\n        }\n      }\n    }\n  ]\n}'"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "developer": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2.0.0.0'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Product launch timeline (Gantt + milestones)'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E9F2'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Diamond = launch milestone · Bar shows active era and filtered volume'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9.5D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8B95B0'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0F1730'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1D2749'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

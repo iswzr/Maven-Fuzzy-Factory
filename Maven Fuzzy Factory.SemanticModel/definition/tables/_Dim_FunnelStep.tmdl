@@ -15,6 +15,7 @@ table _Dim_FunnelStep
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [StepName]
+		sortByColumn: StepNumber
 
 	column PageURL
 		dataType: string
@@ -25,7 +26,7 @@ table _Dim_FunnelStep
 
 	partition _Dim_FunnelStep = calculated
 		mode: import
-		source = DATATABLE("StepNumber", INTEGER, "StepName", STRING, "PageURL", STRING, {{1, "1. Entry Landing Page", "/lander"}, {2, "2. Browse Products", "/products"}, {3, "3. Product Detail View", "/detail"}, {4, "4. Add to Cart", "/cart"}, {5, "5. Shipping Details", "/shipping"}, {6, "6. Billing & Payment", "/billing"}, {7, "7. Purchase Confirmation", "/thank-you-for-your-order"}})
+		source = DATATABLE("StepNumber", INTEGER, "StepName", STRING, "PageURL", STRING, {{1, "Sessions", "/lander"}, {2, "/products", "/products"}, {3, "Product page", "/detail"}, {4, "/cart", "/cart"}, {5, "/shipping", "/shipping"}, {6, "/billing", "/billing"}, {7, "Order placed", "/thank-you-for-your-order"}})
 
 	annotation PBI_Id = 788e0644-43a6-4282-b701-2f2c935d38ae
 

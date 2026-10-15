@@ -1,0 +1,312 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "8c9e182124848a9062e8",
+  "position": {
+    "x": 7.9393521709166093,
+    "y": 713.21847002067534,
+    "z": 10000,
+    "height": 355.947622329428,
+    "width": 505.47208821502414,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Dim_BillingVariant"
+                    }
+                  },
+                  "Property": "Billing Variant"
+                }
+              },
+              "queryRef": "_Dim_BillingVariant.Billing Variant",
+              "nativeQueryRef": "Billing Variant"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-06 CVR"
+                }
+              },
+              "queryRef": "_Measures.VIZ-06 CVR",
+              "nativeQueryRef": "VIZ-06 CVR"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-06 CVR LABEL"
+                }
+              },
+              "queryRef": "_Measures.VIZ-06 CVR LABEL",
+              "nativeQueryRef": "VIZ-06 CVR LABEL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-06 BAR COLOR"
+                }
+              },
+              "queryRef": "_Measures.VIZ-06 BAR COLOR",
+              "nativeQueryRef": "VIZ-06 BAR COLOR"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-06 ORDERS"
+                }
+              },
+              "queryRef": "_Measures.VIZ-06 ORDERS",
+              "nativeQueryRef": "VIZ-06 ORDERS"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-06 SESSIONS"
+                }
+              },
+              "queryRef": "_Measures.VIZ-06 SESSIONS",
+              "nativeQueryRef": "VIZ-06 SESSIONS"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "vega": [
+        {
+          "properties": {
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\"name\": \"dataset\"},\n  \"width\": \"container\",\n  \"height\": \"container\",\n  \"title\": {\n    \"text\": \"+18.57 pp · +41.5% relative\",\n    \"color\": \"#2DD4BF\",\n    \"fontSize\": 13,\n    \"fontWeight\": 700,\n    \"font\": \"Segoe UI\",\n    \"anchor\": \"middle\",\n    \"offset\": 10\n  },\n  \"config\": {\n    \"view\": {\"stroke\": null},\n    \"font\": \"Segoe UI, -apple-system, BlinkMacSystemFont, sans-serif\",\n    \"background\": \"transparent\",\n    \"axis\": {\n      \"domain\": false,\n      \"ticks\": false,\n      \"labelColor\": \"#8B95B0\",\n      \"labelFont\": \"Segoe UI\"\n    }\n  },\n  \"encoding\": {\n    \"x\": {\n      \"field\": \"Billing Variant\",\n      \"type\": \"nominal\",\n      \"sort\": [\"/billing\", \"/billing-2\"],\n      \"axis\": {\n        \"title\": null,\n        \"labelAngle\": 0,\n        \"labelLimit\": 0,\n        \"labelColor\": \"#94A3B8\",\n        \"labelFontSize\": 12,\n        \"labelPadding\": 10\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"bars\",\n      \"mark\": {\n        \"type\": \"bar\",\n        \"cornerRadiusTopLeft\": 3,\n        \"cornerRadiusTopRight\": 3,\n        \"width\": {\"band\": 0.54}\n      },\n      \"encoding\": {\n        \"y\": {\n          \"field\": \"VIZ-06 CVR\",\n          \"type\": \"quantitative\",\n          \"scale\": {\"domain\": [0, 0.88]},\n          \"axis\": {\n            \"title\": null,\n            \"values\": [0, 0.29, 0.59, 0.88],\n            \"format\": \".0%\",\n            \"grid\": true,\n            \"gridColor\": \"#1A2342\",\n            \"gridOpacity\": 0.8,\n            \"labelFontSize\": 11,\n            \"labelPadding\": 12\n          }\n        },\n        \"color\": {\n          \"field\": \"VIZ-06 BAR COLOR\",\n          \"type\": \"nominal\",\n          \"scale\": null,\n          \"legend\": null\n        },\n        \"tooltip\": [\n          {\"field\": \"Billing Variant\", \"title\": \"Variant\"},\n          {\"field\": \"VIZ-06 SESSIONS\", \"title\": \"Sessions\", \"format\": \",d\"},\n          {\"field\": \"VIZ-06 ORDERS\", \"title\": \"Orders\", \"format\": \",d\"},\n          {\"field\": \"VIZ-06 CVR LABEL\", \"title\": \"Conversion Rate\"}\n        ]\n      }\n    },\n    {\n      \"name\": \"bar_labels\",\n      \"mark\": {\n        \"type\": \"text\",\n        \"align\": \"center\",\n        \"baseline\": \"bottom\",\n        \"dy\": -6,\n        \"fontSize\": 12,\n        \"fontWeight\": 600,\n        \"font\": \"Segoe UI\",\n        \"color\": \"#E6E9F2\"\n      },\n      \"encoding\": {\n        \"y\": {\n          \"field\": \"VIZ-06 CVR\",\n          \"type\": \"quantitative\"\n        },\n        \"text\": {\n          \"field\": \"VIZ-06 CVR LABEL\"\n        }\n      }\n    }\n  ]\n}'"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableContextMenuSelector": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "enableSelection": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "selectionMaxDataPoints": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            },
+            "selectionMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'simple'"
+                }
+              }
+            },
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.4.3'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "stateManagement": [
+        {
+          "properties": {
+            "denebMetaVersion": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2'"
+                }
+              }
+            },
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "306D"
+                }
+              }
+            },
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "495D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "developer": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2.0.0.0'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Billing A/B: /billing vs /billing-2'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0F1730'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

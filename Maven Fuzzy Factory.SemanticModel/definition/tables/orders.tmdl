@@ -96,7 +96,7 @@ table orders
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"order_id", Int64.Type}, {"created_at", type datetime}, {"website_session_id", Int64.Type}, {"user_id", Int64.Type}, {"primary_product_id", Int64.Type}, {"items_purchased", Int64.Type}, {"price_usd", type number}, {"cogs_usd", type number}}),
 				  #"Added Order Date" = Table.AddColumn(#"Changed column type", "Order Date", each DateTime.Date([created_at]), type date),
-				  #"Added Basket Type" = Table.AddColumn(#"Added Order Date", "Basket Type", each if [items_purchased] = 1 then "Single" else "Bundle", type text),
+				  #"Added Basket Type" = Table.AddColumn(#"Added Order Date", "Basket Type", each if [items_purchased] = 1 then "1 item" else "2 items", type text),
 				  #"Added Margin $" = Table.AddColumn(#"Added Basket Type", "Margin $", each [price_usd] - [cogs_usd], type number),
 				  #"Added Margin %" = Table.AddColumn(#"Added Margin $", "Margin %", each if [price_usd] = 0 or [price_usd] = null then 0 else ([price_usd] - [cogs_usd]) / [price_usd], type number)
 				in

@@ -188,6 +188,21 @@ table website_sessions
 		lineageTag: e1f2a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b
 		summarizeBy: none
 
+	column 'Landing Page Short' =
+			SWITCH(
+				website_sessions[Landing Page],
+				"/home", "home",
+				"/lander-1", "L1",
+				"/lander-2", "L2",
+				"/lander-3", "L3",
+				"/lander-4", "L4",
+				"/lander-5", "L5",
+				website_sessions[Landing Page]
+			)
+		dataType: string
+		lineageTag: b9698c41-68cf-4c8b-94e5-76423ce7faa1
+		summarizeBy: none
+
 	partition website_sessions = m
 		mode: import
 		source =

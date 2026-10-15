@@ -266,7 +266,7 @@ table _Measures
 			  .kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; width: 100%; height: 100vh; }
 			  .kpi-card {
 			    position: relative; overflow: hidden; min-width: 0; height: 100%;
-			    padding: 11px 13px 9px 13px; border-radius: 12px;
+			    padding: 14px 14px 12px 14px; border-radius: 12px;
 			    display: flex; flex-direction: column; justify-content: space-between;
 			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
 			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
@@ -282,54 +282,64 @@ table _Measures
 			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
 			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
 			  .kpi-card:hover { border-color: var(--acc); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
-			  .kpi-top { display:flex; align-items:center; gap:7px; }
-			  .kpi-ico { width:20px; height:20px; border-radius:6px; flex-shrink:0;
-			    display:flex; align-items:center; justify-content:center;
-			    font-size:11px; font-weight:700; color:var(--acc);
-			    background: var(--glow); border:1px solid var(--glow); }
-			  .kpi-label { font-size:9.5px; color:#8FA0BC; font-weight:600; text-transform:uppercase;
+			  .kpi-top { display:flex; align-items:center; gap:9px; }
+			  .kpi-ico { width:30px; height:30px; border-radius:9px; flex-shrink:0;
+			    display:flex; align-items:center; justify-content:center; color:var(--acc);
+			    background: linear-gradient(145deg, var(--glow), rgba(255,255,255,0.02));
+			    border:1px solid var(--line);
+			    box-shadow: 0 0 14px var(--glow), inset 0 1px 0 rgba(255,255,255,0.08); }
+			  .kpi-ico svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.9;
+			    stroke-linecap:round; stroke-linejoin:round; }
+			  .kpi-label { font-size:9.5px; color:#8FA0BC; font-weight:700; text-transform:uppercase;
 			    letter-spacing:.9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-			  .kpi-value { font-size: clamp(20px, 2vw, 27px); font-weight:700; color:#F8FAFC; line-height:1.05;
+			  .kpi-value { font-size: clamp(22px, 2.2vw, 30px); font-weight:800; color:#F8FAFC; line-height:1.05;
 			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
-			    overflow:hidden; text-overflow:ellipsis; margin:3px 0 2px;
+			    overflow:hidden; text-overflow:ellipsis; margin:4px 0 3px;
 			    text-shadow: 0 0 18px var(--glow); }
-			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:9px; font-weight:600; color:var(--acc);
-			    background: var(--glow); border-radius:20px; padding:2px 8px;
+			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:9.5px; font-weight:600; color:var(--acc);
+			    background: var(--glow); border-radius:20px; padding:3px 9px;
 			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 			  .kpi-sub.up { color:#34D399; background:rgba(52,211,153,.14); }
 			  .kpi-sub.dn { color:#F87171; background:rgba(248,113,113,.14); }
 			</style>
 			<div class='kpi-grid'>
-			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);'>
-			    <div class='kpi-top'><span class='kpi-ico'>$</span><span class='kpi-label'>Gross Revenue</span></div>
+			
+			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--line:rgba(56,189,248,.40);'>
+			    <div class='kpi-top'><span class='kpi-ico'><svg viewBox='0 0 24 24'><rect x='2' y='6' width='20' height='12' rx='2'/><circle cx='12' cy='12' r='2.5'/><path d='M6 12h.01M18 12h.01'/></svg></span><span class='kpi-label'>Gross Revenue</span></div>
 			    <div class='kpi-value'>" & revStr & "</div>
 			    <div class='kpi-sub'>" & subRev & "</div>
 			  </div>
-			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);'>
-			    <div class='kpi-top'><span class='kpi-ico'>✓</span><span class='kpi-label'>Orders</span></div>
+			
+			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--line:rgba(52,211,153,.40);'>
+			    <div class='kpi-top'><span class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z'/><path d='M3 6h18'/><path d='M16 10a4 4 0 0 1-8 0'/></svg></span><span class='kpi-label'>Orders</span></div>
 			    <div class='kpi-value'>" & ordStr & "</div>
 			    <div class='kpi-sub'>" & subOrd & "</div>
 			  </div>
-			  <div class='kpi-card' style='--acc:#22D3EE;--glow:rgba(34,211,238,.16);'>
-			    <div class='kpi-top'><span class='kpi-ico'>◎</span><span class='kpi-label'>Sessions</span></div>
+			
+			  <div class='kpi-card' style='--acc:#22D3EE;--glow:rgba(34,211,238,.16);--line:rgba(34,211,238,.40);'>
+			    <div class='kpi-top'><span class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M23 21v-2a4 4 0 0 0-3-3.87'/><path d='M16 3.13a4 4 0 0 1 0 7.75'/></svg></span><span class='kpi-label'>Sessions</span></div>
 			    <div class='kpi-value'>" & sessStr & "</div>
 			    <div class='kpi-sub'>" & subSess & "</div>
 			  </div>
-			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);'>
-			    <div class='kpi-top'><span class='kpi-ico'>↗</span><span class='kpi-label'>Conv. Rate</span></div>
+			
+			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);--line:rgba(251,191,36,.40);'>
+			    <div class='kpi-top'><span class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M22 3H2l8 9.46V19l4 2v-8.54L22 3z'/></svg></span><span class='kpi-label'>Conv. Rate</span></div>
 			    <div class='kpi-value'>" & cvrStr & "</div>
 			    <div class='kpi-sub " & cvrCls & "'>" & subCvr & "</div>
 			  </div>
-			  <div class='kpi-card' style='--acc:#A78BFA;--glow:rgba(167,139,250,.18);'>
-			    <div class='kpi-top'><span class='kpi-ico'>◈</span><span class='kpi-label'>Order AOV</span></div>
+			
+			  <div class='kpi-card' style='--acc:#A78BFA;--glow:rgba(167,139,250,.18);--line:rgba(167,139,250,.40);'>
+			    <div class='kpi-top'><span class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><path d='M15 8.5c-.6-1-1.7-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.3 0-2.4-.5-3-1.5'/><path d='M12 5.5V7M12 17v1.5'/></svg></span><span class='kpi-label'>Order AOV</span></div>
 			    <div class='kpi-value'>" & aovStr & "</div>
 			    <div class='kpi-sub'>" & subAov & "</div>
 			  </div>
-			  <div class='kpi-card' style='--acc:#2DD4BF;--glow:rgba(45,212,191,.16);'>
-			    <div class='kpi-top'><span class='kpi-ico'>%</span><span class='kpi-label'>Gross Margin</span></div>
+			
+			  <div class='kpi-card' style='--acc:#2DD4BF;--glow:rgba(45,212,191,.16);--line:rgba(45,212,191,.40);'>
+			    <div class='kpi-top'><span class='kpi-ico'><svg viewBox='0 0 24 24'><line x1='19' y1='5' x2='5' y2='19'/><circle cx='6.5' cy='6.5' r='2.5'/><circle cx='17.5' cy='17.5' r='2.5'/></svg></span><span class='kpi-label'>Gross Margin</span></div>
 			    <div class='kpi-value'>" & gmStr & "</div>
 			    <div class='kpi-sub'>" & subGm & "</div>
 			  </div>
+			
 			</div>"
 		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: f9e5d82b-9842-4217-91ef-4729fb569c32
@@ -802,7 +812,7 @@ table _Measures
 			  .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; width: 100%; height: 100%; }
 			  .kpi-card {
 			    position: relative; overflow: hidden; min-width: 0; height: 100%;
-			    padding: 12px 16px 10px 16px; border-radius: 10px;
+			    padding: 14px 16px 12px 16px; border-radius: 12px;
 			    display: flex; flex-direction: column; justify-content: space-between;
 			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
 			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
@@ -813,38 +823,48 @@ table _Measures
 			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
 			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
 			  .kpi-card:hover { border-color: var(--acc); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
+			  .kpi-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
 			  .kpi-label { font-size:10px; color:#8FA0BC; font-weight:700; text-transform:uppercase;
-			    letter-spacing:0.8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-			  .kpi-value { font-size: clamp(21px, 2.1vw, 27px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.1;
+			    letter-spacing:0.8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+			  .kpi-ico { flex:0 0 auto; width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+			    color:var(--acc); background: linear-gradient(145deg, var(--glow), rgba(255,255,255,0.02));
+			    border:1px solid var(--glow); box-shadow: 0 0 14px var(--glow); }
+			  .kpi-ico svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+			  .kpi-value { font-size: clamp(23px, 2.3vw, 30px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.1;
 			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
-			    overflow:hidden; text-overflow:ellipsis; margin:3px 0 2px;
-			    text-shadow: 0 0 18px var(--glow); }
-			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:9.5px; font-weight:600; color:#94A3B8;
+			    overflow:hidden; text-overflow:ellipsis; margin:6px 0 4px; text-shadow: 0 0 18px var(--glow); }
+			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:10px; font-weight:600; color:var(--val-col);
+			    background:var(--glow); padding:2px 8px; border-radius:999px;
 			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 			</style>
 			<div class='kpi-grid'>
 			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--val-col:#38BDF8;'>
-			    <div class='kpi-label'>TOTAL SESSIONS</div>
+			    <div class='kpi-top'><div class='kpi-label'>TOTAL SESSIONS</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M3 12h4l3-8 4 16 3-8h4'/></svg></div></div>
 			    <div class='kpi-value'>" & sessStr & "</div>
-			    <div class='kpi-sub'>&nbsp;</div>
+			    <div class='kpi-sub' style='visibility:hidden'>&nbsp;</div>
 			  </div>
 			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--val-col:#34D399;'>
-			    <div class='kpi-label'>UNPAID TRAFFIC</div>
+			    <div class='kpi-top'><div class='kpi-label'>UNPAID TRAFFIC</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='9'/><path d='M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18'/></svg></div></div>
 			    <div class='kpi-value'>" & unpPctStr & "</div>
 			    <div class='kpi-sub'>" & unpSessStr & "</div>
 			  </div>
 			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--val-col:#34D399;'>
-			    <div class='kpi-label'>UNPAID REVENUE</div>
+			    <div class='kpi-top'><div class='kpi-label'>UNPAID REVENUE</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/></svg></div></div>
 			    <div class='kpi-value'>" & unpRevStr & "</div>
 			    <div class='kpi-sub'>zero ad spend</div>
 			  </div>
 			  <div class='kpi-card' style='--acc:#FB7185;--glow:rgba(251,113,133,.16);--val-col:#FB7185;'>
-			    <div class='kpi-label'>MOBILE SHARE OF TRAFFIC</div>
+			    <div class='kpi-top'><div class='kpi-label'>MOBILE SHARE OF TRAFFIC</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><rect x='7' y='2' width='10' height='20' rx='2'/><path d='M11 18h2'/></svg></div></div>
 			    <div class='kpi-value'>" & mobPctStr & "</div>
 			    <div class='kpi-sub'>" & mobSubStr & "</div>
 			  </div>
 			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);--val-col:#FBBF24;'>
-			    <div class='kpi-label'>CVR DESKTOP | MOBILE</div>
+			    <div class='kpi-top'><div class='kpi-label'>CVR DESKTOP | MOBILE</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M22 7l-8.5 8.5-5-5L2 17M16 7h6v6'/></svg></div></div>
 			    <div class='kpi-value'>" & cvrStr & "</div>
 			    <div class='kpi-sub'>" & cvrSubStr & "</div>
 			  </div>
@@ -1388,7 +1408,7 @@ table _Measures
 			  .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; width: 100%; height: 100%; }
 			  .kpi-card {
 			    position: relative; overflow: hidden; min-width: 0; height: 100%;
-			    padding: 12px 16px 10px 16px; border-radius: 10px;
+			    padding: 14px 16px 12px 16px; border-radius: 12px;
 			    display: flex; flex-direction: column; justify-content: space-between;
 			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
 			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
@@ -1399,44 +1419,1030 @@ table _Measures
 			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
 			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
 			  .kpi-card:hover { border-color: var(--acc); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
+			  .kpi-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
 			  .kpi-label { font-size:10px; color:#8FA0BC; font-weight:700; text-transform:uppercase;
-			    letter-spacing:0.8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-			  .kpi-value { font-size: clamp(21px, 2.1vw, 27px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.1;
+			    letter-spacing:0.8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+			  .kpi-ico { flex:0 0 auto; width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+			    color:var(--acc); background: linear-gradient(145deg, var(--glow), rgba(255,255,255,0.02));
+			    border:1px solid var(--glow); box-shadow: 0 0 14px var(--glow); }
+			  .kpi-ico svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+			  .kpi-value { font-size: clamp(23px, 2.3vw, 30px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.1;
 			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
-			    overflow:hidden; text-overflow:ellipsis; margin:3px 0 2px;
-			    text-shadow: 0 0 18px var(--glow); }
-			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:9.5px; font-weight:600; color:#94A3B8;
+			    overflow:hidden; text-overflow:ellipsis; margin:6px 0 4px; text-shadow: 0 0 18px var(--glow); }
+			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:10px; font-weight:600; color:var(--val-col);
+			    background:var(--glow); padding:2px 8px; border-radius:999px;
 			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 			</style>
 			<div class='kpi-grid'>
 			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--val-col:#34D399;'>
-			    <div class='kpi-label'>BEST LANDER CVR</div>
+			    <div class='kpi-top'><div class='kpi-label'>BEST LANDER CVR</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3'/></svg></div></div>
 			    <div class='kpi-value'>" & card1Val & "</div>
 			    <div class='kpi-sub'>" & card1Sub & "</div>
 			  </div>
 			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--val-col:#38BDF8;'>
-			    <div class='kpi-label'>LOWEST BOUNCE</div>
+			    <div class='kpi-top'><div class='kpi-label'>LOWEST BOUNCE</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z'/><path d='M9 12l2 2 4-4'/></svg></div></div>
 			    <div class='kpi-value'>" & card2Val & "</div>
 			    <div class='kpi-sub'>" & card2Sub & "</div>
 			  </div>
 			  <div class='kpi-card' style='--acc:#2DD4BF;--glow:rgba(45,212,191,.16);--val-col:#2DD4BF;'>
-			    <div class='kpi-label'>BILLING LIFT</div>
+			    <div class='kpi-top'><div class='kpi-label'>BILLING LIFT</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M22 7l-8.5 8.5-5-5L2 17M16 7h6v6'/></svg></div></div>
 			    <div class='kpi-value'>" & card3Val & "</div>
 			    <div class='kpi-sub'>" & card3Sub & "</div>
 			  </div>
 			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--val-col:#38BDF8;'>
-			    <div class='kpi-label'>BILLING Z-SCORE</div>
+			    <div class='kpi-top'><div class='kpi-label'>BILLING Z-SCORE</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M3 20h18M4 20c2-1 3-4 5-9 1-3 2-5 3-5s2 2 3 5c2 5 3 8 5 9'/></svg></div></div>
 			    <div class='kpi-value'>" & card4Val & "</div>
 			    <div class='kpi-sub'>" & card4Sub & "</div>
 			  </div>
 			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);--val-col:#FBBF24;'>
-			    <div class='kpi-label'>CHECKOUT COMPLETION</div>
+			    <div class='kpi-top'><div class='kpi-label'>CHECKOUT COMPLETION</div>
+			      <div class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='9' cy='20' r='1.5'/><circle cx='18' cy='20' r='1.5'/><path d='M2 3h3l2.7 11.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 7H6'/></svg></div></div>
 			    <div class='kpi-value'>" & card5Val & "</div>
 			    <div class='kpi-sub'>" & card5Sub & "</div>
 			  </div>
 			</div>"
 		displayFolder: 05 Page 3 - CRO Lab
 		lineageTag: f038361e-5ff2-4d3a-996c-5f97b69aa856
+
+	measure 'VIZ-03 SESSIONS' = [Lander Sessions]
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 5b6a7c8d-9e0f-4123-b456-7a8b9c0d1e2f
+
+	measure 'VIZ-03 BOUNCE' = [Lander Bounce Rate]
+		formatString: 0.0%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 6c7d8e9f-0a1b-4234-c567-8b9c0d1e2f3a
+
+	measure 'VIZ-03 CVR' = [Lander CVR]
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 7d8e9f0a-1b2c-4345-d678-9c0d1e2f3a4b
+
+	measure 'VIZ-03 ORDERS' = [Lander Orders]
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 8e9f0a1b-2c3d-4456-e789-0d1e2f3a4b5c
+
+	measure 'VIZ-03 VERDICT' =
+			VAR CurrentLander = SELECTEDVALUE(website_sessions[Landing Page])
+			VAR CurrentSessions = [VIZ-03 SESSIONS]
+			VAR CurrentOrders = [VIZ-03 ORDERS]
+			VAR CurrentCVR = [VIZ-03 CVR]
+			VAR CurrentBounce = [VIZ-03 BOUNCE]
+			VAR IsSingleLander = HASONEVALUE(website_sessions[Landing Page])
+			
+			-- Baseline metrics (/home in current filter context)
+			VAR BaseSessions = CALCULATE([VIZ-03 SESSIONS], website_sessions[Landing Page] = "/home", ALLSELECTED(website_sessions[Landing Page]))
+			VAR BaseOrders = CALCULATE([VIZ-03 ORDERS], website_sessions[Landing Page] = "/home", ALLSELECTED(website_sessions[Landing Page]))
+			VAR BaseCVR = DIVIDE(BaseOrders, BaseSessions)
+			VAR BaseBounce = CALCULATE([VIZ-03 BOUNCE], website_sessions[Landing Page] = "/home", ALLSELECTED(website_sessions[Landing Page]))
+			
+			-- Two-proportion Z-test for A/B testing
+			VAR p1 = BaseCVR
+			VAR p2 = CurrentCVR
+			VAR n1 = BaseSessions
+			VAR n2 = CurrentSessions
+			VAR p_pool = DIVIDE(BaseOrders + CurrentOrders, BaseSessions + CurrentSessions)
+			VAR se = SQRT(p_pool * (1 - p_pool) * (DIVIDE(1, n1) + DIVIDE(1, n2)))
+			VAR z_score = DIVIDE(p2 - p1, se)
+			VAR lift = DIVIDE(p2 - p1, p1)
+			VAR delta_bounce = CurrentBounce - BaseBounce
+			
+			RETURN
+				IF(
+					NOT IsSingleLander || ISBLANK(CurrentSessions) || CurrentSessions = 0,
+					BLANK(),
+					IF(
+						CurrentLander = "/home",
+						"Baseline",
+						SWITCH(
+							TRUE(),
+							-- Low sample size test (underpowered)
+							n2 < 10000 && ABS(z_score) < 1.96, "Short test",
+							-- Strong statistical champion: z >= 2.58 (p < 0.01), substantial lift >= 20%, lower bounce
+							z_score >= 2.58 && lift >= 0.20 && delta_bounce <= 0.01, "Champion",
+							-- Statistically significant winner (z >= 1.96, p < 0.05)
+							z_score >= 1.96, "Won, scaled",
+							-- Statistically significant loser (z <= -1.96, p < 0.05)
+							z_score <= -1.96, "Lost",
+							-- Adequately powered, but no significant difference from baseline
+							"Neutral / Tied"
+						)
+					)
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 9f0a1b2c-3d4e-4567-f890-1e2f3a4b5c6d
+
+	measure 'VIZ-03 VERDICT Color' =
+			VAR V = [VIZ-03 VERDICT]
+			RETURN
+				SWITCH(
+					V,
+					"Champion", "#34D399",
+					"Won, scaled", "#60A5FA",
+					"Baseline", "#94A3B8",
+					"Lost", "#FB7185",
+					"Short test", "#A78BFA",
+					"Neutral / Tied", "#94A3B8",
+					BLANK()
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 0a1b2c3d-4e5f-4678-0901-2e3f4a5b6c7d
+
+	measure 'VIZ-03 LANDER Color' =
+			VAR S = [VIZ-03 SESSIONS]
+			VAR LanderName = SELECTEDVALUE(website_sessions[Landing Page])
+			RETURN
+				IF(
+					ISBLANK(S) || S = 0,
+					BLANK(),
+					SWITCH(
+						LanderName,
+						"/home", "#94A3B8",
+						"/lander-1", "#FB7185",
+						"/lander-2", "#60A5FA",
+						"/lander-3", "#FBBF24",
+						"/lander-4", "#A78BFA",
+						"/lander-5", "#34D399",
+						"#94A3B8"
+					)
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 1b2c3d4e-5f60-4789-1012-3e4f5a6b7c8d
+
+	measure 'VIZ-03 LANDER Dot' =
+			VAR S = [VIZ-03 SESSIONS]
+			VAR LanderName = SELECTEDVALUE(website_sessions[Landing Page])
+			RETURN
+				IF(
+					ISBLANK(S) || S = 0 || ISBLANK(LanderName),
+					BLANK(),
+					"●  " & LanderName
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 2c3d4e5f-6071-4890-2123-4e5f6a7b8c9d
+
+	measure 'VIZ-03 BOUNCE Color' =
+			VAR S = [VIZ-03 SESSIONS]
+			VAR B = [VIZ-03 BOUNCE]
+			RETURN
+				IF(
+					ISBLANK(S) || S = 0,
+					BLANK(),
+					SWITCH(
+						TRUE(),
+						ISBLANK(B), BLANK(),
+						B >= 0.52, "#6E2232",
+						B >= 0.49, "#541E2B",
+						B >= 0.45, "#3D1F2B",
+						B >= 0.40, "#262235",
+						"#14262E"
+					)
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 3d4e5f60-7182-4901-3234-5e6f7a8b9c0e
+
+	measure 'VIZ-03 BOUNCE Font Color' =
+			VAR S = [VIZ-03 SESSIONS]
+			VAR B = [VIZ-03 BOUNCE]
+			RETURN
+				IF(ISBLANK(S) || S = 0 || ISBLANK(B), BLANK(), "#E6E9F2")
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 4e5f6071-8293-4012-4345-6e7f8a9b0c1f
+
+	measure 'VIZ-03 CVR Bar Color' = "#176A60"
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 5f607182-93a4-4123-5456-7e8f9a0b1c20
+
+	measure 'VIZ-03 SESSIONS Bar Color' = "#176A60"
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 60718293-a4b5-4234-6567-8e9f0a1b2c31
+
+	measure 'VIZ-03 CVR LIFT vs Baseline' =
+			VAR CurrentLander = SELECTEDVALUE(website_sessions[Landing Page])
+			VAR CurrentSessions = [VIZ-03 SESSIONS]
+			VAR CurrentCVR = [VIZ-03 CVR]
+			VAR BaseSessions = CALCULATE([VIZ-03 SESSIONS], website_sessions[Landing Page] = "/home", ALLSELECTED(website_sessions[Landing Page]))
+			VAR BaseOrders = CALCULATE([VIZ-03 ORDERS], website_sessions[Landing Page] = "/home", ALLSELECTED(website_sessions[Landing Page]))
+			VAR p1 = DIVIDE(BaseOrders, BaseSessions)
+			RETURN
+				IF(
+					CurrentLander = "/home" || ISBLANK(CurrentSessions) || CurrentSessions = 0 || ISBLANK(p1) || p1 = 0,
+					BLANK(),
+					DIVIDE(CurrentCVR - p1, p1)
+				)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 718293a4-b5c6-4345-7678-9e0f1a2b3c42
+
+	measure 'VIZ-03 BOUNCE DIFF pp' =
+			VAR CurrentLander = SELECTEDVALUE(website_sessions[Landing Page])
+			VAR CurrentSessions = [VIZ-03 SESSIONS]
+			VAR CurrentBounce = [VIZ-03 BOUNCE]
+			VAR BaseBounce = CALCULATE([VIZ-03 BOUNCE], website_sessions[Landing Page] = "/home", ALLSELECTED(website_sessions[Landing Page]))
+			RETURN
+				IF(
+					CurrentLander = "/home" || ISBLANK(CurrentSessions) || CurrentSessions = 0,
+					BLANK(),
+					CurrentBounce - BaseBounce
+				)
+		formatString: +0.0 pp;-0.0 pp;0.0 pp
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: 8293a4b5-c6d7-4456-8789-0e1f2a3b4c53
+
+	measure 'VIZ-03 Z-SCORE' =
+			VAR CurrentLander = SELECTEDVALUE(website_sessions[Landing Page])
+			VAR CurrentSessions = [VIZ-03 SESSIONS]
+			VAR CurrentOrders = [VIZ-03 ORDERS]
+			VAR CurrentCVR = [VIZ-03 CVR]
+			VAR BaseSessions = CALCULATE([VIZ-03 SESSIONS], website_sessions[Landing Page] = "/home", ALLSELECTED(website_sessions[Landing Page]))
+			VAR BaseOrders = CALCULATE([VIZ-03 ORDERS], website_sessions[Landing Page] = "/home", ALLSELECTED(website_sessions[Landing Page]))
+			VAR p1 = DIVIDE(BaseOrders, BaseSessions)
+			VAR p2 = CurrentCVR
+			VAR n1 = BaseSessions
+			VAR n2 = CurrentSessions
+			VAR p_pool = DIVIDE(BaseOrders + CurrentOrders, BaseSessions + CurrentSessions)
+			VAR se = SQRT(p_pool * (1 - p_pool) * (DIVIDE(1, n1) + DIVIDE(1, n2)))
+			RETURN
+				IF(
+					CurrentLander = "/home" || ISBLANK(CurrentSessions) || CurrentSessions = 0 || se = 0,
+					BLANK(),
+					DIVIDE(p2 - p1, se)
+				)
+		formatString: 0.00
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: a1b2c3d4-e5f6-4789-8012-3e4f5a6b7c89
+
+	measure 'VIZ-03 P-VALUE' =
+			VAR z = ABS([VIZ-03 Z-SCORE])
+			RETURN
+				SWITCH(
+					TRUE(),
+					ISBLANK(z), BLANK(),
+					z >= 2.58, "p < 0.01 (99% conf.)",
+					z >= 1.96, "p < 0.05 (95% conf.)",
+					z >= 1.64, "p < 0.10 (90% conf.)",
+					"p >= 0.10 (Not sig.)"
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-03 Lander Scoreboard
+		lineageTag: b2c3d4e5-f6a7-4890-9123-4f5a6b7c8d90
+
+	measure 'VIZ-04 START DATE' = CALCULATE(MIN(website_sessions[Session Date]))
+		formatString: yyyy-mm-dd
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-04 Lander Lifecycle (Gantt)
+		lineageTag: 6ce81180-4d55-4478-be2c-92ad642bc0d7
+
+	measure 'VIZ-04 END DATE' = CALCULATE(MAX(website_sessions[Session Date]))
+		formatString: yyyy-mm-dd
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-04 Lander Lifecycle (Gantt)
+		lineageTag: 6a735ca8-f650-46d4-aa5e-1e424591662f
+
+	measure 'VIZ-04 CVR' = [VIZ-03 CVR]
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-04 Lander Lifecycle (Gantt)
+		lineageTag: 575eb791-1248-4a41-8f1b-7d6da70b50ef
+
+	measure 'VIZ-04 CVR LABEL' = FORMAT([VIZ-04 CVR], "0.00%")
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-04 Lander Lifecycle (Gantt)
+		lineageTag: 8f0def4e-598e-49cd-8e6b-ffd7cb9fece9
+
+	measure 'VIZ-04 SESSIONS' = [VIZ-03 SESSIONS]
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-04 Lander Lifecycle (Gantt)
+		lineageTag: 4dd3f5dd-cf9d-4713-bc53-048ec9acee71
+
+	measure 'VIZ-04 COLOR' =
+			VAR LanderName = SELECTEDVALUE(website_sessions[Landing Page])
+			RETURN
+				SWITCH(
+					LanderName,
+					"/home", "#64748B",
+					"/lander-1", "#FB7185",
+					"/lander-2", "#60A5FA",
+					"/lander-3", "#FBBF24",
+					"/lander-4", "#A78BFA",
+					"/lander-5", "#34D399",
+					"#64748B"
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-04 Lander Lifecycle (Gantt)
+		lineageTag: d114a10d-3062-438c-a4b2-4d47df806476
+
+	measure 'VIZ-04 MID DATE' = [VIZ-04 START DATE] + DIVIDE([VIZ-04 END DATE] - [VIZ-04 START DATE], 2)
+		formatString: yyyy-mm-dd
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-04 Lander Lifecycle (Gantt)
+		lineageTag: 6a28de78-14df-4ad7-88cf-f48c45d4fece
+
+	measure 'VIZ-05 SESSIONS' =
+			VAR StepNum = SELECTEDVALUE(_Dim_FunnelStep[StepNumber])
+			RETURN
+				SWITCH(
+					StepNum,
+					1, COUNTROWS(website_sessions),
+					2, CALCULATE(DISTINCTCOUNT(website_pageviews[website_session_id]), website_pageviews[pageview_url] = "/products"),
+					3, CALCULATE(DISTINCTCOUNT(website_pageviews[website_session_id]), website_pageviews[Page Category] = "Product Detail"),
+					4, CALCULATE(DISTINCTCOUNT(website_pageviews[website_session_id]), website_pageviews[pageview_url] = "/cart"),
+					5, CALCULATE(DISTINCTCOUNT(website_pageviews[website_session_id]), website_pageviews[pageview_url] = "/shipping"),
+					6, CALCULATE(DISTINCTCOUNT(website_pageviews[website_session_id]), website_pageviews[pageview_url] IN {"/billing", "/billing-2"}),
+					7, CALCULATE(DISTINCTCOUNT(website_pageviews[website_session_id]), website_pageviews[pageview_url] = "/thank-you-for-your-order"),
+					COUNTROWS(website_sessions)
+				)
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: 10a65f17-733d-4a28-96ee-42a4f41cfe77
+
+	measure 'VIZ-05 PREVIOUS SESSIONS' =
+			VAR StepNum = SELECTEDVALUE(_Dim_FunnelStep[StepNumber])
+			RETURN
+				IF(
+					StepNum <= 1,
+					BLANK(),
+					CALCULATE(
+						[VIZ-05 SESSIONS],
+						_Dim_FunnelStep[StepNumber] = StepNum - 1,
+						ALLSELECTED(_Dim_FunnelStep)
+					)
+				)
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: cf9b7ce6-2621-4700-9b8e-d2428243a917
+
+	measure 'VIZ-05 SESSIONS % OF TOTAL' =
+			VAR Curr = [VIZ-05 SESSIONS]
+			VAR TotalSess = CALCULATE([VIZ-05 SESSIONS], _Dim_FunnelStep[StepNumber] = 1, ALLSELECTED(_Dim_FunnelStep))
+			RETURN
+				DIVIDE(Curr, TotalSess)
+		formatString: 0.0%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: 82194be2-75ba-40d9-b28f-ab56851a9c1c
+
+	measure 'VIZ-05 SESSIONS LABEL' =
+			VAR S = [VIZ-05 SESSIONS]
+			RETURN
+				SWITCH(
+					TRUE(),
+					ISBLANK(S), BLANK(),
+					S >= 1000000, FORMAT(S / 1000000, "0.0") & "M",
+					S >= 100000, FORMAT(S / 1000, "0") & "K",
+					S >= 1000, FORMAT(S / 1000, "0.0") & "K",
+					FORMAT(S, "#,0")
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: a7e171da-3a55-4b7b-8e9c-548437eff9ff
+
+	measure 'VIZ-05 STEP CVR' =
+			VAR StepNum = SELECTEDVALUE(_Dim_FunnelStep[StepNumber])
+			VAR Curr = [VIZ-05 SESSIONS]
+			VAR Prev = [VIZ-05 PREVIOUS SESSIONS]
+			RETURN
+				IF(
+					StepNum = 1,
+					BLANK(),
+					DIVIDE(Curr, Prev)
+				)
+		formatString: 0.0%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: 41091c1c-9b78-4f66-8481-dac8803ebd1d
+
+	measure 'VIZ-05 STEP CVR LABEL' =
+			VAR StepNum = SELECTEDVALUE(_Dim_FunnelStep[StepNumber])
+			VAR CVR = [VIZ-05 STEP CVR]
+			RETURN
+				IF(
+					StepNum = 1,
+					"—",
+					FORMAT(CVR, "0.0%")
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: 5f464bd8-41d5-4924-99ca-c8a66f777e00
+
+	measure 'VIZ-05 DROP OFF %' =
+			VAR StepNum = SELECTEDVALUE(_Dim_FunnelStep[StepNumber])
+			VAR CVR = [VIZ-05 STEP CVR]
+			RETURN
+				IF(StepNum = 1, BLANK(), 1 - CVR)
+		formatString: 0.0%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: 7345e87d-1cdf-4005-822a-2c6f75d4fec7
+
+	measure 'VIZ-05 DROP OFF LABEL' =
+			VAR D = [VIZ-05 DROP OFF %]
+			RETURN
+				IF(ISBLANK(D), BLANK(), FORMAT(D, "0.0%"))
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: 014b6014-3119-4a77-a46d-4c768c7ea290
+
+	measure 'VIZ-05 BAR COLOR' =
+			VAR StepNum = SELECTEDVALUE(_Dim_FunnelStep[StepNumber])
+			VAR StepCVR = [VIZ-05 STEP CVR]
+			VAR MinCVR =
+				MINX(
+					FILTER(ALLSELECTED(_Dim_FunnelStep), _Dim_FunnelStep[StepNumber] >= 2),
+					[VIZ-05 STEP CVR]
+				)
+			RETURN
+				IF(StepNum >= 2 && StepCVR = MinCVR, "#FB7185", "#60A5FA")
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: ba881f1f-4cf9-42cb-88f7-661e0e059d1a
+
+	measure 'VIZ-05 CVR COLOR' =
+			VAR StepNum = SELECTEDVALUE(_Dim_FunnelStep[StepNumber])
+			VAR StepCVR = [VIZ-05 STEP CVR]
+			VAR MinCVR =
+				MINX(
+					FILTER(ALLSELECTED(_Dim_FunnelStep), _Dim_FunnelStep[StepNumber] >= 2),
+					[VIZ-05 STEP CVR]
+				)
+			RETURN
+				IF(StepNum >= 2 && StepCVR = MinCVR, "#FB7185", "#8B95B0")
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-05 Checkout Funnel
+		lineageTag: bbc16e3b-9f23-4e46-bf31-c67ea9ef7fb0
+
+	measure 'VIZ-06 SESSIONS' =
+			VAR VariantName = SELECTEDVALUE(_Dim_BillingVariant[Billing Variant])
+			VAR b_sessions =
+				CALCULATETABLE(
+					VALUES(website_pageviews[website_session_id]),
+					website_pageviews[pageview_url] = VariantName
+				)
+			RETURN
+				COUNTROWS(b_sessions)
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-06 Billing AB Test
+		lineageTag: 905cb5e7-61dd-4f55-9d07-736fe48b32d4
+
+	measure 'VIZ-06 ORDERS' =
+			VAR VariantName = SELECTEDVALUE(_Dim_BillingVariant[Billing Variant])
+			VAR b_sessions =
+				CALCULATETABLE(
+					VALUES(website_pageviews[website_session_id]),
+					website_pageviews[pageview_url] = VariantName
+				)
+			RETURN
+				CALCULATE([Total Orders], TREATAS(b_sessions, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-06 Billing AB Test
+		lineageTag: 72c7efe0-0010-4989-8f6d-19116b648d8c
+
+	measure 'VIZ-06 CVR' = DIVIDE([VIZ-06 ORDERS], [VIZ-06 SESSIONS])
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-06 Billing AB Test
+		lineageTag: eba8eaed-828c-4516-95cc-2fcc3bf2c810
+
+	measure 'VIZ-06 CVR LABEL' = FORMAT([VIZ-06 CVR], "0.00%")
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-06 Billing AB Test
+		lineageTag: 06432ff8-fc6b-48fe-9621-1ffa68b476f6
+
+	measure 'VIZ-06 BAR COLOR' =
+			VAR VariantName = SELECTEDVALUE(_Dim_BillingVariant[Billing Variant])
+			RETURN
+				SWITCH(
+					VariantName,
+					"/billing", "#FB7185",
+					"/billing-2", "#34D399",
+					"#64748B"
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-06 Billing AB Test
+		lineageTag: eb99b316-09b4-4f80-831f-7dbeb40c4298
+
+	measure 'VIZ-06 LIFT ANNOTATION' =
+			VAR b1_cvr = CALCULATE([VIZ-06 CVR], _Dim_BillingVariant[Billing Variant] = "/billing", ALL(_Dim_BillingVariant))
+			VAR b2_cvr = CALCULATE([VIZ-06 CVR], _Dim_BillingVariant[Billing Variant] = "/billing-2", ALL(_Dim_BillingVariant))
+			VAR absLift = b2_cvr - b1_cvr
+			VAR relLift = DIVIDE(absLift, b1_cvr)
+			RETURN
+				"+" & FORMAT(absLift * 100, "0.00") & " pp · +" & FORMAT(relLift, "0.0%") & " relative"
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-06 Billing AB Test
+		lineageTag: a67387c8-2798-4687-9cd9-2a4bfdf52313
+
+	measure 'VIZ-07 BOUNCE RATE' = [Lander Bounce Rate]
+		formatString: 0.0%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-07 Bounce vs CVR
+		lineageTag: 46aae049-892d-465a-954e-2122f33c57d3
+
+	measure 'VIZ-07 CVR' = [Lander CVR]
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-07 Bounce vs CVR
+		lineageTag: 1a4440a5-0a59-46c7-9c0d-6f05ed418a5b
+
+	measure 'VIZ-07 SESSIONS' = [Lander Sessions]
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-07 Bounce vs CVR
+		lineageTag: afe0b487-cf0d-4494-ac93-01aa48be7379
+
+	measure 'VIZ-07 ORDERS' = [Lander Orders]
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-07 Bounce vs CVR
+		lineageTag: 6ab66f77-9073-4cae-9eb5-a96b1b4d01ca
+
+	measure 'VIZ-07 COLOR' =
+			VAR LanderName =
+				COALESCE(
+					SELECTEDVALUE(website_sessions[Landing Page]),
+					SELECTEDVALUE(website_sessions[Landing Page Short]),
+					SELECTEDVALUE(Dim_Lander[Lander])
+				)
+			RETURN
+				SWITCH(
+					LanderName,
+					"/home", "#64748B",
+					"home", "#64748B",
+					"/lander-1", "#FB7185",
+					"L1", "#FB7185",
+					"/lander-2", "#60A5FA",
+					"L2", "#60A5FA",
+					"/lander-3", "#FBBF24",
+					"L3", "#FBBF24",
+					"/lander-4", "#A78BFA",
+					"L4", "#A78BFA",
+					"/lander-5", "#34D399",
+					"L5", "#34D399",
+					"#64748B"
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-07 Bounce vs CVR
+		lineageTag: 65819f6a-e666-4ce8-afb0-ade29b33cbbe
+
+	measure 'VIZ-07 LANDER SHORT' =
+			VAR LanderName =
+				COALESCE(
+					SELECTEDVALUE(website_sessions[Landing Page]),
+					SELECTEDVALUE(Dim_Lander[Lander])
+				)
+			RETURN
+				SWITCH(
+					LanderName,
+					"/home", "home",
+					"/lander-1", "L1",
+					"/lander-2", "L2",
+					"/lander-3", "L3",
+					"/lander-4", "L4",
+					"/lander-5", "L5",
+					LanderName
+				)
+		displayFolder: 05 Page 3 - CRO Lab\VIZ-07 Bounce vs CVR
+		lineageTag: c76237c3-4672-4fe3-a301-34f4c235747d
+
+	measure 'Page Title P4' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR ordCount = CALCULATE(COUNTROWS(orders), TREATAS(sid, orders[website_session_id]))
+			VAR addonCount = CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+			VAR grossRev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR attachRate = DIVIDE(addonCount, ordCount)
+			VAR aov = DIVIDE(grossRev, ordCount)
+			VAR Attach = FORMAT(attachRate, "0.0%")
+			VAR AovVal = FORMAT(aov, "$#,0.00")
+			VAR YearPart =
+			    IF(
+			        ISFILTERED(Dim_Date[Year]),
+			        " " & UNICHAR(183) & " " & SELECTEDVALUE(Dim_Date[Year], "Multi-Year"),
+			        ""
+			    )
+			VAR ProdPart =
+			    IF(
+			        ISFILTERED(products[product_name]),
+			        " " & UNICHAR(183) & " " & SELECTEDVALUE(products[product_name], "All Products"),
+			        ""
+			    )
+			VAR DevicePart =
+			    IF(
+			        ISFILTERED(website_sessions[Device]),
+			        " " & UNICHAR(183) & " " & SELECTEDVALUE(website_sessions[Device], "All Devices"),
+			        ""
+			    )
+			VAR TrafficPart =
+			    IF(
+			        ISFILTERED(website_sessions[Traffic Type]),
+			        " " & UNICHAR(183) & " " & SELECTEDVALUE(website_sessions[Traffic Type], "All Traffic"),
+			        ""
+			    )
+			RETURN
+			    "Portfolio " & UNICHAR(183) & " " & Attach & " attach rate " & UNICHAR(183) & " AOV " & AovVal & YearPart & ProdPart & DevicePart & TrafficPart
+		displayFolder: 06 Page 4 - Products
+		lineageTag: fd101734-8f86-47f9-b118-a3f030d393e6
+
+	measure 'Header P4 HTML' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR ordCount = CALCULATE(COUNTROWS(orders), TREATAS(sid, orders[website_session_id]))
+			VAR totalUnits = CALCULATE(COUNTROWS(order_items), TREATAS(sid, orders[website_session_id]))
+			VAR addonCount = CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+			VAR grossRev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR attachRate = DIVIDE(addonCount, ordCount)
+			VAR aov = DIVIDE(grossRev, ordCount)
+			VAR mbTotal = CALCULATE(COUNTROWS(order_items), products[product_id] = 4, TREATAS(sid, orders[website_session_id]))
+			VAR mbAddon = CALCULATE(COUNTROWS(order_items), products[product_id] = 4, order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+			VAR mbShare = DIVIDE(mbAddon, mbTotal)
+			
+			VAR Attach = FORMAT(attachRate, "0.0%")
+			VAR AovVal = FORMAT(aov, "$#,0.00")
+			VAR YearPart =
+			    IF(
+			        ISFILTERED(Dim_Date[Year]),
+			        " <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>" & SELECTEDVALUE(Dim_Date[Year], "Multi-Year") & "</span>",
+			        ""
+			    )
+			VAR ProdPart =
+			    IF(
+			        ISFILTERED(products[product_name]),
+			        " <span style='color:#475569'>&bull;</span> <span style='color:#60A5FA;font-weight:700'>" & SELECTEDVALUE(products[product_name], "All Products") & "</span>",
+			        ""
+			    )
+			VAR DevicePart =
+			    IF(
+			        ISFILTERED(website_sessions[Device]),
+			        " <span style='color:#475569'>&bull;</span> <span style='color:#FBBF24;font-weight:700'>" & SELECTEDVALUE(website_sessions[Device], "All Devices") & "</span>",
+			        ""
+			    )
+			VAR TrafficPart =
+			    IF(
+			        ISFILTERED(website_sessions[Traffic Type]),
+			        " <span style='color:#475569'>&bull;</span> <span style='color:#38BDF8;font-weight:700'>" & SELECTEDVALUE(website_sessions[Traffic Type], "All Traffic") & "</span>",
+			        ""
+			    )
+			VAR TotalUnitsStr = FORMAT(totalUnits, "#,0")
+			VAR AddonUnitsStr = FORMAT(addonCount, "#,0")
+			VAR OrdersCountStr = FORMAT(ordCount, "#,0")
+			VAR MbShareStr = IF(ISBLANK(mbShare) || mbTotal = 0, "N/A", FORMAT(mbShare, "0.0%"))
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .hdr-wrap { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 2px 4px; }
+			  .hdr-title { font-size: 22px; font-weight: 800; color: #F8FAFC; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 3px; }
+			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
+			</style>
+			<div class='hdr-wrap'>
+			  <div class='hdr-title'>Portfolio <span style='color:#475569'>&bull;</span> <span style='color:#2DD4BF'>" & Attach & "</span> <span style='font-size:16px;font-weight:500;color:#94A3B8'>attach rate</span> <span style='color:#475569'>&bull;</span> <span style='color:#34D399'>" & AovVal & "</span> <span style='font-size:16px;font-weight:500;color:#94A3B8'>AOV</span>" & YearPart & ProdPart & DevicePart & TrafficPart & "</div>
+			  <div class='hdr-sub'>" & AddonUnitsStr & " add-on units attached to " & OrdersCountStr & " orders (" & TotalUnitsStr & " total units) &bull; Mini Bear " & MbShareStr & " add-on share &bull; data through 19 Mar 2015</div>
+			</div>"
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 42135cd8-4afa-4653-a99b-8efe51b6fc46
+
+	measure 'Units Sold' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(COUNTROWS(order_items), TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 06 Page 4 - Products\KPI Cards
+		lineageTag: ea3a0411-39d3-47d8-bc11-9f2dea8926ea
+
+	measure 'Mini Bear Cross-Sell Share' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR MiniTotal = CALCULATE(COUNTROWS(order_items), products[product_id] = 4, TREATAS(sid, orders[website_session_id]))
+			VAR MiniAddon = CALCULATE(COUNTROWS(order_items), products[product_id] = 4, order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+			RETURN DIVIDE(MiniAddon, MiniTotal)
+		formatString: 0.0%
+		displayFolder: 06 Page 4 - Products\KPI Cards
+		lineageTag: 65e2366b-b20f-445c-b635-a919fc26b8ca
+
+	measure 'Best Margin Product Name' =
+			VAR Margins =
+				ADDCOLUMNS(
+					ALLSELECTED(products),
+					"M_Pct", DIVIDE(products[Retail Price] - products[Unit COGS], products[Retail Price])
+				)
+			VAR TopMargin = TOPN(1, Margins, [M_Pct], DESC)
+			RETURN MAXX(TopMargin, products[product_name])
+		displayFolder: 06 Page 4 - Products\KPI Cards
+		lineageTag: 3b9adcbd-d67a-41e7-9980-c0ec1f0f5221
+
+	measure 'Best Margin Product Short' =
+			VAR FullName = [Best Margin Product Name]
+			RETURN
+				SWITCH(
+					FullName,
+					"The Birthday Sugar Panda", "Sugar Panda",
+					"The Original Mr. Fuzzy", "Mr. Fuzzy",
+					"The Forever Love Bear", "Love Bear",
+					"The Hudson River Mini Bear", "Mini Bear",
+					FullName
+				)
+		displayFolder: 06 Page 4 - Products\KPI Cards
+		lineageTag: 5eae188a-2793-44d6-96b2-b91009b19885
+
+	measure 'Best Margin %' =
+			VAR Margins =
+				ADDCOLUMNS(
+					ALLSELECTED(products),
+					"M_Pct", DIVIDE(products[Retail Price] - products[Unit COGS], products[Retail Price])
+				)
+			RETURN MAXX(Margins, [M_Pct])
+		formatString: 0.00%
+		displayFolder: 06 Page 4 - Products\KPI Cards
+		lineageTag: a75eb3ec-acdf-490f-89da-e98604914959
+
+	measure 'KPI Strip P4 HTML' =
+			
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR ordCount = CALCULATE(COUNTROWS(orders), TREATAS(sid, orders[website_session_id]))
+			VAR uSold = CALCULATE(COUNTROWS(order_items), TREATAS(sid, orders[website_session_id]))
+			VAR pUnits = CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 1, TREATAS(sid, orders[website_session_id]))
+			VAR xUnits = CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+			VAR attach = DIVIDE(xUnits, ordCount)
+			VAR mbTotal = CALCULATE(COUNTROWS(order_items), products[product_id] = 4, TREATAS(sid, orders[website_session_id]))
+			VAR mbAddon = CALCULATE(COUNTROWS(order_items), products[product_id] = 4, order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+			VAR mbShare = DIVIDE(mbAddon, mbTotal)
+			VAR pRev = CALCULATE(SUM(order_items[price_usd]), order_items[is_primary_item] = 1, TREATAS(sid, orders[website_session_id]))
+			VAR xRev = CALCULATE(SUM(order_items[price_usd]), order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+			VAR totRev = pRev + xRev
+			VAR aovVal = DIVIDE(totRev, ordCount)
+			VAR pAov = DIVIDE(pRev, ordCount)
+			VAR xAov = DIVIDE(xRev, ordCount)
+			VAR bMargin = [Best Margin %]
+			VAR bName = [Best Margin Product Short]
+			
+			VAR card1Val = IF(ISBLANK(uSold), "-", FORMAT(uSold, "#,0"))
+			VAR card1Sub = FORMAT(pUnits, "#,0") & " primary " & UNICHAR(183) & " " & FORMAT(xUnits, "#,0") & " add-on"
+			
+			VAR card2Val = IF(ISBLANK(attach), "-", FORMAT(attach, "0.0%"))
+			VAR card2Sub = FORMAT(xUnits, "#,0") & " of " & FORMAT(ordCount, "#,0") & " orders"
+			
+			VAR card3Val = IF(ISBLANK(mbShare) || mbTotal = 0, "N/A", FORMAT(mbShare, "0.0%"))
+			VAR card3Sub = IF(mbTotal = 0, "Launched Dec 2014", FORMAT(mbAddon, "#,0") & " of " & FORMAT(mbTotal, "#,0") & " units")
+			
+			VAR card4Val = IF(ISBLANK(aovVal), "-", FORMAT(aovVal, "$#,0.00"))
+			VAR card4Sub = "primary " & FORMAT(pAov, "$#,0.00") & " + " & FORMAT(xAov, "$#,0.00")
+			
+			VAR card5Val = IF(ISBLANK(bMargin), "-", FORMAT(bMargin, "0.00%"))
+			VAR card5Sub = bName
+			
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; width: 100%; height: 100%; }
+			  .kpi-card {
+			    position: relative; overflow: hidden; min-width: 0; height: 100%;
+			    padding: 14px 16px 12px 18px; border-radius: 12px;
+			    display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px;
+			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
+			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
+			    border: 1px solid rgba(255,255,255,0.08);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 20px rgba(0,0,0,0.35);
+			    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+			  }
+			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
+			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
+			  .kpi-card:hover { border-color: var(--acc); transform: translateY(-1px);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
+			  .kpi-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 5px; }
+			  .kpi-label { font-size:10px; color:#8FA0BC; font-weight:700; text-transform:uppercase;
+			    letter-spacing:0.9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-value { font-size: clamp(22px, 2.3vw, 31px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.05;
+			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
+			    overflow:hidden; text-overflow:ellipsis; text-shadow: 0 0 18px var(--glow); }
+			  .kpi-sub { max-width:100%; font-size:10px; font-weight:600; color:#94A3B8;
+			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-ico { flex: none; width: 42px; height: 42px; border-radius: 12px;
+			    display: flex; align-items: center; justify-content: center; color: var(--acc);
+			    background: linear-gradient(145deg, var(--soft), rgba(255,255,255,0.02));
+			    border: 1px solid var(--line); box-shadow: 0 0 18px var(--soft), inset 0 1px 0 rgba(255,255,255,0.08); }
+			  .kpi-ico svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8;
+			    stroke-linecap: round; stroke-linejoin: round; }
+			  .kpi-ico svg .f { fill: currentColor; stroke: none; }
+			  @media (max-width: 820px) {
+			    .kpi-ico { width: 32px; height: 32px; border-radius: 9px; }
+			    .kpi-ico svg { width: 16px; height: 16px; }
+			  }
+			</style>
+			<div class='kpi-grid'>
+			
+			  <div class='kpi-card' style='--acc:#60A5FA;--glow:rgba(96,165,250,.16);--soft:rgba(96,165,250,.14);--line:rgba(96,165,250,.38);--val-col:#60A5FA;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>UNITS SOLD</div>
+			      <div class='kpi-value'>" & card1Val & "</div>
+			      <div class='kpi-sub'>" & card1Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M21 8l-9-5-9 5v8l9 5 9-5V8z'/><path d='M3.3 7.5L12 12.5l8.7-5'/><path d='M12 22V12.5'/></svg></div>
+			  </div>
+			
+			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);--soft:rgba(251,191,36,.14);--line:rgba(251,191,36,.38);--val-col:#FBBF24;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>CROSS-SELL ATTACH RATE</div>
+			      <div class='kpi-value'>" & card2Val & "</div>
+			      <div class='kpi-sub'>" & card2Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='9' cy='20' r='1.5'/><circle cx='18' cy='20' r='1.5'/><path d='M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6'/><path d='M13.5 10.5v3.5M11.75 12.25h3.5'/></svg></div>
+			  </div>
+			
+			  <div class='kpi-card' style='--acc:#2DD4BF;--glow:rgba(45,212,191,.16);--soft:rgba(45,212,191,.14);--line:rgba(45,212,191,.38);--val-col:#2DD4BF;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>MINI BEAR ADD-ON SHARE</div>
+			      <div class='kpi-value'>" & card3Val & "</div>
+			      <div class='kpi-sub'>" & card3Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='12' cy='13.5' r='7'/><circle cx='6.5' cy='6.5' r='2.5'/><circle cx='17.5' cy='6.5' r='2.5'/><circle class='f' cx='9.5' cy='12.5' r='.9'/><circle class='f' cx='14.5' cy='12.5' r='.9'/><path d='M10.5 16c.8.7 2.2.7 3 0'/></svg></div>
+			  </div>
+			
+			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--soft:rgba(52,211,153,.14);--line:rgba(52,211,153,.38);--val-col:#34D399;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>AVERAGE ORDER VALUE</div>
+			      <div class='kpi-value'>" & card4Val & "</div>
+			      <div class='kpi-sub'>" & card4Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><path d='M15 8.5c-.6-1-1.7-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.3 0-2.4-.5-3-1.5'/><path d='M12 5.5V7M12 17v1.5'/></svg></div>
+			  </div>
+			
+			  <div class='kpi-card' style='--acc:#A78BFA;--glow:rgba(167,139,250,.16);--soft:rgba(167,139,250,.14);--line:rgba(167,139,250,.38);--val-col:#A78BFA;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>BEST MARGIN PRODUCT</div>
+			      <div class='kpi-value'>" & card5Val & "</div>
+			      <div class='kpi-sub'>" & card5Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M6 9H4.5a2.5 2.5 0 0 1 0-5H6'/><path d='M18 9h1.5a2.5 2.5 0 0 0 0-5H18'/><path d='M4 22h16'/><path d='M10 14.66V17c0 .55-.47.98-1.97 1.21C7.85 18.75 7 20.24 7 22'/><path d='M14 14.66V17c0 .55.47.98 1.97 1.21C16.15 18.75 17 20.24 17 22'/><path d='M18 2H6v7a6 6 0 0 0 12 0V2Z'/></svg></div>
+			  </div>
+			
+			</div>"
+		displayFolder: 06 Page 4 - Products\KPI Cards
+		lineageTag: 1126a3bb-2ca1-466d-8b72-ed78f3c1a97b
+
+	measure 'Orders (Page 4)' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(COUNTROWS(orders), TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 06 Page 4 - Products
+		lineageTag: f1a2b3c4-d5e6-4789-a012-3b4c5d6e7f80
+
+	measure 'Gross Revenue (Page 4)' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 06 Page 4 - Products
+		lineageTag: f2b3c4d5-e6a7-4890-b123-4c5d6e7f8a91
+
+	measure 'Average Order Value (Page 4)' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR ords = CALCULATE(COUNTROWS(orders), TREATAS(sid, orders[website_session_id]))
+			VAR rev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			RETURN DIVIDE(rev, ords)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 06 Page 4 - Products
+		lineageTag: f3c4d5e6-a7b8-4901-c234-5d6e7f8a9b02
+
+	measure 'Cross-Sell Attach % (Page 4)' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR ords = CALCULATE(COUNTROWS(orders), TREATAS(sid, orders[website_session_id]))
+			VAR addons = CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+			RETURN DIVIDE(addons, ords)
+		formatString: 0.0%
+		displayFolder: 06 Page 4 - Products
+		lineageTag: f4d5e6a7-b8c9-4012-d345-6e7f8a9b0c13
+
+	measure 'VIZ-Timeline Product Short' =
+			VAR u = [VIZ-Timeline Units]
+			RETURN
+				IF(
+					NOT ISBLANK(u) && u > 0,
+					SWITCH(
+						SELECTEDVALUE(products[product_id]),
+						1, "Mr. Fuzzy",
+						2, "Love Bear",
+						3, "Sugar Panda",
+						4, "Mini Bear",
+						SELECTEDVALUE(products[product_name])
+					)
+				)
+		displayFolder: 06 Page 4 - Products\Product Launch Timeline
+		lineageTag: e1a2b3c4-1111-4789-a012-3b4c5d6e7f01
+
+	measure 'VIZ-Timeline Launch Date' =
+			VAR u = [VIZ-Timeline Units]
+			RETURN
+				IF(
+					NOT ISBLANK(u) && u > 0,
+					CALCULATE(MIN(products[created_at]))
+				)
+		formatString: yyyy-mm-dd
+		displayFolder: 06 Page 4 - Products\Product Launch Timeline
+		lineageTag: e2b3c4d5-2222-4890-b123-4c5d6e7f8a02
+
+	measure 'VIZ-Timeline End Date' =
+			VAR u = [VIZ-Timeline Units]
+			RETURN
+				IF(
+					NOT ISBLANK(u) && u > 0,
+					DATE(2015, 3, 19)
+				)
+		formatString: yyyy-mm-dd
+		displayFolder: 06 Page 4 - Products\Product Launch Timeline
+		lineageTag: e3c4d5e6-3333-4901-c234-5d6e7f8a9b03
+
+	measure 'VIZ-Timeline Mid Date' =
+			VAR s = [VIZ-Timeline Launch Date]
+			VAR e = [VIZ-Timeline End Date]
+			RETURN
+				IF(NOT ISBLANK(s) && NOT ISBLANK(e), s + (e - s) / 2)
+		formatString: yyyy-mm-dd
+		displayFolder: 06 Page 4 - Products\Product Launch Timeline
+		lineageTag: e4d5e6a7-4444-4012-d345-6e7f8a9b0c04
+
+	measure 'VIZ-Timeline Launch Label' =
+			VAR u = [VIZ-Timeline Units]
+			VAR dt =
+				SWITCH(
+					SELECTEDVALUE(products[product_id]),
+					1, "Mar 2012",
+					2, "Jan 2013",
+					3, "Dec 2013",
+					4, "Feb 2014",
+					FORMAT(MIN(products[created_at]), "mmm yyyy")
+				)
+			VAR uFmt =
+				IF(
+					u >= 1000,
+					FORMAT(u / 1000, "#,0.0") & "K units",
+					FORMAT(u, "#,0") & " units"
+				)
+			RETURN
+				IF(
+					NOT ISBLANK(u) && u > 0,
+					dt & " " & UNICHAR(183) & " " & uFmt
+				)
+		displayFolder: 06 Page 4 - Products\Product Launch Timeline
+		lineageTag: e5e6a7b8-5555-4123-e456-7f8a9b0c1d05
+
+	measure 'VIZ-Timeline Color' =
+			SWITCH(
+			    SELECTEDVALUE(products[product_id]),
+			    1, "#60A5FA",
+			    2, "#FB7185",
+			    3, "#FBBF24",
+			    4, "#2DD4BF",
+			    "#60A5FA"
+			)
+		displayFolder: 06 Page 4 - Products\Product Launch Timeline
+		lineageTag: e6a7b8c9-6666-4234-f567-8a9b0c1d2e06
+
+	measure 'VIZ-Timeline Units' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(COUNTROWS(order_items), TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 06 Page 4 - Products\Product Launch Timeline
+		lineageTag: e0a1b2c3-0000-4789-a012-3b4c5d6e7f00
+
+	measure 'Primary Units' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 1, TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 06 Page 4 - Products
+		lineageTag: b6964db5-d4f7-402a-a1a7-9603c281b8cb
+
+	measure 'Cross-Sell Units' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 0, TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 4d044eb8-a7da-4609-9a62-4f3b394cd840
+
+	measure 'Product Refund Rate %' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR oItems = CALCULATETABLE(VALUES(order_items[order_item_id]), TREATAS(sid, orders[website_session_id]))
+			VAR refCount = CALCULATE(COUNTROWS(order_item_refunds), TREATAS(oItems, order_item_refunds[order_item_id]))
+			VAR unitCount = CALCULATE(COUNTROWS(order_items), TREATAS(sid, orders[website_session_id]))
+			RETURN DIVIDE(refCount, unitCount, 0)
+		formatString: 0.00%
+		displayFolder: 06 Page 4 - Products
+		lineageTag: f59f1ee3-c4e6-40b1-81f2-e5cb4e04eaf6
+
+	measure 'Unit Price' = MAX(products[Retail Price])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 06 Page 4 - Products
+		lineageTag: ee739611-73ee-4fbf-8c66-75bc32851654
+
+	measure 'Unit COGS' = MAX(products[Unit COGS])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 1fe11573-6016-4df2-97f1-13e9cc443de9
+
+	measure 'Unit Margin %' = MAX(products[Margin %])
+		formatString: 0.0%
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 3ad6f394-d696-49f0-9b03-e2020afa9058
+
+	measure '1 item' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(COUNTROWS(orders), orders[items_purchased] = 1, TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 834b8444-2fab-4252-b0c4-0132f31f3a50
+
+	measure '2 items' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(COUNTROWS(orders), orders[items_purchased] = 2, TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 51e70649-cdbd-4eb7-9f3c-7c432e36fe0e
+
+	measure 'Basket Orders' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(COUNTROWS(orders), TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 13be49e2-f699-4100-9f1b-3474805307a4
 
 	column Dummy
 		lineageTag: 3ce5026e-32f8-4521-831e-9fe6f7d36d85

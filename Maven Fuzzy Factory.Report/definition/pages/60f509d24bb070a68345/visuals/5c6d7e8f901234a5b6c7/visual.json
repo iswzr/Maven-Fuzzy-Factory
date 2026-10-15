@@ -1,0 +1,462 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "5c6d7e8f901234a5b6c7",
+  "position": {
+    "x": 1317.932460372157,
+    "y": 326.83666436940041,
+    "z": 8000,
+    "height": 371.8263266712612,
+    "width": 592.80496209510682,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Dim_FunnelStep"
+                    }
+                  },
+                  "Property": "StepName"
+                }
+              },
+              "queryRef": "_Dim_FunnelStep.StepName",
+              "nativeQueryRef": "StepName"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Dim_FunnelStep"
+                    }
+                  },
+                  "Property": "StepNumber"
+                }
+              },
+              "queryRef": "_Dim_FunnelStep.StepNumber",
+              "nativeQueryRef": "StepNumber"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 SESSIONS"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 SESSIONS",
+              "nativeQueryRef": "VIZ-05 SESSIONS"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 SESSIONS % OF TOTAL"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 SESSIONS % OF TOTAL",
+              "nativeQueryRef": "VIZ-05 SESSIONS % OF TOTAL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 SESSIONS LABEL"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 SESSIONS LABEL",
+              "nativeQueryRef": "VIZ-05 SESSIONS LABEL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 STEP CVR"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 STEP CVR",
+              "nativeQueryRef": "VIZ-05 STEP CVR"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 STEP CVR LABEL"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 STEP CVR LABEL",
+              "nativeQueryRef": "VIZ-05 STEP CVR LABEL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 DROP OFF %"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 DROP OFF %",
+              "nativeQueryRef": "VIZ-05 DROP OFF %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 DROP OFF LABEL"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 DROP OFF LABEL",
+              "nativeQueryRef": "VIZ-05 DROP OFF LABEL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 BAR COLOR"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 BAR COLOR",
+              "nativeQueryRef": "VIZ-05 BAR COLOR"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "VIZ-05 CVR COLOR"
+                }
+              },
+              "queryRef": "_Measures.VIZ-05 CVR COLOR",
+              "nativeQueryRef": "VIZ-05 CVR COLOR"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "stateManagement": [
+        {
+          "properties": {
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "579D"
+                }
+              }
+            },
+            "denebMetaVersion": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2'"
+                }
+              }
+            },
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "302D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "vega": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.4.3'"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": {\n    \"step\": 34\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, BlinkMacSystemFont, sans-serif\",\n    \"background\": \"transparent\"\n  },\n  \"encoding\": {\n    \"y\": {\n      \"field\": \"StepName\",\n      \"type\": \"nominal\",\n      \"sort\": {\n        \"field\": \"StepNumber\"\n      },\n      \"axis\": {\n        \"title\": null,\n        \"domain\": false,\n        \"ticks\": false,\n        \"labelColor\": \"#E6E9F2\",\n        \"labelFont\": \"Segoe UI\",\n        \"labelFontSize\": 12,\n        \"labelFontWeight\": 400,\n        \"labelPadding\": 16\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"funnel_bars\",\n      \"mark\": {\n        \"type\": \"bar\",\n        \"cornerRadius\": 6,\n        \"height\": {\n          \"band\": 0.62\n        }\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-05 SESSIONS % OF TOTAL\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1.45\n            ]\n          },\n          \"axis\": null\n        },\n        \"color\": {\n          \"field\": \"VIZ-05 BAR COLOR\",\n          \"type\": \"nominal\",\n          \"scale\": null\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"StepName\",\n            \"title\": \"Funnel Step\"\n          },\n          {\n            \"field\": \"VIZ-05 SESSIONS\",\n            \"title\": \"Total Sessions\",\n            \"format\": \",d\"\n          },\n          {\n            \"field\": \"VIZ-05 STEP CVR LABEL\",\n            \"title\": \"Step Conversion\"\n          },\n          {\n            \"field\": \"VIZ-05 DROP OFF LABEL\",\n            \"title\": \"Step Drop-off\"\n          },\n          {\n            \"field\": \"VIZ-05 SESSIONS % OF TOTAL\",\n            \"title\": \"% of All Sessions\",\n            \"format\": \".1%\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"session_volume_labels\",\n      \"mark\": {\n        \"type\": \"text\",\n        \"align\": \"right\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 12,\n        \"fontWeight\": 500,\n        \"font\": \"Segoe UI\",\n        \"color\": \"#E6E9F2\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"datum\": 1.2,\n          \"type\": \"quantitative\"\n        },\n        \"text\": {\n          \"field\": \"VIZ-05 SESSIONS LABEL\"\n        }\n      }\n    },\n    {\n      \"name\": \"cvr_labels\",\n      \"mark\": {\n        \"type\": \"text\",\n        \"align\": \"right\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 12,\n        \"fontWeight\": 600,\n        \"font\": \"Segoe UI\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"datum\": 1.43,\n          \"type\": \"quantitative\"\n        },\n        \"color\": {\n          \"field\": \"VIZ-05 CVR COLOR\",\n          \"type\": \"nominal\",\n          \"scale\": null\n        },\n        \"text\": {\n          \"field\": \"VIZ-05 STEP CVR LABEL\"\n        }\n      }\n    }\n  ]\n}'"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "developer": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2.0.0.0'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E9F2'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Checkout funnel: step conversion and drop-off'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Step conversion, session volume & drop-off rates across checkout'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9.5D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8B95B0'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0F1730'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1D2749'"
+                    }
+                  }
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
