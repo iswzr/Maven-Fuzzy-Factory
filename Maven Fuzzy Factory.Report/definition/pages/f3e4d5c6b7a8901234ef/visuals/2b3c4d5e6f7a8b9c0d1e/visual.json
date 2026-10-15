@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "2b3c4d5e6f7a8b9c0d1e",
   "position": {
-    "x": 906.96071674707093,
-    "y": 271.5368711233632,
-    "z": 4000,
-    "height": 384.56237077877324,
-    "width": 594.07305306685043,
-    "tabOrder": 4000
+    "x": 577.37470167064441,
+    "y": 672.54635579217916,
+    "z": 8000,
+    "height": 395.49109601615567,
+    "width": 714.84486873508354,
+    "tabOrder": 7000
   },
   "visual": {
     "visualType": "scatterChart",
@@ -480,6 +480,31 @@
               }
             ],
             "id": "Paid Social"
+          }
+        }
+      ],
+      "markers": [
+        {
+          "properties": {
+            "borderColorMatchFill": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "borderColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       ]

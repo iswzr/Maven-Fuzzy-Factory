@@ -1,0 +1,305 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "c4d5e6f7a8b901234e5f",
+  "position": {
+    "x": 1446.6091426473288,
+    "y": 270.71048283458782,
+    "z": 9000,
+    "height": 384.91646778042957,
+    "width": 541.42096566917564,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "website_sessions"
+                    }
+                  },
+                  "Property": "Channel"
+                }
+              },
+              "queryRef": "website_sessions.Channel",
+              "nativeQueryRef": "Channel"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "website_sessions"
+                    }
+                  },
+                  "Property": "Device"
+                }
+              },
+              "queryRef": "website_sessions.Device",
+              "nativeQueryRef": "Device"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Dumbbell CVR %"
+                }
+              },
+              "queryRef": "_Measures.Dumbbell CVR %",
+              "nativeQueryRef": "Dumbbell CVR %"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "stateManagement": [
+        {
+          "properties": {
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "529D"
+                }
+              }
+            },
+            "denebMetaVersion": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2'"
+                }
+              }
+            },
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "339D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "vega": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.4.3'"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, BlinkMacSystemFont, ''Inter'', sans-serif\",\n    \"background\": \"transparent\",\n    \"padding\": {\n      \"top\": 10,\n      \"left\": 15,\n      \"right\": 25,\n      \"bottom\": 15\n    }\n  },\n  \"transform\": [\n    {\n      \"calculate\": \"datum[''Dumbbell CVR %''] != null ? datum[''Dumbbell CVR %''] : (datum[''Conversion Rate %''] != null ? datum[''Conversion Rate %''] : (datum[''CVR''] != null ? datum[''CVR''] : 0))\",\n      \"as\": \"cvr_val\"\n    },\n    {\n      \"calculate\": \"datum[''Channel''] != null ? datum[''Channel''] : (datum[''Channel Grouping''] != null ? datum[''Channel Grouping''] : ''Unknown'')\",\n      \"as\": \"channel_name\"\n    },\n    {\n      \"calculate\": \"datum[''Device''] != null ? datum[''Device''] : (datum[''device_type''] != null ? (lower(datum[''device_type'']) == ''mobile'' ? ''Mobile'' : ''Desktop'') : ''Desktop'')\",\n      \"as\": \"device_name\"\n    },\n    {\n      \"filter\": \"datum.cvr_val > 0 && datum.channel_name != ''Direct Type-In'' && datum.channel_name != ''Paid Social''\"\n    }\n  ],\n  \"encoding\": {\n    \"y\": {\n      \"field\": \"channel_name\",\n      \"type\": \"nominal\",\n      \"scale\": {\n        \"domain\": [\n          \"Google Nonbrand\",\n          \"Bing Nonbrand\",\n          \"Brand (G+B)\",\n          \"Organic\",\n          \"Direct\",\n          \"Social pilot\",\n          \"Social targeted\"\n        ]\n      },\n      \"axis\": {\n        \"title\": null,\n        \"domain\": false,\n        \"ticks\": false,\n        \"grid\": false,\n        \"labelColor\": \"#94A3B8\",\n        \"labelFontSize\": 12,\n        \"labelFontWeight\": 500,\n        \"labelPadding\": 12\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"dumbbell_connecting_line\",\n      \"mark\": {\n        \"type\": \"rule\",\n        \"strokeWidth\": 2,\n        \"color\": \"#475569\",\n        \"strokeCap\": \"round\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"aggregate\": \"min\",\n          \"field\": \"cvr_val\",\n          \"type\": \"quantitative\"\n        },\n        \"x2\": {\n          \"aggregate\": \"max\",\n          \"field\": \"cvr_val\"\n        }\n      }\n    },\n    {\n      \"name\": \"dumbbell_dots\",\n      \"mark\": {\n        \"type\": \"circle\",\n        \"size\": 130,\n        \"opacity\": 1\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"cvr_val\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [0, 0.125],\n            \"nice\": false\n          },\n          \"axis\": {\n            \"title\": null,\n            \"values\": [0, 0.04, 0.08, 0.12],\n            \"format\": \".0%\",\n            \"domain\": false,\n            \"ticks\": false,\n            \"grid\": true,\n            \"gridColor\": \"#1E293B\",\n            \"gridWidth\": 1,\n            \"labelColor\": \"#64748B\",\n            \"labelFontSize\": 11,\n            \"labelPadding\": 8\n          }\n        },\n        \"color\": {\n          \"field\": \"device_name\",\n          \"type\": \"nominal\",\n          \"scale\": {\n            \"domain\": [\"Mobile\", \"Desktop\"],\n            \"range\": [\"#FB7185\", \"#2DD4BF\"]\n          },\n          \"legend\": {\n            \"orient\": \"bottom-right\",\n            \"direction\": \"horizontal\",\n            \"title\": null,\n            \"labelColor\": \"#94A3B8\",\n            \"labelFontSize\": 12,\n            \"symbolType\": \"circle\",\n            \"symbolSize\": 90,\n            \"offset\": 0\n          }\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"channel_name\",\n            \"type\": \"nominal\",\n            \"title\": \"Marketing Channel\"\n          },\n          {\n            \"field\": \"device_name\",\n            \"type\": \"nominal\",\n            \"title\": \"Device\"\n          },\n          {\n            \"field\": \"cvr_val\",\n            \"type\": \"quantitative\",\n            \"format\": \".2%\",\n            \"title\": \"Conversion Rate\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"desktop_cvr_labels\",\n      \"transform\": [\n        {\n          \"filter\": \"datum.device_name == ''Desktop''\"\n        }\n      ],\n      \"mark\": {\n        \"type\": \"text\",\n        \"align\": \"left\",\n        \"baseline\": \"middle\",\n        \"dx\": 10,\n        \"fontSize\": 11,\n        \"fontWeight\": 600,\n        \"color\": \"#2DD4BF\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"cvr_val\",\n          \"type\": \"quantitative\"\n        },\n        \"text\": {\n          \"field\": \"cvr_val\",\n          \"type\": \"quantitative\",\n          \"format\": \".1%\"\n        }\n      }\n    }\n  ]\n}\n'"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "developer": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2.0.0.0'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E9F2'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Desktop vs mobile CVR gap (dumbbell)'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#131A2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#222C47'"
+                    }
+                  }
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

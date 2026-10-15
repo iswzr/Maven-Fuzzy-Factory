@@ -1,0 +1,180 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "name": "dataset"
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Segoe UI, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+    "background": "transparent",
+    "padding": {
+      "top": 10,
+      "left": 15,
+      "right": 25,
+      "bottom": 15
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum['Conversion Rate %'] != null ? datum['Conversion Rate %'] : (datum['CVR'] != null ? datum['CVR'] : 0)",
+      "as": "cvr_val"
+    },
+    {
+      "calculate": "datum['Channel'] != null ? datum['Channel'] : (datum['Channel Grouping'] != null ? datum['Channel Grouping'] : 'Unknown')",
+      "as": "channel_name"
+    },
+    {
+      "calculate": "datum['Device'] != null ? datum['Device'] : (datum['device_type'] != null ? (lower(datum['device_type']) == 'mobile' ? 'Mobile' : 'Desktop') : 'Desktop')",
+      "as": "device_name"
+    },
+    {
+      "filter": "datum.cvr_val > 0 && datum.channel_name != 'Direct Type-In' && datum.channel_name != 'Paid Social'"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "channel_name",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Google Nonbrand",
+          "Bing Nonbrand",
+          "Brand (G+B)",
+          "Organic",
+          "Direct",
+          "Social pilot",
+          "Social targeted"
+        ]
+      },
+      "axis": {
+        "title": null,
+        "domain": false,
+        "ticks": false,
+        "grid": false,
+        "labelColor": "#94A3B8",
+        "labelFontSize": 12,
+        "labelFontWeight": 500,
+        "labelPadding": 12
+      }
+    }
+  },
+  "layer": [
+    {
+      "name": "dumbbell_connecting_line",
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 2,
+        "color": "#475569",
+        "strokeCap": "round"
+      },
+      "encoding": {
+        "x": {
+          "aggregate": "min",
+          "field": "cvr_val",
+          "type": "quantitative"
+        },
+        "x2": {
+          "aggregate": "max",
+          "field": "cvr_val"
+        }
+      }
+    },
+    {
+      "name": "dumbbell_dots",
+      "mark": {
+        "type": "circle",
+        "size": 130,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "cvr_val",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 0.125],
+            "nice": false
+          },
+          "axis": {
+            "title": null,
+            "values": [0, 0.04, 0.08, 0.12],
+            "format": ".0%",
+            "domain": false,
+            "ticks": false,
+            "grid": true,
+            "gridColor": "#1E293B",
+            "gridWidth": 1,
+            "labelColor": "#64748B",
+            "labelFontSize": 11,
+            "labelPadding": 8
+          }
+        },
+        "color": {
+          "field": "device_name",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Mobile", "Desktop"],
+            "range": ["#FB7185", "#2DD4BF"]
+          },
+          "legend": {
+            "orient": "bottom-right",
+            "direction": "horizontal",
+            "title": null,
+            "labelColor": "#94A3B8",
+            "labelFontSize": 12,
+            "symbolType": "circle",
+            "symbolSize": 90,
+            "offset": 0
+          }
+        },
+        "tooltip": [
+          {
+            "field": "channel_name",
+            "type": "nominal",
+            "title": "Marketing Channel"
+          },
+          {
+            "field": "device_name",
+            "type": "nominal",
+            "title": "Device"
+          },
+          {
+            "field": "cvr_val",
+            "type": "quantitative",
+            "format": ".2%",
+            "title": "Conversion Rate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "desktop_cvr_labels",
+      "transform": [
+        {
+          "filter": "datum.device_name == 'Desktop'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 10,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#2DD4BF"
+      },
+      "encoding": {
+        "x": {
+          "field": "cvr_val",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "cvr_val",
+          "type": "quantitative",
+          "format": ".1%"
+        }
+      }
+    }
+  ]
+}

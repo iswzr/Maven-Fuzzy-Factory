@@ -64,6 +64,8 @@ table orders
 		summarizeBy: none
 		sourceColumn: Order Date
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	column 'Basket Type'
 		dataType: string
 		lineageTag: b851a37f-ee24-43e6-b21c-135b75910973
@@ -88,7 +90,9 @@ table orders
 		mode: import
 		source =
 				let
-				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\orders.csv"), [Delimiter = ",", Columns = 8, QuoteStyle = QuoteStyle.None]),
+				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/orders.csv") else File.Contents(LocalPath & "orders.csv"),
+				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 8, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"order_id", Int64.Type}, {"created_at", type datetime}, {"website_session_id", Int64.Type}, {"user_id", Int64.Type}, {"primary_product_id", Int64.Type}, {"items_purchased", Int64.Type}, {"price_usd", type number}, {"cogs_usd", type number}}),
 				  #"Added Order Date" = Table.AddColumn(#"Changed column type", "Order Date", each DateTime.Date([created_at]), type date),

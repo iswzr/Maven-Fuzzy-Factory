@@ -3,70 +3,100 @@ table _Measures
 
 	measure 'Total Sessions' = COUNTROWS(website_sessions)
 		formatString: #,0
+		displayFolder: 01 Core Metrics
 		lineageTag: 91f19f0e-c096-406f-9e5c-1ff5c689092a
 
 	measure 'Total Orders' = COUNTROWS(orders)
 		formatString: #,0
+		displayFolder: 01 Core Metrics
 		lineageTag: 25ee9512-6c26-479c-a694-3942fd59cbd1
 
 	measure 'Gross Revenue' = SUM(order_items[price_usd])
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 01 Core Metrics
 		lineageTag: c86b7eea-8b42-4610-8940-4efcf83643f5
 
 	measure 'Total COGS' = SUM(order_items[cogs_usd])
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 01 Core Metrics
 		lineageTag: b6166148-f267-4c8f-9114-ce93504d76ef
 
 	measure 'Gross Profit' = [Gross Revenue] - [Total COGS]
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 01 Core Metrics
 		lineageTag: 6dd4756a-e7ab-480b-a161-10ca8b290746
 
 	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Gross Revenue], 0)
 		formatString: 0.00%
+		displayFolder: 01 Core Metrics
 		lineageTag: 997ce250-9015-45e7-a1e2-2e27b2dd6774
 
 	measure 'Total Refunds' = SUM(order_item_refunds[refund_amount_usd])
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 01 Core Metrics
 		lineageTag: 54db0c6b-e06f-4230-84f7-72fdaf9cd208
 
 	measure 'Net Revenue' = [Gross Revenue] - [Total Refunds]
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 01 Core Metrics
 		lineageTag: 85cd4d39-8f45-422f-aec0-a4d205dbc68b
 
 	measure 'Net Profit' = [Gross Profit] - [Total Refunds]
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 01 Core Metrics
 		lineageTag: 635c1580-49b9-4901-8ce1-6248c13503bc
 
 	measure 'Net Margin %' = DIVIDE([Net Profit], [Net Revenue], 0)
 		formatString: 0.00%
+		displayFolder: 01 Core Metrics
 		lineageTag: b7b90b42-7b98-47fb-9e88-ed554ac23989
 
-	measure 'Conversion Rate %' = DIVIDE([Total Orders], [Total Sessions], 0)
+	measure 'Conversion Rate %' =
+			VAR SessIDs = VALUES(website_sessions[website_session_id])
+			VAR SessOrders =
+				CALCULATE(
+					COUNTROWS(orders),
+					TREATAS(SessIDs, orders[website_session_id])
+				)
+			VAR SessCount = COUNTROWS(website_sessions)
+			RETURN
+			IF(
+				ISINSCOPE(_Param_Dim[Member]),
+				[Matrix CVR %],
+				DIVIDE(SessOrders, SessCount, 0)
+			)
 		formatString: 0.00%
+		displayFolder: 01 Core Metrics
 		lineageTag: a2bc80a7-100f-48aa-8573-4abc478b13f4
 
 	measure 'Average Order Value' = DIVIDE([Gross Revenue], [Total Orders], 0)
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 01 Core Metrics
 		lineageTag: d009fea1-b290-447c-8255-b0d51812f61a
 
 	measure 'Cross-Sell Attach %' = DIVIDE(CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 0), [Total Orders], 0)
 		formatString: 0.00%
+		displayFolder: 01 Core Metrics
 		lineageTag: aa991bbe-7d9a-4402-8de0-b7b277b544fb
 
 	measure 'Refund Rate %' = DIVIDE(COUNTROWS(order_item_refunds), COUNTROWS(order_items), 0)
 		formatString: 0.00%
+		displayFolder: 01 Core Metrics
 		lineageTag: b67b9762-6e40-44fd-b4c1-66aa9ab11c6e
 
 	measure 'Bounce Rate %' = DIVIDE(CALCULATE(COUNTROWS(website_sessions), website_sessions[Is Bounce] = 1), [Total Sessions], 0)
 		formatString: 0.00%
+		displayFolder: 01 Core Metrics
 		lineageTag: 60ea540a-a566-407a-afd8-ec4130426fe7
 
 	measure 'Repeat Sessions' = CALCULATE(COUNTROWS(website_sessions), website_sessions[is_repeat_session] = 1)
 		formatString: #,0
+		displayFolder: 01 Core Metrics
 		lineageTag: e3b7e711-d949-44ec-982c-7e90dceba0e1
 
 	measure 'Repeat Session %' = DIVIDE([Repeat Sessions], [Total Sessions], 0)
 		formatString: 0.00%
+		displayFolder: 01 Core Metrics
 		lineageTag: f5b352df-4566-4436-8afa-336ceaa79b95
 
 	measure 'Dynamic Selected Metric' =
@@ -86,14 +116,17 @@ table _Measures
 					10, [Refund Rate %],
 					[Gross Revenue]
 				)
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: e4612243-cf4f-403a-9572-d64ef51bc93b
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Story Headline Text' = SELECTEDVALUE(_Param_Story[Headline], "3-Year Historical Growth Journey (Mar 2012 – Mar 2015)")
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: 157b1283-104a-47f1-aa67-409a6133fdd0
 
 	measure 'Story Narrative Commentary' = SELECTEDVALUE(_Param_Story[Commentary], "Scaled from a single-product bootstrap (3.5% CVR) into an omnichannel brand with 40K+ orders, 8.44% peak CVR, and $1.85M+ net revenue.")
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: d92c1adb-1267-4a83-af56-e24f6a555ba9
 
 	measure 'Revenue (Chapter)' =
@@ -101,6 +134,7 @@ table _Measures
 			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
 			RETURN CALCULATE([Gross Revenue], DATESBETWEEN(Dim_Date[Date], s, e))
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: a3f1e98d-294b-4b11-9a7f-7193dc5e1823
 
 	measure 'Is Selected Chapter' =
@@ -113,11 +147,13 @@ table _Measures
 					IF(_selId = 0, 2, IF(_chId = _selId, 1, 0))
 				)
 		formatString: 0
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: b4c2e81a-9831-4192-ba78-6593dc5e1944
 
 	measure 'Page Title P1' =
 			VAR ch = SELECTEDVALUE(_Param_Story[ChapterName], "The 3-Year Growth Story")
 			RETURN "Maven Fuzzy Factory · " & IF(ch = "All 3 Years" || ISBLANK(ch), "The 3-Year Growth Story", ch)
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: c5d3e72b-8712-4293-8b89-5493dc5e1055
 
 	measure 'Story Narrative HTML' =
@@ -141,6 +177,7 @@ table _Measures
 						Commentary &
 					"</div>" &
 				"</div>"
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: e8d4c91a-7b23-41a6-89de-3619ea458b21
 
 	measure 'Orders (Chapter)' =
@@ -148,6 +185,7 @@ table _Measures
 			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
 			RETURN CALCULATE([Total Orders], DATESBETWEEN(Dim_Date[Date], s, e))
 		formatString: #,0
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d
 
 	measure 'Sessions (Chapter)' =
@@ -155,6 +193,7 @@ table _Measures
 			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
 			RETURN CALCULATE([Total Sessions], DATESBETWEEN(Dim_Date[Date], s, e))
 		formatString: #,0
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: 8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e
 
 	measure 'Conversion Rate % (Chapter)' =
@@ -162,6 +201,7 @@ table _Measures
 			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
 			RETURN CALCULATE([Conversion Rate %], DATESBETWEEN(Dim_Date[Date], s, e))
 		formatString: 0.00%
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: 9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f
 
 	measure 'AOV (Chapter)' =
@@ -169,6 +209,7 @@ table _Measures
 			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
 			RETURN CALCULATE([Average Order Value], DATESBETWEEN(Dim_Date[Date], s, e))
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: 0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a
 
 	measure 'Gross Margin % (Chapter)' =
@@ -176,6 +217,7 @@ table _Measures
 			VAR e = SELECTEDVALUE(_Param_Story[EndDate], DATE(2015, 3, 19))
 			RETURN CALCULATE([Gross Margin %], DATESBETWEEN(Dim_Date[Date], s, e))
 		formatString: 0.00%
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: 1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b
 
 	measure 'KPI Strip HTML' =
@@ -289,6 +331,7 @@ table _Measures
 			    <div class='kpi-sub'>" & subGm & "</div>
 			  </div>
 			</div>"
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: f9e5d82b-9842-4217-91ef-4729fb569c32
 
 	measure 'Trajectory Chart Title' =
@@ -309,6 +352,7 @@ table _Measures
 				)
 			RETURN
 				"Growth Trajectory · " & SelectedMetric & TimeText & " (" & ChapterText & ")"
+		displayFolder: 02 Page 1 - Storyboard
 		lineageTag: d6e7f8a9-0b1c-2d3e-4f5a-6b7c8d9e0f1a
 
 	measure 'Dynamic Selected Metric Formatted' =
@@ -329,10 +373,12 @@ table _Measures
 					10, FORMAT(val, "0.0%"),
 					FORMAT(val, "#,##0")
 				)
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b
 
 	measure 'Selected Metric ID' = SELECTEDVALUE(_Param_Metric[MetricID], 1)
 		formatString: 0
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: a1b2c3d4-e5f6-4789-0123-456789abcdef
 
 	measure 'Time Mode Value' =
@@ -381,12 +427,14 @@ table _Measures
 					6, Rolling3MVal,
 					CurrentVal
 				)
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: b8c9d0e1-2f3a-4b5c-6d7e-8f9a0b1c2d3e
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Selected Time Mode ID' = SELECTEDVALUE(_Param_Time[TimeModeID], 1)
 		formatString: 0
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: c1d2e3f4-a5b6-4789-0123-456789abcdef
 
 	measure 'Time Mode Value Formatted' =
@@ -431,11 +479,13 @@ table _Measures
 						)
 					)
 				)
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: d2e3f4a5-b6c7-4890-1234-56789abcdef0
 
 	measure 'Active Time Mode Label' =
 			VAR tm = SELECTEDVALUE(_Param_Time[TimeModeName], "Current Actuals")
 			RETURN "Mode: " & tm
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: e1a2b3c4-d5e6-4789-0123-456789abcdef
 
 	measure 'Metric Slicer Subtitle' =
@@ -527,13 +577,14 @@ table _Measures
 					1, "Actual",
 					2, "PoP: " & IF(IsRate, FORMAT(PoPDiff * 100, "+0.00;-0.00;0.00") & " pp", FORMAT(PoPPct, "+0.0%;-0.0%;0.0%")),
 					3, "YoY: " & IF(IsRate, FORMAT(YoYDiff * 100, "+0.00;-0.00;0.00") & " pp", FORMAT(YoYPct, "+0.0%;-0.0%;0.0%")),
-					4, "Δ YoY: " & IF(IsRate, FORMAT(YoYDiff * 100, "+0.00;-0.00") & " pp", IF(IsCurr, FORMAT(YoYDiff, "+$#,0;-$#,0"), FORMAT(YoYDiff, "+#,0;-#,0"))),
+					4, "Δ YoY: " & IF(IsRate, FORMAT(YoYDiff * 100, "+0.00;-0.00;0.00") & " pp", IF(IsCurr, FORMAT(YoYDiff, "+$#,0;-$#,0"), FORMAT(YoYDiff, "+#,0;-#,0"))),
 					5, "YoY %: " & FORMAT(YoYPct, "+0.0%;-0.0%;0.0%"),
 					6, "vs 3M Avg: " & IF(IsRate, FORMAT(R3MDiff * 100, "+0.00;-0.00") & " pp", FORMAT(DIVIDE(R3MDiff, Roll3MVal), "+0.0%;-0.0%")),
 					"Actual"
 				)
 			RETURN
 				ActStr & "  ·  " & DiffStr
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: f2b3c4d5-e6f7-4890-1234-56789abcdef0
 
 	measure 'Metric Slicer Subtitle Color' =
@@ -583,26 +634,49 @@ table _Measures
 			VAR IsGood = IF(MetricID = 10, Delta <= 0, Delta >= 0)
 			RETURN
 				IF(TimeMode = 1, "#94A3B8", IF(IsGood, "#34D399", "#FB7185"))
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: a3b4c5d6-e7f8-4901-2345-6789abcdef01
 
 	measure 'Active Metric Label' =
 			VAR m = SELECTEDVALUE(_Param_Metric[MetricName], "Gross Revenue ($)")
 			RETURN "Metric: " & m
+		displayFolder: 03 Dynamic Drivers
 		lineageTag: f2b3c4d5-e6f7-4890-1234-56789abcdef1
 
-	measure 'Page Title P2' =
-			"Acquisition " & UNICHAR(183) & " " &
-			IF(ISFILTERED(Dim_Date[Year]), SELECTEDVALUE(Dim_Date[Year], "multi-year"), "2012" & UNICHAR(8211) & "2015")
-			  & " " & UNICHAR(183) & " grouped by " &
-			SELECTEDVALUE(_Param_Dim[DimensionName], "Marketing Channel")
+	measure 'Page Title P2' = ```
+			
+			VAR SelectedDim = 
+			    IF(
+			        ISFILTERED('_Param_Dim'[DimensionName]), 
+			        MAX('_Param_Dim'[DimensionName]), 
+			        "Marketing Channel"
+			    )
+			VAR DimLabel = 
+			    IF(
+			        SelectedDim = "Channel" || SelectedDim = "Marketing Channel", 
+			        "Marketing Channel", 
+			        SelectedDim
+			    )
+			RETURN
+			    "Acquisition " & UNICHAR(183) & " " &
+			    IF(
+			        ISFILTERED(Dim_Date[Year]), 
+			        SELECTEDVALUE(Dim_Date[Year], "multi-year"), 
+			        "2012" & UNICHAR(8211) & "2015"
+			    )
+			    & " " & UNICHAR(183) & " grouped by " & DimLabel
+			```
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: 3a776cdd-b206-4849-8ed8-8511e45293b2
 
 	measure 'Unpaid Sessions' = CALCULATE([Total Sessions], KEEPFILTERS(website_sessions[Traffic Type] IN {"Organic", "Direct"}))
 		formatString: #,0
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: 82f819f7-2624-4e17-81f3-3560836e7c8a
 
 	measure 'Unpaid Session %' = DIVIDE([Unpaid Sessions], [Total Sessions], 0)
 		formatString: 0.0%
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: c9a634f1-e6d7-4d86-a9fc-19f86b52ccf1
 
 	measure 'Unpaid Revenue' =
@@ -617,10 +691,12 @@ table _Measures
 				)
 			)
 		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: 80b57353-75f3-4904-ad5b-fef9a070b36b
 
 	measure 'Mobile Traffic %' = DIVIDE(CALCULATE([Total Sessions], website_sessions[device_type] = "mobile"), [Total Sessions], 0)
 		formatString: 0.0%
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: faf9ab1d-2120-4102-89cb-827e8f196553
 
 	measure 'Mobile Order %' =
@@ -639,6 +715,7 @@ table _Measures
 				0
 			)
 		formatString: 0.0%
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: 4b4cc316-fea4-41cd-aafb-1ca244e6540d
 
 	measure 'CVR Desktop' =
@@ -657,6 +734,7 @@ table _Measures
 				0
 			)
 		formatString: 0.00%
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: 71ba181b-432c-4c85-a7ea-c9600eedeedb
 
 	measure 'CVR Mobile' =
@@ -675,6 +753,7 @@ table _Measures
 				0
 			)
 		formatString: 0.00%
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: cddeb816-1ebc-4e9e-aa69-3f535d4d2615
 
 	measure 'Header P2 HTML' =
@@ -692,6 +771,7 @@ table _Measures
 			  <div class='hdr-title'>" & titleText & "</div>
 			  <div class='hdr-sub'>Sample output of the dynamic title measure " & UNICHAR(183) & " data through 19 Mar 2015</div>
 			</div>"
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: 15409b23-1d64-47c5-8bc7-cbcb4f4a4c19
 
 	measure 'KPI Strip P2 HTML' =
@@ -769,33 +849,594 @@ table _Measures
 			    <div class='kpi-sub'>" & cvrSubStr & "</div>
 			  </div>
 			</div>"
+		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: 045956e6-807a-48a0-a554-34b3caf6b4ff
 
-	measure 'Channel Orders' =
+	measure 'Channel Orders' = [Matrix Orders]
+		formatString: #,0
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: e996cf63-4ee5-457c-89f8-0db4c5af2cf9
+
+	measure 'Channel Revenue' = [Matrix Revenue]
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: 70108808-f46a-436c-949e-b29f487bf3ef
+
+	measure 'Channel CVR' = [Matrix CVR %]
+		formatString: 0.00%
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: b21c9b4f-b7bc-4b8f-89ea-b65c620a7837
+
+	measure 'Brand Sessions' = CALCULATE([Total Sessions], website_sessions[utm_campaign] = "brand")
+		formatString: #,0
+		displayFolder: 04 Page 2 - Acquisition
+		lineageTag: a7b8c9d0-1e2f-4a5b-6c7d-8e9f0a1b2c3d
+
+	measure 'Blended Benchmark CVR' = 0.0683
+		formatString: 0.00%
+		displayFolder: 04 Page 2 - Acquisition
+		lineageTag: b8c9d0e1-2f3a-5b6c-7d8e-9f0a1b2c3d4e
+
+	measure 'Revenue per Session' = [Matrix Rev per Session]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: f1a2b3c4-d5e6-7890-abcd-ef0123456789
+
+	measure 'Session Share %' = [Matrix Session Share %]
+		formatString: 0.0%
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: e2f3a4b5-c6d7-8901-bcde-f0123456789a
+
+	measure 'Ref Line CVR %' =
 			CALCULATE(
-				[Total Orders],
-				TREATAS(
-					CALCULATETABLE(VALUES(website_sessions[website_session_id])),
-					orders[website_session_id]
+				VAR SessIDs = VALUES(website_sessions[website_session_id])
+				VAR SessOrders =
+					CALCULATE(
+						COUNTROWS(orders),
+						TREATAS(SessIDs, orders[website_session_id])
+					)
+				VAR SessCount = COUNTROWS(website_sessions)
+				RETURN
+				DIVIDE(SessOrders, SessCount, 0),
+				ISBLANK(website_sessions[Social Experiment Segment])
+			)
+		formatString: 0.00%
+		displayFolder: 04 Page 2 - Acquisition\Visual 5 - Social Experiment
+		lineageTag: dfff530d-3596-445c-b6f8-31f3a23c4026
+
+	measure 'Dumbbell CVR %' =
+			VAR SessIDs = VALUES(website_sessions[website_session_id])
+			VAR SessOrders =
+				CALCULATE(
+					COUNTROWS(orders),
+					TREATAS(SessIDs, orders[website_session_id])
+				)
+			VAR SessCount = COUNTROWS(website_sessions)
+			RETURN
+			DIVIDE(SessOrders, SessCount, 0)
+		formatString: 0.00%
+		displayFolder: 04 Page 2 - Acquisition\Visual 3 - Dumbbell Gap
+		lineageTag: c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f
+
+	measure 'Social Experiment CVR %' =
+			VAR SessIDs = VALUES(website_sessions[website_session_id])
+			VAR SessOrders =
+				CALCULATE(
+					COUNTROWS(orders),
+					TREATAS(SessIDs, orders[website_session_id])
+				)
+			VAR SessCount = COUNTROWS(website_sessions)
+			RETURN
+			DIVIDE(SessOrders, SessCount, 0)
+		formatString: 0.00%
+		displayFolder: 04 Page 2 - Acquisition\Visual 5 - Social Experiment
+		lineageTag: d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a
+
+	measure 'Matrix Sessions' =
+			IF(
+				ISINSCOPE(_Param_Dim[Member]),
+				VAR ActiveDim = SELECTEDVALUE(_Param_Dim[DimensionName], "Channel")
+				VAR CurMember = SELECTEDVALUE(_Param_Dim[Member])
+				VAR RowDim = SELECTEDVALUE(_Param_Dim[DimensionName])
+				VAR ShouldShow = ISFILTERED(_Param_Dim[DimensionName]) || RowDim = "Channel"
+				RETURN
+				IF(
+					NOT(ShouldShow),
+					BLANK(),
+					SWITCH(
+						ActiveDim,
+						"Channel", CALCULATE(COUNTROWS(website_sessions), website_sessions[Channel] = CurMember),
+						"Device", CALCULATE(COUNTROWS(website_sessions), website_sessions[Device] = CurMember),
+						"Product",
+							VAR ProdUrl =
+								SWITCH(
+									CurMember,
+									"The Original Mr. Fuzzy", "/the-original-mr-fuzzy",
+									"The Forever Love Bear", "/the-forever-love-bear",
+									"The Birthday Sugar Panda", "/the-birthday-sugar-panda",
+									"The Hudson River Mini bear", "/the-hudson-river-mini-bear",
+									BLANK()
+								)
+							VAR PvSess =
+								CALCULATETABLE(
+									VALUES(website_pageviews[website_session_id]),
+									website_pageviews[pageview_url] = ProdUrl
+								)
+							VAR OrderSess =
+								CALCULATETABLE(
+									VALUES(orders[website_session_id]),
+									TREATAS({CurMember}, products[product_name]),
+									TREATAS(
+										CALCULATETABLE(VALUES(website_sessions[website_session_id])),
+										orders[website_session_id]
+									)
+								)
+							VAR CombinedSess = DISTINCT(UNION(PvSess, OrderSess))
+							RETURN
+							COUNTROWS(CombinedSess),
+						"Landing page", CALCULATE(COUNTROWS(website_sessions), website_sessions[Landing Page] = CurMember),
+						"Campaign", CALCULATE(COUNTROWS(website_sessions), website_sessions[Campaign] = CurMember),
+						CALCULATE(COUNTROWS(website_sessions), website_sessions[Channel] = CurMember)
+					)
+				),
+				COUNTROWS(website_sessions)
+			)
+		formatString: #,0
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b
+
+	measure 'Matrix Orders' =
+			IF(
+				ISINSCOPE(_Param_Dim[Member]),
+				VAR ActiveDim = SELECTEDVALUE(_Param_Dim[DimensionName], "Channel")
+				VAR CurMember = SELECTEDVALUE(_Param_Dim[Member])
+				VAR RowDim = SELECTEDVALUE(_Param_Dim[DimensionName])
+				VAR ShouldShow = ISFILTERED(_Param_Dim[DimensionName]) || RowDim = "Channel"
+				RETURN
+				IF(
+					NOT(ShouldShow),
+					BLANK(),
+					SWITCH(
+						ActiveDim,
+						"Channel",
+							CALCULATE(
+								COUNTROWS(orders),
+								TREATAS(
+									CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Channel] = CurMember),
+									orders[website_session_id]
+								)
+							),
+						"Device",
+							CALCULATE(
+								COUNTROWS(orders),
+								TREATAS(
+									CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Device] = CurMember),
+									orders[website_session_id]
+								)
+							),
+						"Product",
+							CALCULATE(
+								DISTINCTCOUNT(order_items[order_id]),
+								TREATAS({CurMember}, products[product_name])
+							),
+						"Landing page",
+							CALCULATE(
+								COUNTROWS(orders),
+								TREATAS(
+									CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Landing Page] = CurMember),
+									orders[website_session_id]
+								)
+							),
+						"Campaign",
+							CALCULATE(
+								COUNTROWS(orders),
+								TREATAS(
+									CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Campaign] = CurMember),
+									orders[website_session_id]
+								)
+							),
+						CALCULATE(
+							COUNTROWS(orders),
+							TREATAS(
+								CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Channel] = CurMember),
+								orders[website_session_id]
+							)
+						)
+					)
+				),
+				CALCULATE(
+					COUNTROWS(orders),
+					TREATAS(CALCULATETABLE(VALUES(website_sessions[website_session_id])), orders[website_session_id])
 				)
 			)
 		formatString: #,0
-		lineageTag: e996cf63-4ee5-457c-89f8-0db4c5af2cf9
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c
 
-	measure 'Channel Revenue' =
-			CALCULATE(
-				[Gross Revenue],
-				TREATAS(
-					CALCULATETABLE(VALUES(website_sessions[website_session_id])),
-					orders[website_session_id]
+	measure 'Matrix Revenue' =
+			IF(
+				ISINSCOPE(_Param_Dim[Member]),
+				VAR ActiveDim = SELECTEDVALUE(_Param_Dim[DimensionName], "Channel")
+				VAR CurMember = SELECTEDVALUE(_Param_Dim[Member])
+				VAR RowDim = SELECTEDVALUE(_Param_Dim[DimensionName])
+				VAR ShouldShow = ISFILTERED(_Param_Dim[DimensionName]) || RowDim = "Channel"
+				RETURN
+				IF(
+					NOT(ShouldShow),
+					BLANK(),
+					SWITCH(
+						ActiveDim,
+						"Channel",
+							CALCULATE(
+								[Gross Revenue],
+								TREATAS(
+									CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Channel] = CurMember),
+									orders[website_session_id]
+								)
+							),
+						"Device",
+							CALCULATE(
+								[Gross Revenue],
+								TREATAS(
+									CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Device] = CurMember),
+									orders[website_session_id]
+								)
+							),
+						"Product",
+							CALCULATE(
+								[Gross Revenue],
+								TREATAS({CurMember}, products[product_name])
+							),
+						"Landing page",
+							CALCULATE(
+								[Gross Revenue],
+								TREATAS(
+									CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Landing Page] = CurMember),
+									orders[website_session_id]
+								)
+							),
+						"Campaign",
+							CALCULATE(
+								[Gross Revenue],
+								TREATAS(
+									CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Campaign] = CurMember),
+									orders[website_session_id]
+								)
+							),
+						CALCULATE(
+							[Gross Revenue],
+							TREATAS(
+								CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[Channel] = CurMember),
+								orders[website_session_id]
+							)
+						)
+					)
+				),
+				CALCULATE(
+					[Gross Revenue],
+					TREATAS(CALCULATETABLE(VALUES(website_sessions[website_session_id])), orders[website_session_id])
 				)
 			)
 		formatString: \$#,0;(\$#,0);\$#,0
-		lineageTag: 70108808-f46a-436c-949e-b29f487bf3ef
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d
 
-	measure 'Channel CVR' = DIVIDE([Channel Orders], [Total Sessions], 0)
+	measure 'Matrix CVR %' = DIVIDE([Matrix Orders], [Matrix Sessions], 0)
+		formatString: 0.00%
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e
+
+	measure 'Matrix Rev per Session' = DIVIDE([Matrix Revenue], [Matrix Sessions], 0)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f
+
+	measure 'Matrix Session Share %' =
+			IF(
+				ISINSCOPE(_Param_Dim[Member]),
+				VAR Tot = [Matrix Sessions]
+				VAR ActiveDim = SELECTEDVALUE(_Param_Dim[DimensionName], "Channel")
+				VAR ProductTotal =
+					VAR S1 =
+						CALCULATE(
+							VAR ProdUrl = "/the-original-mr-fuzzy"
+							VAR PvSess = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] = ProdUrl)
+							VAR OrderSess = CALCULATETABLE(VALUES(orders[website_session_id]), products[product_name] = "The Original Mr. Fuzzy", TREATAS(CALCULATETABLE(VALUES(website_sessions[website_session_id])), orders[website_session_id]))
+							RETURN COUNTROWS(DISTINCT(UNION(PvSess, OrderSess))),
+							ALLSELECTED(_Param_Dim)
+						)
+					VAR S2 =
+						CALCULATE(
+							VAR ProdUrl = "/the-forever-love-bear"
+							VAR PvSess = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] = ProdUrl)
+							VAR OrderSess = CALCULATETABLE(VALUES(orders[website_session_id]), products[product_name] = "The Forever Love Bear", TREATAS(CALCULATETABLE(VALUES(website_sessions[website_session_id])), orders[website_session_id]))
+							RETURN COUNTROWS(DISTINCT(UNION(PvSess, OrderSess))),
+							ALLSELECTED(_Param_Dim)
+						)
+					VAR S3 =
+						CALCULATE(
+							VAR ProdUrl = "/the-birthday-sugar-panda"
+							VAR PvSess = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] = ProdUrl)
+							VAR OrderSess = CALCULATETABLE(VALUES(orders[website_session_id]), products[product_name] = "The Birthday Sugar Panda", TREATAS(CALCULATETABLE(VALUES(website_sessions[website_session_id])), orders[website_session_id]))
+							RETURN COUNTROWS(DISTINCT(UNION(PvSess, OrderSess))),
+							ALLSELECTED(_Param_Dim)
+						)
+					VAR S4 =
+						CALCULATE(
+							VAR ProdUrl = "/the-hudson-river-mini-bear"
+							VAR PvSess = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] = ProdUrl)
+							VAR OrderSess = CALCULATETABLE(VALUES(orders[website_session_id]), products[product_name] = "The Hudson River Mini bear", TREATAS(CALCULATETABLE(VALUES(website_sessions[website_session_id])), orders[website_session_id]))
+							RETURN COUNTROWS(DISTINCT(UNION(PvSess, OrderSess))),
+							ALLSELECTED(_Param_Dim)
+						)
+					RETURN
+					S1 + S2 + S3 + S4
+				VAR ChannelTotal =
+					CALCULATE(
+						[Matrix Sessions],
+						ALLSELECTED(_Param_Dim[Member]),
+						ALLSELECTED(_Param_Dim[MemberSort])
+					)
+				VAR AllTot =
+					IF(ActiveDim = "Product", ProductTotal, ChannelTotal)
+				RETURN
+				IF(ISBLANK(Tot), BLANK(), DIVIDE(Tot, AllTot, 0)),
+				1.0
+			)
 		formatString: 0.0%
-		lineageTag: b21c9b4f-b7bc-4b8f-89ea-b65c620a7837
+		displayFolder: 04 Page 2 - Acquisition\Visual 6 - Dynamic Matrix
+		lineageTag: d0e1f2a3-b4c5-4d6e-7f8a-9b0c1d2e3f4a
+
+	measure 'Page Title P3' =
+			VAR BlendedCVR = FORMAT([Conversion Rate %], "0.00%")
+			VAR BestLander = [Best Lander Name]
+			VAR BestCVR = FORMAT([Best Lander CVR], "0.00%")
+			VAR YearPart =
+			    IF(
+			        ISFILTERED(Dim_Date[Year]),
+			        " " & UNICHAR(183) & " " & SELECTEDVALUE(Dim_Date[Year], "Multi-Year"),
+			        ""
+			    )
+			VAR DevicePart =
+			    IF(
+			        ISFILTERED(website_sessions[Device]),
+			        " " & UNICHAR(183) & " " & SELECTEDVALUE(website_sessions[Device], "All Devices"),
+			        ""
+			    )
+			VAR TrafficPart =
+			    IF(
+			        ISFILTERED(website_sessions[Traffic Type]),
+			        " " & UNICHAR(183) & " " & SELECTEDVALUE(website_sessions[Traffic Type], "All Traffic"),
+			        ""
+			    )
+			RETURN
+			    "CRO Lab " & UNICHAR(183) & " " & BlendedCVR & " blended CVR " & UNICHAR(183) & " best lander " & BestLander & " (" & BestCVR & ")" & YearPart & DevicePart & TrafficPart
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: cbbc7922-703f-4ae7-8d29-9aa6ddac15a8
+
+	measure 'Header P3 HTML' =
+			VAR titleText = [Page Title P3]
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .hdr-wrap { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 2px 4px; }
+			  .hdr-title { font-size: 22px; font-weight: 800; color: #F8FAFC; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 3px; }
+			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
+			</style>
+			<div class='hdr-wrap'>
+			  <div class='hdr-title'>" & titleText & "</div>
+			  <div class='hdr-sub'>Sample output of the dynamic title measure " & UNICHAR(183) & " data through 19 Mar 2015</div>
+			</div>"
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 4577f806-5809-4d3e-bf26-dbc884d14d4f
+
+	measure 'Lander Sessions' = [Total Sessions]
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 161b62c3-8786-4a68-8423-06dd25183ffc
+
+	measure 'Lander Orders' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE([Total Orders], TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: a761da2a-ff05-4ea8-9359-55548e1d2a04
+
+	measure 'Lander CVR' = DIVIDE([Lander Orders], [Lander Sessions])
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 35398a93-be70-4b1f-bf4b-a3a681a388e4
+
+	measure 'Lander Bounces' = CALCULATE(COUNTROWS(website_sessions), website_sessions[Is Bounce] = 1)
+		formatString: #,0
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 82c18da4-167c-4912-a551-3fae2d1ffff3
+
+	measure 'Lander Bounce Rate' = DIVIDE([Lander Bounces], [Lander Sessions])
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 793acbce-1d8d-4004-b0a7-c4a6cdd0ba4f
+
+	measure 'Best Lander Name' =
+			VAR Landers =
+			    ADDCOLUMNS(
+			        VALUES(website_sessions[Landing Page]),
+			        "L_CVR", [Lander CVR]
+			    )
+			VAR TopL = TOPN(1, Landers, [L_CVR], DESC)
+			RETURN MAXX(TopL, website_sessions[Landing Page])
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 205aa887-c258-4453-98f8-15d0616cb4b7
+
+	measure 'Best Lander CVR' =
+			VAR Landers =
+			    ADDCOLUMNS(
+			        VALUES(website_sessions[Landing Page]),
+			        "L_CVR", [Lander CVR]
+			    )
+			RETURN MAXX(Landers, [L_CVR])
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 700fa8ad-42a3-4cff-982f-f6cdc301a1d4
+
+	measure 'Lowest Bounce %' =
+			VAR Landers =
+			    ADDCOLUMNS(
+			        VALUES(website_sessions[Landing Page]),
+			        "L_Bounce", [Lander Bounce Rate]
+			    )
+			RETURN MINX(Landers, [L_Bounce])
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: f97e5b93-3e27-4aca-b3bc-056f0f7a6b33
+
+	measure 'Lowest Bounce Lander' =
+			VAR Landers =
+			    ADDCOLUMNS(
+			        VALUES(website_sessions[Landing Page]),
+			        "L_Bounce", [Lander Bounce Rate]
+			    )
+			VAR LowB = TOPN(1, Landers, [L_Bounce], ASC)
+			RETURN MAXX(LowB, website_sessions[Landing Page])
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: d06bcf01-9039-41f8-87a3-269c5cb517e3
+
+	measure 'Billing Baseline CVR' =
+			VAR b1_sessions = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] = "/billing")
+			VAR n1 = COUNTROWS(b1_sessions)
+			VAR x1 = CALCULATE([Total Orders], TREATAS(b1_sessions, orders[website_session_id]))
+			RETURN DIVIDE(x1, n1)
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 20a13200-4fed-41ca-9d8e-38889b773963
+
+	measure 'Billing Variant CVR' =
+			VAR b2_sessions = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] = "/billing-2")
+			VAR n2 = COUNTROWS(b2_sessions)
+			VAR x2 = CALCULATE([Total Orders], TREATAS(b2_sessions, orders[website_session_id]))
+			RETURN DIVIDE(x2, n2)
+		formatString: 0.00%
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: e6c3f018-a66d-448c-9aee-b2fa5eca8d61
+
+	measure 'Billing Lift pp' =
+			VAR p1 = [Billing Baseline CVR]
+			VAR p2 = [Billing Variant CVR]
+			RETURN p2 - p1
+		formatString: +0.00 pp;-0.00 pp;0.00 pp
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 37ef0623-518d-43c2-b022-1bdeb9b11f51
+
+	measure 'Billing Z-Score' =
+			VAR b1_sessions = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] = "/billing")
+			VAR b2_sessions = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] = "/billing-2")
+			VAR n1 = COUNTROWS(b1_sessions)
+			VAR n2 = COUNTROWS(b2_sessions)
+			VAR x1 = CALCULATE([Total Orders], TREATAS(b1_sessions, orders[website_session_id]))
+			VAR x2 = CALCULATE([Total Orders], TREATAS(b2_sessions, orders[website_session_id]))
+			VAR p1 = DIVIDE(x1, n1)
+			VAR p2 = DIVIDE(x2, n2)
+			VAR p = DIVIDE(x1 + x2, n1 + n2)
+			VAR se = SQRT(p * (1 - p) * (DIVIDE(1, n1) + DIVIDE(1, n2)))
+			RETURN DIVIDE(p2 - p1, se)
+		formatString: 0.0
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 8072b331-7c27-4fb1-a0f9-59063501b558
+
+	measure 'Checkout Completion %' =
+			VAR b_sessions = CALCULATETABLE(VALUES(website_pageviews[website_session_id]), website_pageviews[pageview_url] IN { "/billing", "/billing-2" })
+			VAR n = COUNTROWS(b_sessions)
+			VAR x = CALCULATE([Total Orders], TREATAS(b_sessions, orders[website_session_id]))
+			RETURN DIVIDE(x, n)
+		formatString: 0.0%
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: 1c08b40f-ff4a-4614-9f5a-000362a37c3d
+
+	measure 'KPI Strip P3 HTML' =
+			VAR bestCvr = [Best Lander CVR]
+			VAR bestName = [Best Lander Name]
+			VAR lowBounce = [Lowest Bounce %]
+			VAR lowBounceName = [Lowest Bounce Lander]
+			VAR bLift = [Billing Lift pp]
+			VAR bBase = [Billing Baseline CVR]
+			VAR bVar = [Billing Variant CVR]
+			VAR bZ = [Billing Z-Score]
+			VAR chkComp = [Checkout Completion %]
+			
+			VAR card1Val = IF(ISBLANK(bestCvr), "-", FORMAT(bestCvr, "0.00%"))
+			VAR card1Sub = IF(ISBLANK(bestName), "-", bestName)
+			
+			VAR card2Val = IF(ISBLANK(lowBounce), "-", FORMAT(lowBounce, "0.00%"))
+			VAR card2Sub = IF(ISBLANK(lowBounceName), "-", lowBounceName)
+			
+			VAR card3Val = IF(ISBLANK(bLift), "+18.57 pp", "+" & FORMAT(bLift * 100, "0.00") & " pp")
+			VAR card3Sub = IF(ISBLANK(bBase) || ISBLANK(bVar), "44.79% " & UNICHAR(8594) & " 63.36%", FORMAT(bBase, "0.00%") & " " & UNICHAR(8594) & " " & FORMAT(bVar, "0.00%"))
+			
+			VAR card4Val = IF(ISBLANK(bZ), UNICHAR(8776) & " 22", UNICHAR(8776) & " " & FORMAT(ROUND(bZ, 0), "0"))
+			VAR card4Sub = "p < 0.0001"
+			
+			VAR card5Val = IF(ISBLANK(chkComp), "62.1%", FORMAT(chkComp, "0.0%"))
+			VAR card5Sub = "billing " & UNICHAR(8594) & " order"
+			
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; width: 100%; height: 100%; }
+			  .kpi-card {
+			    position: relative; overflow: hidden; min-width: 0; height: 100%;
+			    padding: 12px 16px 10px 16px; border-radius: 10px;
+			    display: flex; flex-direction: column; justify-content: space-between;
+			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
+			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
+			    border: 1px solid rgba(255,255,255,0.08);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 20px rgba(0,0,0,0.35);
+			    transition: border-color .2s ease, box-shadow .2s ease;
+			  }
+			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
+			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
+			  .kpi-card:hover { border-color: var(--acc); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
+			  .kpi-label { font-size:10px; color:#8FA0BC; font-weight:700; text-transform:uppercase;
+			    letter-spacing:0.8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-value { font-size: clamp(21px, 2.1vw, 27px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.1;
+			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
+			    overflow:hidden; text-overflow:ellipsis; margin:3px 0 2px;
+			    text-shadow: 0 0 18px var(--glow); }
+			  .kpi-sub { align-self:flex-start; max-width:100%; font-size:9.5px; font-weight:600; color:#94A3B8;
+			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			</style>
+			<div class='kpi-grid'>
+			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--val-col:#34D399;'>
+			    <div class='kpi-label'>BEST LANDER CVR</div>
+			    <div class='kpi-value'>" & card1Val & "</div>
+			    <div class='kpi-sub'>" & card1Sub & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--val-col:#38BDF8;'>
+			    <div class='kpi-label'>LOWEST BOUNCE</div>
+			    <div class='kpi-value'>" & card2Val & "</div>
+			    <div class='kpi-sub'>" & card2Sub & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#2DD4BF;--glow:rgba(45,212,191,.16);--val-col:#2DD4BF;'>
+			    <div class='kpi-label'>BILLING LIFT</div>
+			    <div class='kpi-value'>" & card3Val & "</div>
+			    <div class='kpi-sub'>" & card3Sub & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--val-col:#38BDF8;'>
+			    <div class='kpi-label'>BILLING Z-SCORE</div>
+			    <div class='kpi-value'>" & card4Val & "</div>
+			    <div class='kpi-sub'>" & card4Sub & "</div>
+			  </div>
+			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);--val-col:#FBBF24;'>
+			    <div class='kpi-label'>CHECKOUT COMPLETION</div>
+			    <div class='kpi-value'>" & card5Val & "</div>
+			    <div class='kpi-sub'>" & card5Sub & "</div>
+			  </div>
+			</div>"
+		displayFolder: 05 Page 3 - CRO Lab
+		lineageTag: f038361e-5ff2-4d3a-996c-5f97b69aa856
 
 	column Dummy
 		lineageTag: 3ce5026e-32f8-4521-831e-9fe6f7d36d85

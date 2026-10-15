@@ -4,7 +4,7 @@ import uuid
 def uid():
     return str(uuid.uuid4())
 
-base_dir = r"f:\MAVEN DATA\Maven+Fuzzy+Factory\Maven Fuzzy Factory.SemanticModel\definition"
+base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Maven Fuzzy Factory.SemanticModel", "definition")
 tables_dir = os.path.join(base_dir, "tables")
 os.makedirs(tables_dir, exist_ok=True)
 

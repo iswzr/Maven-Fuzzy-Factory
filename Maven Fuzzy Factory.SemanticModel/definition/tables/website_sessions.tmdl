@@ -78,6 +78,8 @@ table website_sessions
 		summarizeBy: none
 		sourceColumn: Session Date
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	column 'Channel Grouping'
 		dataType: string
 		lineageTag: bdefff95-449f-4eb0-83da-80aed524d745
@@ -110,8 +112,10 @@ table website_sessions
 				website_sessions[utm_campaign] = "brand", 3,
 				(ISBLANK(website_sessions[utm_source]) || website_sessions[utm_source] = "") && NOT(ISBLANK(website_sessions[http_referer])) && website_sessions[http_referer] <> "", 4,
 				(ISBLANK(website_sessions[utm_source]) || website_sessions[utm_source] = "") && (ISBLANK(website_sessions[http_referer]) || website_sessions[http_referer] = ""), 5,
-				website_sessions[utm_source] = "socialbook", 6,
-				7
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "pilot", 6,
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "desktop_targeted", 7,
+				website_sessions[utm_source] = "socialbook", 8,
+				9
 			)
 		dataType: int64
 		formatString: 0
@@ -126,6 +130,8 @@ table website_sessions
 				website_sessions[utm_campaign] = "brand", "Brand (G+B)",
 				(ISBLANK(website_sessions[utm_source]) || website_sessions[utm_source] = "") && NOT(ISBLANK(website_sessions[http_referer])) && website_sessions[http_referer] <> "", "Organic",
 				(ISBLANK(website_sessions[utm_source]) || website_sessions[utm_source] = "") && (ISBLANK(website_sessions[http_referer]) || website_sessions[http_referer] = ""), "Direct",
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "pilot", "Social pilot",
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "desktop_targeted", "Social targeted",
 				website_sessions[utm_source] = "socialbook", "Paid Social",
 				"Direct"
 			)
@@ -134,11 +140,61 @@ table website_sessions
 		summarizeBy: none
 		sortByColumn: 'Channel Sort'
 
+	column 'Social Experiment Sort' =
+			SWITCH(
+				TRUE(),
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "pilot" && website_sessions[device_type] = "mobile", 1,
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "pilot" && website_sessions[device_type] = "desktop", 2,
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "desktop_targeted", 3,
+				BLANK()
+			)
+		dataType: int64
+		formatString: 0
+		lineageTag: c9d0e1f2-3a4b-5c6d-7e8f-0a1b2c3d4e5f
+		summarizeBy: none
+
+	column 'Social Experiment Segment' =
+			SWITCH(
+				TRUE(),
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "pilot" && website_sessions[device_type] = "mobile", "Pilot · mobile",
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "pilot" && website_sessions[device_type] = "desktop", "Pilot · desktop",
+				website_sessions[utm_source] = "socialbook" && website_sessions[utm_campaign] = "desktop_targeted", "Desktop-targeted",
+				BLANK()
+			)
+		dataType: string
+		lineageTag: d0e1f2a3-4b5c-6d7e-8f0a-1b2c3d4e5f6a
+		summarizeBy: none
+		sortByColumn: 'Social Experiment Sort'
+
+	column Campaign =
+			SWITCH(
+				website_sessions[utm_campaign],
+				"nonbrand", "Nonbrand Search",
+				"brand", "Brand Search",
+				"pilot", "Social Pilot",
+				"desktop_targeted", "Social Targeted",
+				"Organic / Direct"
+			)
+		dataType: string
+		lineageTag: f2a3b4c5-d6e7-8f9a-0b1c-2d3e4f5a6b7c
+		summarizeBy: none
+
+	column 'Landing Page' =
+			CALCULATE(
+				MIN(website_pageviews[pageview_url]),
+				website_pageviews[Page Category] = "Landing Page"
+			)
+		dataType: string
+		lineageTag: e1f2a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b
+		summarizeBy: none
+
 	partition website_sessions = m
 		mode: import
 		source =
 				let
-				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\website_sessions.csv"), [Delimiter = ",", Columns = 9, QuoteStyle = QuoteStyle.None]),
+				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/website_sessions.csv") else File.Contents(LocalPath & "website_sessions.csv"),
+				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 9, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"website_session_id", Int64.Type}, {"created_at", type datetime}, {"user_id", Int64.Type}, {"is_repeat_session", Int64.Type}, {"utm_source", type text}, {"utm_campaign", type text}, {"utm_content", type text}, {"device_type", type text}, {"http_referer", type text}}),
 				  #"Replaced NULLs" = Table.ReplaceValue(#"Changed column type", "NULL", null, Replacer.ReplaceValue, {"utm_source", "utm_campaign", "utm_content", "http_referer"}),

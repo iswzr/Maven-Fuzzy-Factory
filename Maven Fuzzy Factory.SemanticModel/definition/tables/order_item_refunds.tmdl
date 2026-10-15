@@ -61,11 +61,15 @@ table order_item_refunds
 		summarizeBy: none
 		sourceColumn: Refund Date
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	partition order_item_refunds = m
 		mode: import
 		source =
 				let
-				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\order_item_refunds.csv"), [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
+				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/order_item_refunds.csv") else File.Contents(LocalPath & "order_item_refunds.csv"),
+				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"order_item_refund_id", Int64.Type}, {"created_at", type datetime}, {"order_item_id", Int64.Type}, {"order_id", Int64.Type}, {"refund_amount_usd", type number}}),
 				  #"Added Refund Date" = Table.AddColumn(#"Changed column type", "Refund Date", each DateTime.Date([created_at]), type date)

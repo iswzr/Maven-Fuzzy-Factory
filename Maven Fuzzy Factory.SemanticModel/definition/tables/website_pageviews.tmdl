@@ -5,8 +5,10 @@ table website_pageviews
 		dataType: int64
 		formatString: 0
 		lineageTag: b3d347f0-d93e-42a3-810e-9a5b8d7c873d
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: website_pageview_id
+
+		annotation SummarizationSetBy = Automatic
 
 	column created_at
 		dataType: dateTime
@@ -35,6 +37,13 @@ table website_pageviews
 		summarizeBy: none
 		sourceColumn: Pageview Date
 
+		variation Variation
+			isDefault
+			relationship: 6d3016c9-ea6c-47df-a74c-5420f2ca6149
+			defaultHierarchy: LocalDateTable_991d05b5-666d-41f3-ba9b-9bc9a1eeb268.'Date Hierarchy'
+
+		annotation UnderlyingDateTimeDataType = Date
+
 	column 'Page Category'
 		dataType: string
 		lineageTag: 4a94e6e9-ae35-4e29-a19d-abe3a6db38e6
@@ -45,7 +54,9 @@ table website_pageviews
 		mode: import
 		source =
 				let
-				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\website_pageviews.csv"), [Delimiter = ",", Columns = 4, QuoteStyle = QuoteStyle.None]),
+				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/website_pageviews.csv") else File.Contents(LocalPath & "website_pageviews.csv"),
+				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 4, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"website_pageview_id", Int64.Type}, {"created_at", type datetime}, {"website_session_id", Int64.Type}, {"pageview_url", type text}}),
 				  #"Added Pageview Date" = Table.AddColumn(#"Changed column type", "Pageview Date", each DateTime.Date([created_at]), type date),

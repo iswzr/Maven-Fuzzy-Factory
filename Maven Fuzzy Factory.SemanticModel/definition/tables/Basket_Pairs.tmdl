@@ -5,72 +5,115 @@ table Basket_Pairs
 		dataType: int64
 		formatString: 0
 		lineageTag: 6efc432b-a711-472f-86b5-6bb6eb6c61d9
-		summarizeBy: none
+		summarizeBy: count
 		isNameInferred
 		sourceColumn: [PrimaryProductID]
+
+		annotation SummarizationSetBy = Automatic
 
 	column CrossProductID
 		dataType: int64
 		formatString: 0
 		lineageTag: 83c97f66-da95-4d9d-a092-1f4c4d0a7b85
-		summarizeBy: none
+		summarizeBy: count
 		isNameInferred
 		sourceColumn: [CrossProductID]
 
+		annotation SummarizationSetBy = Automatic
+
 	column order_item_id
 		lineageTag: 543525c8-6921-4427-9c75-86ea61a62ecb
+		summarizeBy: sum
 		isNameInferred
 		sourceColumn: order_items[order_item_id]
 
+		annotation SummarizationSetBy = Automatic
+
 	column created_at
 		lineageTag: be0fe08d-0a23-4bbf-9bde-fc943e284bb5
+		summarizeBy: none
 		isNameInferred
 		sourceColumn: order_items[created_at]
 
+		annotation SummarizationSetBy = Automatic
+
 	column order_id
 		lineageTag: a5ce3740-e117-41ff-ac91-e23b55910f7f
+		summarizeBy: sum
 		isNameInferred
 		sourceColumn: order_items[order_id]
 
+		annotation SummarizationSetBy = Automatic
+
 	column product_id
 		lineageTag: 86dbaccd-c821-4b0f-8d60-37effa8e53bd
+		summarizeBy: sum
 		isNameInferred
 		sourceColumn: order_items[product_id]
 
+		annotation SummarizationSetBy = Automatic
+
 	column is_primary_item
 		lineageTag: 67842241-77dd-4f51-9215-16ec7ba73f80
+		summarizeBy: sum
 		isNameInferred
 		sourceColumn: order_items[is_primary_item]
 
+		annotation SummarizationSetBy = Automatic
+
 	column price_usd
 		lineageTag: 9e56607a-8ee6-44dc-82c0-20563f476309
+		summarizeBy: sum
 		isNameInferred
 		sourceColumn: order_items[price_usd]
 
+		annotation SummarizationSetBy = Automatic
+
 	column cogs_usd
 		lineageTag: 5a9ec78a-48f8-4f25-9f5b-8a5068a2bca1
+		summarizeBy: sum
 		isNameInferred
 		sourceColumn: order_items[cogs_usd]
 
+		annotation SummarizationSetBy = Automatic
+
 	column 'Order Date'
+		formatString: General Date
 		lineageTag: d0ab76b7-c58d-4f1f-91f2-e15915d40c0f
+		summarizeBy: none
 		isNameInferred
 		sourceColumn: order_items[Order Date]
 
+		variation Variation
+			isDefault
+			relationship: b3697504-ea8f-424d-9d80-0f73352f8a99
+			defaultHierarchy: LocalDateTable_4629f3af-df82-46a6-a425-58d9212e98cf.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
 	column 'Item Role'
 		lineageTag: df14bbdf-f135-4194-8eb6-ba3c48a781bf
+		summarizeBy: none
 		isNameInferred
 		sourceColumn: order_items[Item Role]
 
+		annotation SummarizationSetBy = Automatic
+
 	column 'Margin $'
 		lineageTag: 28848c89-7b5e-4f08-b483-67704defdb10
+		summarizeBy: sum
 		isNameInferred
 		sourceColumn: order_items[Margin $]
 
+		annotation SummarizationSetBy = Automatic
+
 	column 'Margin %'
 		lineageTag: 0fd87b81-d14f-43f0-804c-0f93b57a5639
+		summarizeBy: sum
 		isNameInferred
 		sourceColumn: order_items[Margin %]
+
+		annotation SummarizationSetBy = Automatic
 
 	partition Basket_Pairs = calculated
 		mode: import

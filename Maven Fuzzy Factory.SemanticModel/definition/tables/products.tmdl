@@ -59,7 +59,9 @@ table products
 		mode: import
 		source =
 				let
-				  Source = Csv.Document(File.Contents("F:\MAVEN DATA\Maven+Fuzzy+Factory\products.csv"), [Delimiter = ",", Columns = 3, QuoteStyle = QuoteStyle.None]),
+				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/products.csv") else File.Contents(LocalPath & "products.csv"),
+				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 3, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"product_id", Int64.Type}, {"created_at", type datetime}, {"product_name", type text}}),
 				  #"Added Retail Price" = Table.AddColumn(#"Changed column type", "Retail Price", each if [product_id] = 1 then 49.99 else if [product_id] = 2 then 59.99 else if [product_id] = 3 then 45.99 else 29.99, type number),
