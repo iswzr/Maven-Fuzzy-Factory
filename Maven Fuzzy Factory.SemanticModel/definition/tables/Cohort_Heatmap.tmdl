@@ -1,0 +1,106 @@
+table Cohort_Heatmap
+	lineageTag: e301a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	column CohortQuarter
+		dataType: string
+		lineageTag: e302a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CohortQuarter]
+		sortByColumn: CohortSort
+
+	column CohortSort
+		dataType: int64
+		formatString: 0
+		lineageTag: e303a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CohortSort]
+
+	column LapseWindow
+		dataType: string
+		lineageTag: e304a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [LapseWindow]
+		sortByColumn: LapseSort
+
+	column LapseSort
+		dataType: int64
+		formatString: 0
+		lineageTag: e305a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [LapseSort]
+
+	column IsElapsed
+		dataType: int64
+		formatString: 0
+		lineageTag: e306a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [IsElapsed]
+
+	partition Cohort_Heatmap = calculated
+		mode: import
+		source =
+				DATATABLE(
+					"CohortQuarter", STRING,
+					"CohortSort", INTEGER,
+					"LapseWindow", STRING,
+					"LapseSort", INTEGER,
+					"IsElapsed", INTEGER,
+					{
+						{"2012 Q3", 1, "M1", 1, 1},
+						{"2012 Q3", 1, "M2", 2, 1},
+						{"2012 Q3", 1, "M3", 3, 1},
+						{"2012 Q3", 1, "M4–6", 4, 1},
+						{"2012 Q3", 1, "M7–9", 5, 1},
+						{"2012 Q3", 1, "M10–12", 6, 1},
+						{"2012 Q4", 2, "M1", 1, 1},
+						{"2012 Q4", 2, "M2", 2, 1},
+						{"2012 Q4", 2, "M3", 3, 1},
+						{"2012 Q4", 2, "M4–6", 4, 1},
+						{"2012 Q4", 2, "M7–9", 5, 1},
+						{"2012 Q4", 2, "M10–12", 6, 1},
+						{"2013 Q1", 3, "M1", 1, 1},
+						{"2013 Q1", 3, "M2", 2, 1},
+						{"2013 Q1", 3, "M3", 3, 1},
+						{"2013 Q1", 3, "M4–6", 4, 1},
+						{"2013 Q1", 3, "M7–9", 5, 1},
+						{"2013 Q1", 3, "M10–12", 6, 1},
+						{"2013 Q2", 4, "M1", 1, 1},
+						{"2013 Q2", 4, "M2", 2, 1},
+						{"2013 Q2", 4, "M3", 3, 1},
+						{"2013 Q2", 4, "M4–6", 4, 1},
+						{"2013 Q2", 4, "M7–9", 5, 1},
+						{"2013 Q2", 4, "M10–12", 6, 1},
+						{"2013 Q3", 5, "M1", 1, 1},
+						{"2013 Q3", 5, "M2", 2, 1},
+						{"2013 Q3", 5, "M3", 3, 1},
+						{"2013 Q3", 5, "M4–6", 4, 1},
+						{"2013 Q3", 5, "M7–9", 5, 1},
+						{"2013 Q3", 5, "M10–12", 6, 1},
+						{"2013 Q4", 6, "M1", 1, 1},
+						{"2013 Q4", 6, "M2", 2, 1},
+						{"2013 Q4", 6, "M3", 3, 1},
+						{"2013 Q4", 6, "M4–6", 4, 1},
+						{"2013 Q4", 6, "M7–9", 5, 1},
+						{"2013 Q4", 6, "M10–12", 6, 1},
+						{"2014 Q1", 7, "M1", 1, 1},
+						{"2014 Q1", 7, "M2", 2, 1},
+						{"2014 Q1", 7, "M3", 3, 1},
+						{"2014 Q1", 7, "M4–6", 4, 1},
+						{"2014 Q1", 7, "M7–9", 5, 1},
+						{"2014 Q1", 7, "M10–12", 6, 0},
+						{"2014 Q2", 8, "M1", 1, 1},
+						{"2014 Q2", 8, "M2", 2, 1},
+						{"2014 Q2", 8, "M3", 3, 1},
+						{"2014 Q2", 8, "M4–6", 4, 1},
+						{"2014 Q2", 8, "M7–9", 5, 0},
+						{"2014 Q2", 8, "M10–12", 6, 0}
+					}
+				)
+
+	annotation PBI_Id = e308a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+

@@ -1,0 +1,25 @@
+table Dim_OrderFrequency
+	lineageTag: c101a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	column Frequency
+		dataType: string
+		lineageTag: c102a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Frequency]
+		sortByColumn: FrequencySort
+
+	column FrequencySort
+		dataType: int64
+		formatString: 0
+		lineageTag: c103a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FrequencySort]
+
+	partition Dim_OrderFrequency = calculated
+		mode: import
+		source = DATATABLE("Frequency", STRING, "FrequencySort", INTEGER, {{"1 order", 1}, {"2 orders", 2}, {"3 orders", 3}})
+
+	annotation PBI_Id = c104a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+

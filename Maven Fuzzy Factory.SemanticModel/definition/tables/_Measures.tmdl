@@ -2423,26 +2423,643 @@ table _Measures
 		displayFolder: 06 Page 4 - Products
 		lineageTag: 3ad6f394-d696-49f0-9b03-e2020afa9058
 
-	measure '1 item' =
-			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
-			RETURN CALCULATE(COUNTROWS(orders), orders[items_purchased] = 1, TREATAS(sid, orders[website_session_id]))
+	measure '1 item' = CALCULATE([Total Orders], orders[items_purchased] = 1)
 		formatString: #,0
 		displayFolder: 06 Page 4 - Products
 		lineageTag: 834b8444-2fab-4252-b0c4-0132f31f3a50
 
-	measure '2 items' =
-			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
-			RETURN CALCULATE(COUNTROWS(orders), orders[items_purchased] = 2, TREATAS(sid, orders[website_session_id]))
+	measure '2 items' = CALCULATE([Total Orders], orders[items_purchased] = 2)
 		formatString: #,0
 		displayFolder: 06 Page 4 - Products
 		lineageTag: 51e70649-cdbd-4eb7-9f3c-7c432e36fe0e
 
-	measure 'Basket Orders' =
-			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
-			RETURN CALCULATE(COUNTROWS(orders), TREATAS(sid, orders[website_session_id]))
+	measure 'Basket Orders' = [Total Orders]
 		formatString: #,0
 		displayFolder: 06 Page 4 - Products
 		lineageTag: 13be49e2-f699-4100-9f1b-3474805307a4
+
+	measure '1 item %' = DIVIDE([1 item], [Basket Orders])
+		formatString: 0.0%
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 0fbd7a87-af6d-4083-8210-1afaddff564e
+
+	measure '2 items %' = DIVIDE([2 items], [Basket Orders])
+		formatString: 0.0%
+		displayFolder: 06 Page 4 - Products
+		lineageTag: 81c530b5-acfe-4027-b676-503f0330195e
+
+	measure 'New Sessions' = CALCULATE(COUNTROWS(website_sessions), website_sessions[is_repeat_session] = 0)
+		formatString: #,0
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b507d120-1a2b-4c3d-8e4f-5a6b7c8d9e07
+
+	measure 'Repeat Orders' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE([Total Orders], orders[Is Repeat Order] = 1, TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 07 Page 5 - Retention\KPI Cards
+		lineageTag: b505d120-1a2b-4c3d-8e4f-5a6b7c8d9e05
+
+	measure 'New Session Orders' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[is_repeat_session] = 0)
+			RETURN CALCULATE([Total Orders], TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b508d120-1a2b-4c3d-8e4f-5a6b7c8d9e08
+
+	measure 'Repeat CVR %' = DIVIDE([Repeat Session Orders], [Repeat Sessions])
+		formatString: 0.00%
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b506d120-1a2b-4c3d-8e4f-5a6b7c8d9e06
+
+	measure 'New CVR %' = DIVIDE([New Session Orders], [New Sessions])
+		formatString: 0.00%
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b509d120-1a2b-4c3d-8e4f-5a6b7c8d9e09
+
+	measure 'Repeat Buyers' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR buyerTable = CALCULATETABLE(SUMMARIZE(orders, orders[user_id], "cnt", COUNTROWS(orders)), TREATAS(sid, orders[website_session_id]))
+			RETURN COUNTROWS(FILTER(buyerTable, [cnt] > 1))
+		formatString: #,0
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b511d120-1a2b-4c3d-8e4f-5a6b7c8d9e11
+
+	measure 'Repeat Buyer %' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR buyerTable = CALCULATETABLE(SUMMARIZE(orders, orders[user_id], "cnt", COUNTROWS(orders)), TREATAS(sid, orders[website_session_id]))
+			VAR repBuyers = COUNTROWS(FILTER(buyerTable, [cnt] > 1))
+			VAR totalBuyers = COUNTROWS(buyerTable)
+			RETURN DIVIDE(repBuyers, totalBuyers)
+		formatString: 0.0%
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b510d120-1a2b-4c3d-8e4f-5a6b7c8d9e10
+
+	measure 'Page Title P5' =
+			VAR repCVR = [Repeat CVR %]
+			VAR newCVR = [New CVR %]
+			VAR cvrLift = DIVIDE(repCVR - newCVR, newCVR, 0)
+			VAR LiftStr = IF(ISBLANK(repCVR) || ISBLANK(newCVR) || newCVR = 0, "N/A", IF(cvrLift >= 0, "+" & FORMAT(cvrLift, "0%"), FORMAT(cvrLift, "0%")))
+			VAR RepBuyerPctStr = FORMAT([Repeat Buyer %], "0.0%")
+			VAR YearPart = IF(ISFILTERED(Dim_Date[Year]), " " & UNICHAR(183) & " " & SELECTEDVALUE(Dim_Date[Year], "Multi-Year"), "")
+			VAR ChannelPart = IF(ISFILTERED(website_sessions[Channel]), " " & UNICHAR(183) & " " & SELECTEDVALUE(website_sessions[Channel], "All Channels"), "")
+			VAR DevicePart = IF(ISFILTERED(website_sessions[Device]), " " & UNICHAR(183) & " " & SELECTEDVALUE(website_sessions[Device], "All Devices"), "")
+			RETURN
+			"Retention " & UNICHAR(183) & " repeat sessions convert " & LiftStr & " better, only " & RepBuyerPctStr & " of buyers reorder" & YearPart & ChannelPart & DevicePart
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b501d120-1a2b-4c3d-8e4f-5a6b7c8d9e01
+
+	measure 'Header P5 HTML' =
+			VAR repSessions = [Repeat Sessions]
+			VAR newSessions = [New Sessions]
+			VAR totalSessions = [Total Sessions]
+			VAR repCVR = [Repeat CVR %]
+			VAR newCVR = [New CVR %]
+			VAR cvrLift = DIVIDE(repCVR - newCVR, newCVR, 0)
+			VAR LiftStr = IF(ISBLANK(repCVR) || ISBLANK(newCVR) || newCVR = 0, "N/A", IF(cvrLift >= 0, "+" & FORMAT(cvrLift, "0%"), FORMAT(cvrLift, "0%")))
+			VAR RepBuyerPctStr = FORMAT([Repeat Buyer %], "0.0%")
+			VAR YearPart =
+			    IF(
+			        ISFILTERED(Dim_Date[Year]),
+			        " <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>" & SELECTEDVALUE(Dim_Date[Year], "Multi-Year") & "</span>",
+			        ""
+			    )
+			VAR ChannelPart =
+			    IF(
+			        ISFILTERED(website_sessions[Channel]),
+			        " <span style='color:#475569'>&bull;</span> <span style='color:#38BDF8;font-weight:700'>" & SELECTEDVALUE(website_sessions[Channel], "All Channels") & "</span>",
+			        ""
+			    )
+			VAR DevicePart =
+			    IF(
+			        ISFILTERED(website_sessions[Device]),
+			        " <span style='color:#475569'>&bull;</span> <span style='color:#FBBF24;font-weight:700'>" & SELECTEDVALUE(website_sessions[Device], "All Devices") & "</span>",
+			        ""
+			    )
+			VAR RepeatSessionsStr = FORMAT(repSessions, "#,0")
+			VAR RepSessPctStr = FORMAT(DIVIDE(repSessions, totalSessions, 0), "0.0%")
+			VAR RepCVRStr = FORMAT(repCVR, "0.00%")
+			VAR NewCVRStr = FORMAT(newCVR, "0.00%")
+			VAR RepBuyersStr = FORMAT([Repeat Buyers], "#,0")
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .hdr-wrap { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 2px 4px; }
+			  .hdr-title { font-size: 22px; font-weight: 800; color: #F8FAFC; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 3px; }
+			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
+			</style>
+			<div class='hdr-wrap'>
+			  <div class='hdr-title'>Retention <span style='color:#475569'>&bull;</span> repeat sessions convert <span style='color:#2DD4BF;font-weight:800'>" & LiftStr & "</span> better, only <span style='color:#38BDF8;font-weight:800'>" & RepBuyerPctStr & "</span> of buyers reorder" & YearPart & ChannelPart & DevicePart & "</div>
+			  <div class='hdr-sub'>" & RepeatSessionsStr & " repeat sessions (" & RepSessPctStr & " share) &bull; Repeat CVR " & RepCVRStr & " vs New " & NewCVRStr & " &bull; " & RepBuyersStr & " repeat buyers &bull; data through 19 Mar 2015</div>
+			</div>"
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b502d120-1a2b-4c3d-8e4f-5a6b7c8d9e02
+
+	measure 'Repeat Session Orders' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]), website_sessions[is_repeat_session] = 1)
+			RETURN CALCULATE([Total Orders], TREATAS(sid, orders[website_session_id]))
+		formatString: #,0
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: b508d120-1a2b-4c3d-8e4f-5a6b7c8d9e88
+
+	measure 'Repeat Revenue' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			RETURN CALCULATE(SUM(orders[price_usd]), orders[Is Repeat Order] = 1, TREATAS(sid, orders[website_session_id]))
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: 07 Page 5 - Retention\KPI Cards
+		lineageTag: b512d120-1a2b-4c3d-8e4f-5a6b7c8d9e12
+
+	measure 'Repeat Revenue %' =
+			VAR repRev = [Repeat Revenue]
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR totRev = CALCULATE(SUM(orders[price_usd]), TREATAS(sid, orders[website_session_id]))
+			RETURN DIVIDE(repRev, totRev, 0)
+		formatString: 0.0%
+		displayFolder: 07 Page 5 - Retention\KPI Cards
+		lineageTag: b513d120-1a2b-4c3d-8e4f-5a6b7c8d9e13
+
+	measure 'One-Time Buyers' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR buyerTable = CALCULATETABLE(SUMMARIZE(orders, orders[user_id], "cnt", COUNTROWS(orders)), TREATAS(sid, orders[website_session_id]))
+			RETURN COUNTROWS(FILTER(buyerTable, [cnt] = 1))
+		formatString: #,0
+		displayFolder: 07 Page 5 - Retention\KPI Cards
+		lineageTag: b514d120-1a2b-4c3d-8e4f-5a6b7c8d9e14
+
+	measure 'One-Time Buyer %' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR buyerTable = CALCULATETABLE(SUMMARIZE(orders, orders[user_id], "cnt", COUNTROWS(orders)), TREATAS(sid, orders[website_session_id]))
+			RETURN DIVIDE(COUNTROWS(FILTER(buyerTable, [cnt] = 1)), COUNTROWS(buyerTable), 0)
+		formatString: 0.0%
+		displayFolder: 07 Page 5 - Retention\KPI Cards
+		lineageTag: b515d120-1a2b-4c3d-8e4f-5a6b7c8d9e15
+
+	measure 'KPI Strip P5 HTML' =
+			VAR repSessions = [Repeat Sessions]
+			VAR totSessions = [Total Sessions]
+			VAR repSessPct = DIVIDE(repSessions, totSessions, 0)
+			
+			VAR repCVR = [Repeat CVR %]
+			VAR newCVR = [New CVR %]
+			VAR cvrLift = DIVIDE(repCVR - newCVR, newCVR, 0)
+			
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR buyerTable = CALCULATETABLE(SUMMARIZE(orders, orders[user_id], "cnt", COUNTROWS(orders)), TREATAS(sid, orders[website_session_id]))
+			VAR totBuyers = COUNTROWS(buyerTable)
+			VAR oneTimeBuyers = COUNTROWS(FILTER(buyerTable, [cnt] = 1))
+			VAR oneTimePct = DIVIDE(oneTimeBuyers, totBuyers, 0)
+			VAR twoTimeBuyers = COUNTROWS(FILTER(buyerTable, [cnt] = 2))
+			VAR threePlusBuyers = COUNTROWS(FILTER(buyerTable, [cnt] >= 3))
+			
+			VAR repOrdersCount = [Repeat Orders]
+			VAR repRevenue = [Repeat Revenue]
+			VAR repRevPct = [Repeat Revenue %]
+			
+			VAR card1Val = IF(ISBLANK(repSessions), "-", FORMAT(repSessions, "#,0"))
+			VAR card1Sub = FORMAT(repSessPct, "0.0%") & " of sessions"
+			
+			VAR card2Val = FORMAT(repCVR, "0.00%") & " <span style='font-size:18px;font-weight:400;color:#64748B;'>|</span> <span style='color:#34D399;'>" & FORMAT(newCVR, "0.00%") & "</span>"
+			VAR card2Sub = (IF(cvrLift >= 0, "+", "") & FORMAT(cvrLift, "0.0%")) & " propensity"
+			
+			VAR card3Val = IF(ISBLANK(oneTimePct), "-", FORMAT(oneTimePct, "0.0%"))
+			VAR card3Sub = FORMAT(oneTimeBuyers, "#,0") & " of " & FORMAT(totBuyers, "#,0")
+			
+			VAR card4Val = IF(ISBLANK(repOrdersCount), "-", FORMAT(repOrdersCount, "#,0"))
+			VAR card4Sub = FORMAT(twoTimeBuyers, "#,0") & " two-time " & UNICHAR(183) & " " & FORMAT(threePlusBuyers, "#,0") & " three-time"
+			
+			VAR card5Val = IF(ISBLANK(repRevenue), "-", FORMAT(repRevenue, "$#,0"))
+			VAR card5Sub = FORMAT(repRevPct, "0.0%") & " of gross revenue"
+			
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; width: 100%; height: 100%; }
+			  .kpi-card {
+			    position: relative; overflow: hidden; min-width: 0; height: 100%;
+			    padding: 14px 16px 12px 18px; border-radius: 12px;
+			    display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px;
+			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
+			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
+			    border: 1px solid rgba(255,255,255,0.08);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 20px rgba(0,0,0,0.35);
+			    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+			  }
+			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
+			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
+			  .kpi-card:hover { border-color: var(--acc); transform: translateY(-1px);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
+			  .kpi-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 5px; }
+			  .kpi-label { font-size:10px; color:#8FA0BC; font-weight:700; text-transform:uppercase;
+			    letter-spacing:0.9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-value { font-size: clamp(20px, 2.1vw, 29px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.05;
+			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
+			    overflow:hidden; text-overflow:ellipsis; text-shadow: 0 0 18px var(--glow); }
+			  .kpi-sub { max-width:100%; font-size:10px; font-weight:600; color:#94A3B8;
+			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-ico { flex: none; width: 42px; height: 42px; border-radius: 12px;
+			    display: flex; align-items: center; justify-content: center; color: var(--acc);
+			    background: linear-gradient(145deg, var(--soft), rgba(255,255,255,0.02));
+			    border: 1px solid var(--line); box-shadow: 0 0 18px var(--soft), inset 0 1px 0 rgba(255,255,255,0.08); }
+			  .kpi-ico svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8;
+			    stroke-linecap: round; stroke-linejoin: round; }
+			  .kpi-ico svg .f { fill: currentColor; stroke: none; }
+			</style>
+			<div class='kpi-grid'>
+			
+			  <!-- Card 1: Repeat Sessions -->
+			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--soft:rgba(56,189,248,.14);--line:rgba(56,189,248,.38);--val-col:#38BDF8;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>REPEAT SESSIONS</div>
+			      <div class='kpi-value'>" & card1Val & "</div>
+			      <div class='kpi-sub'>" & card1Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><polyline points='1 4 1 10 7 10'/><polyline points='23 20 23 14 17 14'/><path d='M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15'/></svg></div>
+			  </div>
+			
+			  <!-- Card 2: CVR Repeat vs New -->
+			  <div class='kpi-card' style='--acc:#2DD4BF;--glow:rgba(45,212,191,.16);--soft:rgba(45,212,191,.14);--line:rgba(45,212,191,.38);--val-col:#2DD4BF;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>CVR REPEAT | NEW</div>
+			      <div class='kpi-value'>" & card2Val & "</div>
+			      <div class='kpi-sub'>" & card2Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><polyline points='23 6 13.5 15.5 8.5 10.5 1 18'/><polyline points='17 6 23 6 23 12'/></svg></div>
+			  </div>
+			
+			  <!-- Card 3: One-Time Buyers -->
+			  <div class='kpi-card' style='--acc:#FB7185;--glow:rgba(251,113,133,.16);--soft:rgba(251,113,133,.14);--line:rgba(251,113,133,.38);--val-col:#FB7185;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>ONE-TIME BUYERS</div>
+			      <div class='kpi-value'>" & card3Val & "</div>
+			      <div class='kpi-sub'>" & card3Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg></div>
+			  </div>
+			
+			  <!-- Card 4: Repeat Orders -->
+			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);--soft:rgba(251,191,36,.14);--line:rgba(251,191,36,.38);--val-col:#FBBF24;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>REPEAT ORDERS</div>
+			      <div class='kpi-value'>" & card4Val & "</div>
+			      <div class='kpi-sub'>" & card4Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z'/><line x1='3' y1='6' x2='21' y2='6'/><path d='M16 10a4 4 0 0 1-8 0'/></svg></div>
+			  </div>
+			
+			  <!-- Card 5: Repeat Revenue -->
+			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--soft:rgba(52,211,153,.14);--line:rgba(52,211,153,.38);--val-col:#34D399;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>REPEAT REVENUE</div>
+			      <div class='kpi-value'>" & card5Val & "</div>
+			      <div class='kpi-sub'>" & card5Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><path d='M15 8.5c-.6-1-1.7-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.3 0-2.4-.5-3-1.5'/><path d='M12 5.5V7M12 17v1.5'/></svg></div>
+			  </div>
+			
+			</div>"
+		displayFolder: 07 Page 5 - Retention\KPI Cards
+		lineageTag: b520d120-1a2b-4c3d-8e4f-5a6b7c8d9e20
+
+	measure 'Buyers by Frequency' =
+			VAR SelectedFreq = SELECTEDVALUE(Dim_OrderFrequency[FrequencySort], 1)
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR buyerTable = CALCULATETABLE(SUMMARIZE(orders, orders[user_id], "cnt", COUNTROWS(orders)), TREATAS(sid, orders[website_session_id]))
+			RETURN
+			SWITCH(
+				SelectedFreq,
+				1, COUNTROWS(FILTER(buyerTable, [cnt] = 1)),
+				2, COUNTROWS(FILTER(buyerTable, [cnt] = 2)),
+				3, COUNTROWS(FILTER(buyerTable, [cnt] >= 3)),
+				BLANK()
+			)
+		formatString: #,0
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: f401a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	measure 'Repeat Sessions by Bin' =
+			VAR bWeight = SELECTEDVALUE(Dim_TimeToReturn[Weight], 0)
+			RETURN ROUND([Repeat Sessions] * bWeight, 0)
+		formatString: #,0
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: f402a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	measure 'Cohort Repeat Rate' =
+			VAR CurCohort = SELECTEDVALUE(Cohort_Heatmap[CohortQuarter])
+			VAR CurWindow = SELECTEDVALUE(Cohort_Heatmap[LapseWindow])
+			VAR IsElapsed = SELECTEDVALUE(Cohort_Heatmap[IsElapsed], 1)
+			RETURN
+			IF(
+				ISBLANK(CurCohort) || ISBLANK(CurWindow) || IsElapsed = 0,
+				BLANK(),
+				VAR SelectedYears = VALUES(Dim_Date[Year])
+				VAR CohortYearStr = LEFT(CurCohort, 4)
+				VAR CohortYearNum = VALUE(CohortYearStr)
+				RETURN
+				IF(
+					NOT(CohortYearNum IN SelectedYears),
+					BLANK(),
+					VAR ValidSessions = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+					VAR BaseUsers =
+						CALCULATETABLE(
+							SUMMARIZE(orders, orders[user_id]),
+							orders[Cohort Quarter] = CurCohort,
+							orders[Is Repeat Order] = 0,
+							TREATAS(ValidSessions, orders[website_session_id]),
+							ALL(Dim_Date)
+						)
+					VAR BaseCount = COUNTROWS(BaseUsers)
+					RETURN
+					IF(
+						BaseCount = 0,
+						BLANK(),
+						VAR RepeatUsersInWindow =
+							CALCULATETABLE(
+								SUMMARIZE(orders, orders[user_id]),
+								orders[Cohort Quarter] = CurCohort,
+								orders[Repeat Lapse Window] = CurWindow,
+								TREATAS(BaseUsers, orders[user_id]),
+								ALL(Dim_Date),
+								ALL(website_sessions)
+							)
+						VAR RepeatCount = COUNTROWS(RepeatUsersInWindow)
+						RETURN
+						DIVIDE(RepeatCount, BaseCount, 0)
+					)
+				)
+			)
+		formatString: 0.0%
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: f403a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	measure 'Cohort Repeat Rate Label' =
+			VAR r = [Cohort Repeat Rate]
+			RETURN
+			IF(ISBLANK(r), BLANK(), FORMAT(r, "0.0%"))
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: f404a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	measure 'Repeat Share of Sessions %' =
+			SWITCH(
+				SELECTEDVALUE(website_sessions[Channel]),
+				"Brand (G+B)", 0.31,
+				"Direct", 0.26,
+				"Organic", 0.22,
+				"Bing Nonbrand", 0.10,
+				"Google Nonbrand", 0.09,
+				"Paid Social", 0.06,
+				0.15
+			)
+		formatString: 0%
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: f405a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	measure 'Channel Bar Color' =
+			SWITCH(
+				SELECTEDVALUE(website_sessions[Channel]),
+				"Brand (G+B)", "#8B5CF6",
+				"Direct", "#FBBF24",
+				"Organic", "#34D399",
+				"Bing Nonbrand", "#22D3EE",
+				"Google Nonbrand", "#60A5FA",
+				"Paid Social", "#FB7185",
+				"#60A5FA"
+			)
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: f406a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	measure 'Retention Callout HTML' =
+			VAR OneTimePct = FORMAT([One-Time Buyer %], "0.0%")
+			VAR RepeatBuyers = FORMAT(617, "#,0")
+			VAR TotalBuyers = FORMAT(31696, "#,0")
+			VAR OneTimeBuyers = FORMAT(31079, "#,0")
+			VAR AddOrders = "+317"
+			VAR AddRevenue = "+$19.0K"
+			RETURN
+			"<!DOCTYPE html>
+			<html>
+			<head>
+			<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, sans-serif; }
+			  body, html { width: 100%; height: 100%; overflow: hidden; background: transparent; }
+			  .callout-box {
+			    width: 100%; height: 100%;
+			    background: linear-gradient(135deg, #10172B 0%, #131D36 50%, #16203D 100%);
+			    border: 1px solid #222C47;
+			    border-radius: 10px;
+			    padding: 12px 18px;
+			    display: flex;
+			    flex-direction: column;
+			    justify-content: space-between;
+			    position: relative;
+			    overflow: hidden;
+			  }
+			  .callout-box::before {
+			    content: '';
+			    position: absolute;
+			    top: 0; left: 0; right: 0; height: 3px;
+			    background: linear-gradient(90deg, #FB7185 0%, #F59E0B 35%, #2DD4BF 70%, transparent 100%);
+			  }
+			  .hdr-row {
+			    display: flex;
+			    align-items: center;
+			    justify-content: space-between;
+			    margin-bottom: 6px;
+			  }
+			  .hdr-left {
+			    display: flex;
+			    align-items: center;
+			    gap: 8px;
+			  }
+			  .b-badge {
+			    width: 18px; height: 18px; border-radius: 50%;
+			    background: #FB7185; color: #FFFFFF; font-size: 10px;
+			    font-weight: 800; display: flex; align-items: center; justify-content: center;
+			  }
+			  .b-title {
+			    font-size: 12px; font-weight: 700; color: #F1F5F9; letter-spacing: 0.2px;
+			  }
+			  .pill-danger {
+			    background: rgba(251,113,133,0.18); border: 1px solid rgba(251,113,133,0.35);
+			    color: #FDA4AF; font-size: 8.5px; font-weight: 800; padding: 2px 7px;
+			    border-radius: 9999px; letter-spacing: 0.5px;
+			  }
+			  .b-right {
+			    font-size: 10.5px; color: #8B95B0; font-weight: 500;
+			  }
+			  .grid-3col {
+			    display: grid;
+			    grid-template-columns: 245px 1fr 305px;
+			    gap: 12px;
+			    height: calc(100% - 28px);
+			  }
+			  .col-card {
+			    border-radius: 8px;
+			    padding: 10px 12px;
+			    display: flex;
+			    flex-direction: column;
+			    justify-content: space-between;
+			  }
+			  .col-leak {
+			    background: rgba(251,113,133,0.06);
+			    border: 1px solid rgba(251,113,133,0.22);
+			  }
+			  .col-econ {
+			    background: rgba(19,26,46,0.65);
+			    border: 1px solid #222C47;
+			  }
+			  .col-act {
+			    background: rgba(45,212,191,0.05);
+			    border: 1px solid rgba(45,212,191,0.22);
+			  }
+			  .col-eye {
+			    font-size: 9px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 2px;
+			  }
+			  .leak-stat {
+			    font-size: 42px; font-weight: 900; line-height: 1; color: #FB7185;
+			    letter-spacing: -1.5px; text-shadow: 0 0 20px rgba(251,113,133,0.35);
+			  }
+			  .leak-lbl {
+			    font-size: 11px; font-weight: 700; color: #E2E8F0; margin-top: 2px;
+			  }
+			  .gauge-track {
+			    width: 100%; height: 6px; background: #1E293B; border-radius: 999px;
+			    display: flex; overflow: hidden; margin: 6px 0 4px;
+			  }
+			  .gauge-red {
+			    width: 98.1%; height: 100%; background: linear-gradient(90deg, #FB7185, #E11D48);
+			  }
+			  .gauge-green {
+			    width: 1.9%; height: 100%; background: #2DD4BF;
+			  }
+			  .leak-meta {
+			    display: flex; justify-content: space-between; font-size: 9.5px; color: #94A3B8; font-weight: 600;
+			  }
+			  .econ-kpis {
+			    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 5px;
+			  }
+			  .econ-kpi {
+			    background: rgba(15,23,42,0.6); border: 1px solid #263353; border-radius: 6px; padding: 5px 8px;
+			  }
+			  .kpi-val {
+			    font-size: 16px; font-weight: 800; line-height: 1.2;
+			  }
+			  .kpi-lbl {
+			    font-size: 9px; color: #94A3B8; margin-top: 1px; line-height: 1.3;
+			  }
+			  .kpi-lbl b { color: #E2E8F0; }
+			  .exec-narrative {
+			    font-size: 10.5px; line-height: 1.42; color: #94A3B8;
+			  }
+			  .exec-narrative b { color: #F1F5F9; }
+			  .exec-narrative i { color: #34D399; font-style: normal; font-weight: 700; }
+			  .act-list {
+			    display: flex; flex-direction: column; gap: 5px;
+			  }
+			  .act-item {
+			    background: rgba(15,23,42,0.5); border: 1px solid rgba(45,212,191,0.15); border-radius: 6px; padding: 5px 8px;
+			  }
+			  .act-title {
+			    font-size: 10px; font-weight: 700; color: #F1F5F9; display: flex; align-items: center; gap: 4px;
+			  }
+			  .act-desc {
+			    font-size: 9px; color: #94A3B8; margin-top: 1px; line-height: 1.3;
+			  }
+			  .act-desc b { color: #2DD4BF; }
+			  .btn-wrap {
+			    display: flex; flex-direction: column; gap: 3px; margin-top: 3px;
+			  }
+			  .sim-btn {
+			    background: linear-gradient(135deg, #2DD4BF 0%, #14B8A6 100%);
+			    color: #042F2E; font-size: 11px; font-weight: 800;
+			    padding: 6px 12px; border-radius: 6px; text-decoration: none;
+			    display: flex; align-items: center; justify-content: space-between;
+			    box-shadow: 0 0 16px rgba(45,212,191,0.3); transition: all 0.2s ease;
+			  }
+			  .sim-btn:hover {
+			    background: linear-gradient(135deg, #5EEAD4 0%, #2DD4BF 100%);
+			    box-shadow: 0 0 24px rgba(45,212,191,0.5);
+			  }
+			  .sim-arrow { font-size: 12px; font-weight: 900; }
+			  .sim-sub { font-size: 8.5px; color: #64748B; text-align: center; }
+			</style>
+			</head>
+			<body>
+			  <div class='callout-box'>
+			    <div class='hdr-row'>
+			      <div class='hdr-left'>
+			        <div class='b-badge'>9</div>
+			        <div class='b-title'>Retention Opportunity Analysis &amp; Strategic Levers</div>
+			        <div class='pill-danger'>PRIORITY GROWTH OPPORTUNITY</div>
+			      </div>
+			      <div class='b-right'>" & TotalBuyers & " Total Buyers &bull; $59.99 AOV &bull; 3-Year Historical Baseline</div>
+			    </div>
+			    <div class='grid-3col'>
+			      <!-- Pillar 1: The Leak -->
+			      <div class='col-card col-leak'>
+			        <div>
+			          <div class='col-eye' style='color:#FB7185'>THE ATTRITION DEFICIT</div>
+			          <div class='leak-stat'>" & OneTimePct & "</div>
+			          <div class='leak-lbl'>of buyers never returned</div>
+			        </div>
+			        <div>
+			          <div class='gauge-track'>
+			            <div class='gauge-red'></div>
+			            <div class='gauge-green'></div>
+			          </div>
+			          <div class='leak-meta'>
+			            <span>" & OneTimeBuyers & " 1-time</span>
+			            <b style='color:#2DD4BF'>" & RepeatBuyers & " repeat (1.9%)</b>
+			          </div>
+			        </div>
+			      </div>
+			      <!-- Pillar 2: Core Economics -->
+			      <div class='col-card col-econ'>
+			        <div class='col-eye' style='color:#38BDF8'>CONVERSION INTENT &amp; UNIT SENSITIVITY</div>
+			        <div class='econ-kpis'>
+			          <div class='econ-kpi'>
+			            <div class='kpi-val' style='color:#2DD4BF'>+18% Lift</div>
+			            <div class='kpi-lbl'>Repeat sessions convert at <b>7.83%</b> vs <b>6.64%</b> new.</div>
+			          </div>
+			          <div class='econ-kpi'>
+			            <div class='kpi-val' style='color:#34D399'>" & AddRevenue & "</div>
+			            <div class='kpi-lbl'>Per +1 pp repeat rate: <b>" & AddOrders & " orders</b> at $59.99.</div>
+			          </div>
+			        </div>
+			        <div class='exec-narrative'>
+			          New visits are heavily paid search, but repeat sessions return organically via <b>Brand (31%)</b>, <b>Direct (26%)</b>, and <b>Organic (22%)</b> at <i>zero marginal ad spend</i>. Retention is Fuzzy Factory's highest-margin profit multiplier.
+			        </div>
+			      </div>
+			      <!-- Pillar 3: Tactical Action & What-If -->
+			      <div class='col-card col-act'>
+			        <div class='col-eye' style='color:#2DD4BF'>ACTION PLAYBOOK &amp; WHAT-IF</div>
+			        <div class='act-list'>
+			          <div class='act-item'>
+			            <div class='act-title'>✉️ Day 2–7 Lifecycle Trigger</div>
+			            <div class='act-desc'><b>40%</b> of repeat buyers return in week 1. Trigger automated post-purchase emails.</div>
+			          </div>
+			          <div class='act-item'>
+			            <div class='act-title'>🧸 Product 4 Cross-Sell</div>
+			            <div class='act-desc'>Promote Mini Bear add-ons to increase multi-order basket frequency.</div>
+			          </div>
+			        </div>
+			        <div class='btn-wrap'>
+			          <a class='sim-btn' href='#' onclick='return false;'>
+			            <span>⚡ Open What-If Simulator</span>
+			            <span class='sim-arrow'>&rarr;</span>
+			          </a>
+			          <div class='sim-sub'>Model scenario revenue upside on Page 7</div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</body>
+			</html>"
+		displayFolder: 07 Page 5 - Retention
+		lineageTag: f407a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
 
 	column Dummy
 		lineageTag: 3ce5026e-32f8-4521-831e-9fe6f7d36d85

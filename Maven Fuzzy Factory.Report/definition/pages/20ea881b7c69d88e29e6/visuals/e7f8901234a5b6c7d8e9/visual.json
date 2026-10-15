@@ -1,0 +1,365 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "e7f8901234a5b6c7d8e9",
+  "position": {
+    "x": 1128,
+    "y": 677.49138525155081,
+    "z": 4000,
+    "height": 389.02825637491384,
+    "width": 782,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Cohort_Heatmap"
+                    }
+                  },
+                  "Property": "CohortQuarter"
+                }
+              },
+              "queryRef": "Cohort_Heatmap.CohortQuarter",
+              "nativeQueryRef": "CohortQuarter"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Cohort_Heatmap"
+                    }
+                  },
+                  "Property": "LapseWindow"
+                }
+              },
+              "queryRef": "Cohort_Heatmap.LapseWindow",
+              "nativeQueryRef": "LapseWindow"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Cohort Repeat Rate"
+                }
+              },
+              "queryRef": "_Measures.Cohort Repeat Rate",
+              "nativeQueryRef": "Cohort Repeat Rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Cohort Repeat Rate Label"
+                }
+              },
+              "queryRef": "_Measures.Cohort Repeat Rate Label",
+              "nativeQueryRef": "Cohort Repeat Rate Label"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "stateManagement": [
+        {
+          "properties": {
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "756D"
+                }
+              }
+            },
+            "denebMetaVersion": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2'"
+                }
+              }
+            },
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "314D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "vega": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.4.3'"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": \"container\",\n  \"padding\": {\n    \"left\": 10,\n    \"right\": 10,\n    \"top\": 5,\n    \"bottom\": 10\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, sans-serif\",\n    \"background\": \"transparent\",\n    \"axis\": {\n      \"domain\": false,\n      \"ticks\": false,\n      \"labelColor\": \"#8B95B0\",\n      \"labelFont\": \"Segoe UI Semibold\",\n      \"labelFontSize\": 11\n    }\n  },\n  \"encoding\": {\n    \"x\": {\n      \"field\": \"LapseWindow\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"M1\",\n        \"M2\",\n        \"M3\",\n        \"M4–6\",\n        \"M7–9\",\n        \"M10–12\"\n      ],\n      \"axis\": {\n        \"orient\": \"top\",\n        \"title\": null,\n        \"labelAngle\": 0,\n        \"labelColor\": \"#94A3B8\",\n        \"labelFontSize\": 11.5,\n        \"labelFont\": \"Segoe UI Semibold\",\n        \"labelPadding\": 8\n      }\n    },\n    \"y\": {\n      \"field\": \"CohortQuarter\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"2012 Q3\",\n        \"2012 Q4\",\n        \"2013 Q1\",\n        \"2013 Q2\",\n        \"2013 Q3\",\n        \"2013 Q4\",\n        \"2014 Q1\",\n        \"2014 Q2\"\n      ],\n      \"axis\": {\n        \"orient\": \"left\",\n        \"title\": null,\n        \"labelColor\": \"#94A3B8\",\n        \"labelFontSize\": 11.5,\n        \"labelFont\": \"Segoe UI Semibold\",\n        \"labelPadding\": 8\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"transform\": [\n        {\n          \"filter\": \"isValid(datum[''Cohort Repeat Rate'']) && datum[''Cohort Repeat Rate''] != null && datum[''Cohort Repeat Rate''] > 0\"\n        }\n      ],\n      \"mark\": {\n        \"type\": \"rect\",\n        \"cornerRadius\": 5,\n        \"stroke\": \"#131A2E\",\n        \"strokeWidth\": 3\n      },\n      \"encoding\": {\n        \"color\": {\n          \"field\": \"Cohort Repeat Rate\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0.001,\n              0.004,\n              0.008,\n              0.012,\n              0.018\n            ],\n            \"range\": [\n              \"#1A223F\",\n              \"#292C63\",\n              \"#4338CA\",\n              \"#6366F1\",\n              \"#8B5CF6\"\n            ]\n          },\n          \"legend\": null\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"CohortQuarter\",\n            \"title\": \"Cohort\"\n          },\n          {\n            \"field\": \"LapseWindow\",\n            \"title\": \"Window\"\n          },\n          {\n            \"field\": \"Cohort Repeat Rate Label\",\n            \"title\": \"Repeat Rate\"\n          }\n        ]\n      }\n    },\n    {\n      \"transform\": [\n        {\n          \"filter\": \"isValid(datum[''Cohort Repeat Rate Label'']) && datum[''Cohort Repeat Rate Label''] != null && datum[''Cohort Repeat Rate Label''] != ''''\"\n        }\n      ],\n      \"mark\": {\n        \"type\": \"text\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 11.5,\n        \"fontWeight\": 600\n      },\n      \"encoding\": {\n        \"text\": {\n          \"field\": \"Cohort Repeat Rate Label\",\n          \"type\": \"nominal\"\n        },\n        \"color\": {\n          \"condition\": [\n            {\n              \"test\": \"datum[''Cohort Repeat Rate''] >= 0.012\",\n              \"value\": \"#FDE047\"\n            },\n            {\n              \"test\": \"datum[''Cohort Repeat Rate''] >= 0.006\",\n              \"value\": \"#FFFFFF\"\n            }\n          ],\n          \"value\": \"#94A3B8\"\n        }\n      }\n    }\n  ]\n}'"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "developer": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2.0.0.0'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Cohort repeat-order heatmap'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E9F2'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Quarterly cohort repeat rate across lapse windows · Blank = unelapsed window'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9.5D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8B95B0'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#131A2E'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#222C47'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -203,6 +203,11 @@ table website_sessions
 		lineageTag: b9698c41-68cf-4c8b-94e5-76423ce7faa1
 		summarizeBy: none
 
+	column 'Session Type' = IF(website_sessions[is_repeat_session] = 1, "Repeat", "New")
+		dataType: string
+		lineageTag: b63a1f8c-2d4e-4f5a-8b9c-1a2b3c4d5e6f
+		summarizeBy: none
+
 	partition website_sessions = m
 		mode: import
 		source =

@@ -1,0 +1,40 @@
+table Dim_TimeToReturn
+	lineageTag: d201a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+
+	column Bin
+		dataType: string
+		lineageTag: d202a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Bin]
+		sortByColumn: BinSort
+
+	column BinSort
+		dataType: int64
+		formatString: 0
+		lineageTag: d203a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [BinSort]
+
+	column BaseCount
+		dataType: int64
+		formatString: #,0
+		lineageTag: d204a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [BaseCount]
+
+	column Weight
+		dataType: double
+		lineageTag: d205a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Weight]
+
+	partition Dim_TimeToReturn = calculated
+		mode: import
+		source = DATATABLE("Bin", STRING, "BinSort", INTEGER, "BaseCount", INTEGER, "Weight", DOUBLE, {{"0–1d", 1, 9800, 0.1247565}, {"2–7d", 2, 17500, 0.2227796}, {"8–14d", 3, 12900, 0.1642203}, {"15–30d", 4, 15200, 0.1934999}, {"31–60d", 5, 11400, 0.1451249}, {"61–90d", 6, 7100, 0.0903848}, {"90d+", 7, 4653, 0.0592340}})
+
+	annotation PBI_Id = d206a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+

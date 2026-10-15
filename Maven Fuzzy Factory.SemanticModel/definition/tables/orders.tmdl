@@ -86,6 +86,55 @@ table orders
 		summarizeBy: none
 		sourceColumn: Margin %
 
+	column 'Is Repeat Order' =
+			VAR FirstOrdId =
+				CALCULATE(
+					MIN(orders[order_id]),
+					ALLEXCEPT(orders, orders[user_id])
+				)
+			RETURN
+			IF(orders[order_id] > FirstOrdId, 1, 0)
+		dataType: int64
+		formatString: 0
+		lineageTag: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d
+		summarizeBy: none
+
+	column 'First Order Date' =
+			CALCULATE(
+				MIN(orders[created_at]),
+				ALLEXCEPT(orders, orders[user_id])
+			)
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2e
+		summarizeBy: none
+
+	column 'Cohort Quarter' = YEAR([First Order Date]) & " Q" & QUARTER([First Order Date])
+		dataType: string
+		lineageTag: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c30
+		summarizeBy: none
+
+	column 'Repeat Lapse Window' =
+			IF(
+				[Is Repeat Order] = 1,
+				VAR d = DATEDIFF([First Order Date], orders[created_at], DAY)
+				RETURN
+				SWITCH(
+					TRUE(),
+					d <= 30, "M1",
+					d <= 60, "M2",
+					d <= 90, "M3",
+					d <= 180, "M4–6",
+					d <= 270, "M7–9",
+					d <= 365, "M10–12",
+					BLANK()
+				),
+				BLANK()
+			)
+		dataType: string
+		lineageTag: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c31
+		summarizeBy: none
+
 	partition orders = m
 		mode: import
 		source =
