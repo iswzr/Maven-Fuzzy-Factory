@@ -5,7 +5,7 @@ expression DataSourceType = "GitHub" meta [IsParameterQuery=true, List={"GitHub"
 
 	annotation PBI_ResultType = Text
 
-expression LocalFolderPath = "F:\MAVEN DATA\Maven+Fuzzy+Factory\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+expression LocalFolderPath = "c:\Maven Datasets\Fuzzy Factory\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
 	lineageTag: c2367c31-cbb6-46b3-96b6-3a789139ffae
 
 	annotation PBI_NavigationStepName = Navigation

@@ -33,11 +33,6 @@ relationship 27b17217-9af4-46a8-a4ff-32a963261e9b
 	fromColumn: website_pageviews.website_session_id
 	toColumn: website_sessions.website_session_id
 
-relationship b3697504-ea8f-424d-9d80-0f73352f8a99
-	joinOnDateBehavior: datePartOnly
-	fromColumn: Basket_Pairs.'Order Date'
-	toColumn: LocalDateTable_4629f3af-df82-46a6-a425-58d9212e98cf.Date
-
 relationship 6d3016c9-ea6c-47df-a74c-5420f2ca6149
 	joinOnDateBehavior: datePartOnly
 	fromColumn: website_pageviews.'Pageview Date'

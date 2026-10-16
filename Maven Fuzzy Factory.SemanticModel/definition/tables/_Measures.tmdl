@@ -2027,8 +2027,7 @@ table _Measures
 			VAR LanderName =
 				COALESCE(
 					SELECTEDVALUE(website_sessions[Landing Page]),
-					SELECTEDVALUE(website_sessions[Landing Page Short]),
-					SELECTEDVALUE(Dim_Lander[Lander])
+					SELECTEDVALUE(website_sessions[Landing Page Short])
 				)
 			RETURN
 				SWITCH(
@@ -2054,7 +2053,7 @@ table _Measures
 			VAR LanderName =
 				COALESCE(
 					SELECTEDVALUE(website_sessions[Landing Page]),
-					SELECTEDVALUE(Dim_Lander[Lander])
+					SELECTEDVALUE(website_sessions[Landing Page Short])
 				)
 			RETURN
 				SWITCH(
@@ -3403,19 +3402,15 @@ table _Measures
 			IF(
 				ISFILTERED(_Param_CVR_Tuning[Label]),
 				SELECTEDVALUE(_Param_CVR_Tuning[Value], 0.10),
-				IF(
-					ISFILTERED(_Param_CVR_Lift[Value]),
-					COALESCE(SELECTEDVALUE(_Param_CVR_Lift[Value]), MAX(_Param_CVR_Lift[Value])),
-					VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
-					RETURN
-						SWITCH(
-							p,
-							"Conservative", 0.05,
-							"Base", 0.10,
-							"Stretch", 0.20,
-							0.10
-						)
-				)
+				VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
+				RETURN
+					SWITCH(
+						p,
+						"Conservative", 0.05,
+						"Base", 0.10,
+						"Stretch", 0.20,
+						0.10
+					)
 			)
 		formatString: +0%;-0%;0%
 		displayFolder: 09 Page 7 - What-If
@@ -3425,19 +3420,15 @@ table _Measures
 			IF(
 				ISFILTERED(_Param_Attach_Tuning[Label]),
 				SELECTEDVALUE(_Param_Attach_Tuning[Value], 0.08),
-				IF(
-					ISFILTERED(_Param_Attach[Value]),
-					COALESCE(SELECTEDVALUE(_Param_Attach[Value]), MAX(_Param_Attach[Value])),
-					VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
-					RETURN
-						SWITCH(
-							p,
-							"Conservative", 0.03,
-							"Base", 0.08,
-							"Stretch", 0.15,
-							0.08
-						)
-				)
+				VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
+				RETURN
+					SWITCH(
+						p,
+						"Conservative", 0.03,
+						"Base", 0.08,
+						"Stretch", 0.15,
+						0.08
+					)
 			)
 		formatString: +0 "pp";-0 "pp";0 "pp"
 		displayFolder: 09 Page 7 - What-If
@@ -3447,19 +3438,15 @@ table _Measures
 			IF(
 				ISFILTERED(_Param_Refund_Tuning[Label]),
 				SELECTEDVALUE(_Param_Refund_Tuning[Value], 0.20),
-				IF(
-					ISFILTERED(_Param_Refund_Cut[Value]),
-					ABS(COALESCE(SELECTEDVALUE(_Param_Refund_Cut[Value]), MAX(_Param_Refund_Cut[Value]))),
-					VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
-					RETURN
-						SWITCH(
-							p,
-							"Conservative", 0.10,
-							"Base", 0.20,
-							"Stretch", 0.35,
-							0.20
-						)
-				)
+				VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
+				RETURN
+					SWITCH(
+						p,
+						"Conservative", 0.10,
+						"Base", 0.20,
+						"Stretch", 0.35,
+						0.20
+					)
 			)
 		formatString: +0%;-0%;0%
 		displayFolder: 09 Page 7 - What-If
@@ -3569,8 +3556,8 @@ table _Measures
 				)
 			VAR targetPart =
 				IF(
-					ISFILTERED(_Param_Target[TargetName]),
-					" <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>" & SELECTEDVALUE(_Param_Target[TargetName]) & "</span>",
+					ISFILTERED(_Param_BenchmarkTarget[ModeName]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>" & SELECTEDVALUE(_Param_BenchmarkTarget[ModeName]) & "</span>",
 					""
 				)
 			
