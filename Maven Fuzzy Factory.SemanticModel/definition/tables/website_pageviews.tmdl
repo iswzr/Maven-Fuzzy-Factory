@@ -55,7 +55,8 @@ table website_pageviews
 		source =
 				let
 				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
-				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/website_pageviews.csv") else File.Contents(LocalPath & "website_pageviews.csv"),
+			LocalDataPath = if Text.EndsWith(LocalPath, "data\") or Text.EndsWith(LocalPath, "data/") then LocalPath else LocalPath & "data\",
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/data/website_pageviews.csv") else File.Contents(LocalDataPath & "website_pageviews.csv"),
 				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 4, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"website_pageview_id", Int64.Type}, {"created_at", type datetime}, {"website_session_id", Int64.Type}, {"pageview_url", type text}}),

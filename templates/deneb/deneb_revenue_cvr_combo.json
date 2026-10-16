@@ -35,7 +35,7 @@
         },
         "cornerRadiusTopLeft": 3,
         "cornerRadiusTopRight": 3,
-        "color": "#4F83CC",
+        "color": "#1D4ED8",
         "opacity": 0.9
       },
       "encoding": {
@@ -45,11 +45,11 @@
           "axis": {
             "title": null,
             "labelAngle": 0,
-            "labelColor": "#8B95B0",
+            "labelColor": "#475569",
             "labelFontSize": 12,
             "labelFontWeight": 600,
-            "tickColor": "#1A2342",
-            "domainColor": "#1A2342",
+            "tickColor": "#E2E8F0",
+            "domainColor": "#E2E8F0",
             "grid": false
           }
         },
@@ -69,11 +69,11 @@
               825000,
               1240000
             ],
-            "labelColor": "#8B95B0",
+            "labelColor": "#475569",
             "labelFontSize": 11,
-            "tickColor": "#1A2342",
-            "domainColor": "#1A2342",
-            "gridColor": "#1A2342",
+            "tickColor": "#E2E8F0",
+            "domainColor": "#E2E8F0",
+            "gridColor": "#E2E8F0",
             "gridDash": [
               3,
               3
@@ -107,7 +107,7 @@
       "mark": {
         "type": "line",
         "strokeWidth": 2.5,
-        "color": "#FBBF24"
+        "color": "#D97706"
       },
       "encoding": {
         "x": {
@@ -133,8 +133,8 @@
       "mark": {
         "type": "circle",
         "size": 55,
-        "color": "#FBBF24",
-        "fill": "#FBBF24"
+        "color": "#D97706",
+        "fill": "#D97706"
       },
       "encoding": {
         "x": {
@@ -181,7 +181,7 @@
         "dy": -12,
         "fontWeight": 700,
         "fontSize": 12,
-        "color": "#FBBF24"
+        "color": "#D97706"
       },
       "encoding": {
         "x": {

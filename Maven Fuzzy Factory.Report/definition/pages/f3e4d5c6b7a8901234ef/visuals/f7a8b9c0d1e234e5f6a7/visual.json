@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "f7a8b9c0d1e234e5f6a7",
   "position": {
-    "x": 1305.3066850447967,
-    "y": 718.12543073742245,
+    "x": 1306.8256104595271,
+    "y": 775.235531628533,
     "z": 12000,
-    "height": 350.1033769813921,
-    "width": 680.90971743625084,
+    "height": 292.86675639300137,
+    "width": 681.71505479715438,
     "tabOrder": 11000
   },
   "visual": {
@@ -146,7 +146,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1A2342'"
+                      "Value": "'#E2E8F0'"
                     }
                   }
                 }
@@ -155,7 +155,7 @@
             "gridHorizontalWeight": {
               "expr": {
                 "Literal": {
-                  "Value": "5D"
+                  "Value": "0D"
                 }
               }
             },
@@ -177,7 +177,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#8B95B0'"
+                      "Value": "'#1E293B'"
                     }
                   }
                 }
@@ -188,7 +188,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#131A2E'"
+                      "Value": "'#F1F5F9'"
                     }
                   }
                 }
@@ -226,7 +226,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E9F2'"
+                      "Value": "'#0F172A'"
                     }
                   }
                 }
@@ -237,7 +237,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#131A2E'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -248,7 +248,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#131A2E'"
+                      "Value": "'#F8FAFC'"
                     }
                   }
                 }
@@ -279,7 +279,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#0F172A'"
                     }
                   }
                 }
@@ -290,7 +290,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#131A2E'"
+                      "Value": "'#EFF6FF'"
                     }
                   }
                 }
@@ -322,7 +322,7 @@
                   "color": {
                     "expr": {
                       "Literal": {
-                        "Value": "'#176a60'"
+                        "Value": "'#93C5FD'"
                       }
                     }
                   }
@@ -333,7 +333,7 @@
                   "color": {
                     "expr": {
                       "Literal": {
-                        "Value": "'#176a60'"
+                        "Value": "'#93C5FD'"
                       }
                     }
                   }
@@ -344,7 +344,7 @@
                   "color": {
                     "expr": {
                       "Literal": {
-                        "Value": "'#176a60'"
+                        "Value": "'#93C5FD'"
                       }
                     }
                   }
@@ -385,7 +385,7 @@
                   "color": {
                     "expr": {
                       "Literal": {
-                        "Value": "'#176a60'"
+                        "Value": "'#93C5FD'"
                       }
                     }
                   }
@@ -396,7 +396,7 @@
                   "color": {
                     "expr": {
                       "Literal": {
-                        "Value": "'#176a60'"
+                        "Value": "'#93C5FD'"
                       }
                     }
                   }
@@ -407,7 +407,7 @@
                   "color": {
                     "expr": {
                       "Literal": {
-                        "Value": "'#176a60'"
+                        "Value": "'#93C5FD'"
                       }
                     }
                   }
@@ -472,7 +472,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E9F2'"
+                      "Value": "'#0F172A'"
                     }
                   }
                 }
@@ -523,7 +523,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0F1730'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -554,7 +554,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#222C47'"
+                      "Value": "'#E2E8F0'"
                     }
                   }
                 }

@@ -10,14 +10,6 @@ table _Param_Dim
 		isNameInferred
 		sourceColumn: [DimensionID]
 
-	column DimensionName
-		dataType: string
-		lineageTag: f97be56a-9bfe-44d3-858a-7f7eaa5c34e2
-		summarizeBy: none
-		isNameInferred
-		sourceColumn: [DimensionName]
-		sortByColumn: DimSortOrder
-
 	column DimSortOrder
 		dataType: int64
 		isHidden
@@ -26,6 +18,14 @@ table _Param_Dim
 		summarizeBy: sum
 		isNameInferred
 		sourceColumn: [DimSortOrder]
+
+	column DimensionName
+		dataType: string
+		lineageTag: f97be56a-9bfe-44d3-858a-7f7eaa5c34e2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DimensionName]
+		sortByColumn: DimSortOrder
 
 	column Member
 		dataType: string

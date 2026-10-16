@@ -152,7 +152,7 @@
             "viewportHeight": {
               "expr": {
                 "Literal": {
-                  "Value": "302D"
+                  "Value": "301D"
                 }
               }
             }
@@ -193,7 +193,7 @@
             "jsonSpec": {
               "expr": {
                 "Literal": {
-                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\"name\": \"dataset\"},\n  \"width\": \"container\",\n  \"height\": \"container\",\n  \"padding\": {\"left\": 0, \"right\": 8, \"top\": 4, \"bottom\": 0},\n  \"autosize\": {\"type\": \"fit\", \"contains\": \"padding\"},\n  \"config\": {\n    \"view\": {\"stroke\": null},\n    \"font\": \"Segoe UI\",\n    \"background\": \"transparent\",\n    \"axis\": {\"domain\": false, \"ticks\": false, \"labelColor\": \"#8B95B0\", \"labelFont\": \"Segoe UI\"}\n  },\n  \"transform\": [\n    {\"calculate\": \"parseFloat(datum[''VIZ-04 CVR LABEL''])\", \"as\": \"cvr\"},\n    {\"calculate\": \"round((toDate(datum[''VIZ-04 END DATE''])-toDate(datum[''VIZ-04 START DATE'']))/86400000)\", \"as\": \"days\"},\n    {\"joinaggregate\": [{\"op\": \"max\", \"field\": \"cvr\", \"as\": \"maxCvr\"},\n                       {\"op\": \"min\", \"field\": \"VIZ-04 START DATE\", \"as\": \"minStart\"},\n                       {\"op\": \"max\", \"field\": \"VIZ-04 END DATE\", \"as\": \"maxEnd\"}]},\n    {\"calculate\": \"datum.cvr === datum.maxCvr ? ''★ '' + datum[''VIZ-04 CVR LABEL''] : datum[''VIZ-04 CVR LABEL'']\", \"as\": \"lbl\"}\n  ],\n  \"encoding\": {\n    \"y\": {\n      \"field\": \"Landing Page\", \"type\": \"nominal\", \"sort\": null,\n      \"axis\": {\"title\": null, \"labelFontSize\": 11, \"labelFontWeight\": 600, \"labelPadding\": 10, \"labelColor\": \"#C9D1E8\"},\n      \"scale\": {\"paddingInner\": 0.25, \"paddingOuter\": 0.1}\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"track\",\n      \"mark\": {\"type\": \"bar\", \"cornerRadius\": 8, \"height\": {\"band\": 0.8}, \"color\": \"#141C38\", \"opacity\": 0.8},\n      \"encoding\": {\n        \"x\": {\"field\": \"minStart\", \"type\": \"temporal\", \"scale\": {\"nice\": \"month\"},\n              \"axis\": {\"title\": null, \"orient\": \"bottom\", \"format\": \"%b ''%y\", \"tickCount\": 8, \"grid\": true,\n                       \"gridColor\": \"#1A2342\", \"gridDash\": [3, 3], \"labelFontSize\": 10, \"labelPadding\": 8}},\n        \"x2\": {\"field\": \"maxEnd\"}\n      }\n    },\n    {\n      \"name\": \"gantt_pills\",\n      \"mark\": {\"type\": \"bar\", \"cornerRadius\": 8, \"height\": {\"band\": 0.62}, \"opacity\": 0.95, \"strokeWidth\": 0},\n      \"encoding\": {\n        \"x\": {\"field\": \"VIZ-04 START DATE\", \"type\": \"temporal\"},\n        \"x2\": {\"field\": \"VIZ-04 END DATE\"},\n        \"color\": {\"field\": \"VIZ-04 COLOR\", \"type\": \"nominal\", \"scale\": null, \"legend\": null},\n        \"stroke\": {\"condition\": {\"test\": \"datum.cvr === datum.maxCvr\", \"value\": \"#FFFFFF\"}, \"value\": null},\n        \"strokeWidth\": {\"condition\": {\"test\": \"datum.cvr === datum.maxCvr\", \"value\": 1.5}, \"value\": 0},\n        \"tooltip\": [\n          {\"field\": \"Landing Page\", \"title\": \"Landing Page\"},\n          {\"field\": \"VIZ-04 START DATE\", \"title\": \"Launch\", \"type\": \"temporal\", \"format\": \"%b %d, %Y\"},\n          {\"field\": \"VIZ-04 END DATE\", \"title\": \"Retired\", \"type\": \"temporal\", \"format\": \"%b %d, %Y\"},\n          {\"field\": \"days\", \"title\": \"Active (days)\", \"type\": \"quantitative\", \"format\": \",d\"},\n          {\"field\": \"VIZ-04 CVR LABEL\", \"title\": \"CVR\"},\n          {\"field\": \"VIZ-04 SESSIONS\", \"title\": \"Sessions\", \"type\": \"quantitative\", \"format\": \",d\"}\n        ]\n      }\n    },\n    {\n      \"name\": \"cvr_labels\",\n      \"mark\": {\"type\": \"text\", \"align\": \"center\", \"baseline\": \"middle\", \"fontSize\": 12, \"fontWeight\": 800, \"color\": \"#0B1020\"},\n      \"encoding\": {\n        \"x\": {\"field\": \"VIZ-04 MID DATE\", \"type\": \"temporal\"},\n        \"text\": {\"field\": \"lbl\"}\n      }\n    }\n  ]\n}'"
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\"name\": \"dataset\"},\n  \"width\": \"container\",\n  \"height\": \"container\",\n  \"padding\": {\"left\": 0, \"right\": 8, \"top\": 4, \"bottom\": 0},\n  \"autosize\": {\"type\": \"fit\", \"contains\": \"padding\"},\n  \"config\": {\n    \"view\": {\"stroke\": null},\n    \"font\": \"Segoe UI\",\n    \"background\": \"transparent\",\n    \"axis\": {\"domain\": false, \"ticks\": false, \"labelColor\": \"#475569\", \"labelFont\": \"Segoe UI\"}\n  },\n  \"transform\": [\n    {\"calculate\": \"parseFloat(datum[''VIZ-04 CVR LABEL''])\", \"as\": \"cvr\"},\n    {\"calculate\": \"round((toDate(datum[''VIZ-04 END DATE''])-toDate(datum[''VIZ-04 START DATE'']))/86400000)\", \"as\": \"days\"},\n    {\"joinaggregate\": [{\"op\": \"max\", \"field\": \"cvr\", \"as\": \"maxCvr\"},\n                       {\"op\": \"min\", \"field\": \"VIZ-04 START DATE\", \"as\": \"minStart\"},\n                       {\"op\": \"max\", \"field\": \"VIZ-04 END DATE\", \"as\": \"maxEnd\"}]},\n    {\"calculate\": \"datum.cvr === datum.maxCvr ? ''★ '' + datum[''VIZ-04 CVR LABEL''] : datum[''VIZ-04 CVR LABEL'']\", \"as\": \"lbl\"}\n  ],\n  \"encoding\": {\n    \"y\": {\n      \"field\": \"Landing Page\", \"type\": \"nominal\", \"sort\": null,\n      \"axis\": {\"title\": null, \"labelFontSize\": 11, \"labelFontWeight\": 600, \"labelPadding\": 10, \"labelColor\": \"#0F172A\"},\n      \"scale\": {\"paddingInner\": 0.25, \"paddingOuter\": 0.1}\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"track\",\n      \"mark\": {\"type\": \"bar\", \"cornerRadius\": 8, \"height\": {\"band\": 0.8}, \"color\": \"#E2E8F0\", \"opacity\": 0.8},\n      \"encoding\": {\n        \"x\": {\"field\": \"minStart\", \"type\": \"temporal\", \"scale\": {\"nice\": \"month\"},\n              \"axis\": {\"title\": null, \"orient\": \"bottom\", \"format\": \"%b ''%y\", \"tickCount\": 8, \"grid\": true,\n                       \"gridColor\": \"#E2E8F0\", \"gridDash\": [3, 3], \"labelFontSize\": 10, \"labelPadding\": 8}},\n        \"x2\": {\"field\": \"maxEnd\"}\n      }\n    },\n    {\n      \"name\": \"gantt_pills\",\n      \"mark\": {\"type\": \"bar\", \"cornerRadius\": 8, \"height\": {\"band\": 0.62}, \"opacity\": 0.95, \"strokeWidth\": 0},\n      \"encoding\": {\n        \"x\": {\"field\": \"VIZ-04 START DATE\", \"type\": \"temporal\"},\n        \"x2\": {\"field\": \"VIZ-04 END DATE\"},\n        \"color\": {\"field\": \"VIZ-04 COLOR\", \"type\": \"nominal\", \"scale\": null, \"legend\": null},\n        \"stroke\": {\"condition\": {\"test\": \"datum.cvr === datum.maxCvr\", \"value\": \"#FFFFFF\"}, \"value\": null},\n        \"strokeWidth\": {\"condition\": {\"test\": \"datum.cvr === datum.maxCvr\", \"value\": 1.5}, \"value\": 0},\n        \"tooltip\": [\n          {\"field\": \"Landing Page\", \"title\": \"Landing Page\"},\n          {\"field\": \"VIZ-04 START DATE\", \"title\": \"Launch\", \"type\": \"temporal\", \"format\": \"%b %d, %Y\"},\n          {\"field\": \"VIZ-04 END DATE\", \"title\": \"Retired\", \"type\": \"temporal\", \"format\": \"%b %d, %Y\"},\n          {\"field\": \"days\", \"title\": \"Active (days)\", \"type\": \"quantitative\", \"format\": \",d\"},\n          {\"field\": \"VIZ-04 CVR LABEL\", \"title\": \"CVR\"},\n          {\"field\": \"VIZ-04 SESSIONS\", \"title\": \"Sessions\", \"type\": \"quantitative\", \"format\": \",d\"}\n        ]\n      }\n    },\n    {\n      \"name\": \"cvr_labels\",\n      \"mark\": {\"type\": \"text\", \"align\": \"center\", \"baseline\": \"middle\", \"fontSize\": 12, \"fontWeight\": 800, \"color\": \"#FFFFFF\"},\n      \"encoding\": {\n        \"x\": {\"field\": \"VIZ-04 MID DATE\", \"type\": \"temporal\"},\n        \"text\": {\"field\": \"lbl\"}\n      }\n    }\n  ]\n}'"
                 }
               }
             },
@@ -244,7 +244,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E9F2'"
+                      "Value": "'#0F172A'"
                     }
                   }
                 }
@@ -282,7 +282,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0F1730'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -320,7 +320,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1D2749'"
+                      "Value": "'#E2E8F0'"
                     }
                   }
                 }
@@ -399,7 +399,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#8B95B0'"
+                      "Value": "'#64748B'"
                     }
                   }
                 }

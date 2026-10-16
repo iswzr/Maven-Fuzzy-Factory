@@ -1,4 +1,4 @@
-﻿Table,Field,Description
+Table,Field,Description
 orders,order_id,Unique identifier for each order (PK)
 orders,created_at,Timestamp when the order was placed
 orders,website_session_id,Unique identifier for the website session (FK)

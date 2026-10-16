@@ -152,7 +152,7 @@
             "viewportHeight": {
               "expr": {
                 "Literal": {
-                  "Value": "281D"
+                  "Value": "280D"
                 }
               }
             }
@@ -193,7 +193,7 @@
             "jsonSpec": {
               "expr": {
                 "Literal": {
-                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": {\n    \"step\": 56\n  },\n  \"padding\": {\n    \"left\": 10,\n    \"right\": 20,\n    \"top\": 12,\n    \"bottom\": 8\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, BlinkMacSystemFont, sans-serif\",\n    \"background\": \"transparent\",\n    \"axis\": {\n      \"domain\": false,\n      \"ticks\": false,\n      \"labelColor\": \"#8B95B0\",\n      \"labelFont\": \"Segoe UI\"\n    }\n  },\n  \"transform\": [\n    {\n      \"filter\": \"datum['VIZ-Timeline Launch Date'] != null && datum['VIZ-Timeline Product Short'] != null\"\n    }\n  ],\n  \"encoding\": {\n    \"y\": {\n      \"field\": \"VIZ-Timeline Product Short\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"Mr. Fuzzy\",\n        \"Love Bear\",\n        \"Sugar Panda\",\n        \"Mini Bear\"\n      ],\n      \"axis\": {\n        \"title\": null,\n        \"labelFontSize\": 12.5,\n        \"labelFontWeight\": 600,\n        \"labelColor\": \"#E2E8F0\",\n        \"labelPadding\": 16\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"gantt_pills\",\n      \"mark\": {\n        \"type\": \"bar\",\n        \"cornerRadius\": 6,\n        \"height\": {\n          \"band\": 0.7\n        },\n        \"opacity\": 0.9\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Launch Date\",\n          \"type\": \"temporal\",\n          \"scale\": {\n            \"domain\": [\n              \"2012-02-01\",\n              \"2015-04-15\"\n            ]\n          },\n          \"axis\": {\n            \"title\": null,\n            \"orient\": \"bottom\",\n            \"format\": \"%b '%y\",\n            \"tickCount\": 8,\n            \"grid\": true,\n            \"gridColor\": \"#1D2749\",\n            \"gridDash\": [\n              3,\n              3\n            ],\n            \"labelFontSize\": 11,\n            \"labelColor\": \"#8B95B0\",\n            \"labelPadding\": 12\n          }\n        },\n        \"x2\": {\n          \"field\": \"VIZ-Timeline End Date\"\n        },\n        \"color\": {\n          \"field\": \"VIZ-Timeline Color\",\n          \"type\": \"nominal\",\n          \"scale\": null,\n          \"legend\": null\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"VIZ-Timeline Product Short\",\n            \"title\": \"Product\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Launch Date\",\n            \"title\": \"Launch Date\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          },\n          {\n            \"field\": \"VIZ-Timeline End Date\",\n            \"title\": \"Active Through\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Units\",\n            \"title\": \"Units Sold (Filtered Context)\",\n            \"format\": \",d\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"milestone_diamonds\",\n      \"mark\": {\n        \"type\": \"point\",\n        \"shape\": \"diamond\",\n        \"filled\": true,\n        \"fill\": \"#FFFFFF\",\n        \"stroke\": \"#FFFFFF\",\n        \"strokeWidth\": 2,\n        \"size\": 280\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Launch Date\",\n          \"type\": \"temporal\"\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"VIZ-Timeline Product Short\",\n            \"title\": \"Product\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Launch Date\",\n            \"title\": \"Launch Milestone\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"inbar_labels\",\n      \"mark\": {\n        \"type\": \"text\",\n        \"align\": \"center\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 11.5,\n        \"fontWeight\": 700,\n        \"font\": \"Segoe UI\",\n        \"color\": \"#0B132B\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Mid Date\",\n          \"type\": \"temporal\"\n        },\n        \"text\": {\n          \"field\": \"VIZ-Timeline Launch Label\"\n        }\n      }\n    }\n  ]\n}'"
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": {\n    \"step\": 56\n  },\n  \"padding\": {\n    \"left\": 10,\n    \"right\": 20,\n    \"top\": 12,\n    \"bottom\": 8\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, BlinkMacSystemFont, sans-serif\",\n    \"background\": \"transparent\",\n    \"axis\": {\n      \"domain\": false,\n      \"ticks\": false,\n      \"labelColor\": \"#475569\",\n      \"labelFont\": \"Segoe UI\"\n    }\n  },\n  \"transform\": [\n    {\n      \"filter\": \"datum[''VIZ-Timeline Launch Date''] != null && datum[''VIZ-Timeline Product Short''] != null\"\n    }\n  ],\n  \"encoding\": {\n    \"y\": {\n      \"field\": \"VIZ-Timeline Product Short\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"Mr. Fuzzy\",\n        \"Love Bear\",\n        \"Sugar Panda\",\n        \"Mini Bear\"\n      ],\n      \"axis\": {\n        \"title\": null,\n        \"labelFontSize\": 12.5,\n        \"labelFontWeight\": 600,\n        \"labelColor\": \"#0F172A\",\n        \"labelPadding\": 16\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"name\": \"gantt_pills\",\n      \"mark\": {\n        \"type\": \"bar\",\n        \"cornerRadius\": 6,\n        \"height\": {\n          \"band\": 0.7\n        },\n        \"opacity\": 0.9\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Launch Date\",\n          \"type\": \"temporal\",\n          \"scale\": {\n            \"domain\": [\n              \"2012-02-01\",\n              \"2015-04-15\"\n            ]\n          },\n          \"axis\": {\n            \"title\": null,\n            \"orient\": \"bottom\",\n            \"format\": \"%b ''%y\",\n            \"tickCount\": 8,\n            \"grid\": true,\n            \"gridColor\": \"#E2E8F0\",\n            \"gridDash\": [\n              3,\n              3\n            ],\n            \"labelFontSize\": 11,\n            \"labelColor\": \"#475569\",\n            \"labelPadding\": 12\n          }\n        },\n        \"x2\": {\n          \"field\": \"VIZ-Timeline End Date\"\n        },\n        \"color\": {\n          \"field\": \"VIZ-Timeline Color\",\n          \"type\": \"nominal\",\n          \"scale\": null,\n          \"legend\": null\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"VIZ-Timeline Product Short\",\n            \"title\": \"Product\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Launch Date\",\n            \"title\": \"Launch Date\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          },\n          {\n            \"field\": \"VIZ-Timeline End Date\",\n            \"title\": \"Active Through\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Units\",\n            \"title\": \"Units Sold (Filtered Context)\",\n            \"format\": \",d\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"milestone_diamonds\",\n      \"mark\": {\n        \"type\": \"point\",\n        \"shape\": \"diamond\",\n        \"filled\": true,\n        \"fill\": \"#FFFFFF\",\n        \"stroke\": \"#1D4ED8\",\n        \"strokeWidth\": 2,\n        \"size\": 280\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Launch Date\",\n          \"type\": \"temporal\"\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"VIZ-Timeline Product Short\",\n            \"title\": \"Product\"\n          },\n          {\n            \"field\": \"VIZ-Timeline Launch Date\",\n            \"title\": \"Launch Milestone\",\n            \"type\": \"temporal\",\n            \"format\": \"%B %d, %Y\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"inbar_labels\",\n      \"mark\": {\n        \"type\": \"text\",\n        \"align\": \"center\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 11.5,\n        \"fontWeight\": 700,\n        \"font\": \"Segoe UI\",\n        \"color\": \"#FFFFFF\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"VIZ-Timeline Mid Date\",\n          \"type\": \"temporal\"\n        },\n        \"text\": {\n          \"field\": \"VIZ-Timeline Launch Label\"\n        }\n      }\n    }\n  ]\n}'"
                 }
               }
             },
@@ -265,7 +265,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E9F2'"
+                      "Value": "'#0F172A'"
                     }
                   }
                 }
@@ -310,7 +310,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#8B95B0'"
+                      "Value": "'#64748B'"
                     }
                   }
                 }
@@ -334,7 +334,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0F1730'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -365,7 +365,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1D2749'"
+                      "Value": "'#E2E8F0'"
                     }
                   }
                 }

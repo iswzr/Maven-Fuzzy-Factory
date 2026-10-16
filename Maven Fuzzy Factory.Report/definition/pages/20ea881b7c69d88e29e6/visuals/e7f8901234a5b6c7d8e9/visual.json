@@ -96,7 +96,7 @@
             "viewportHeight": {
               "expr": {
                 "Literal": {
-                  "Value": "295D"
+                  "Value": "294D"
                 }
               }
             }
@@ -137,7 +137,7 @@
             "jsonSpec": {
               "expr": {
                 "Literal": {
-                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": \"container\",\n  \"padding\": {\n    \"left\": 10,\n    \"right\": 10,\n    \"top\": 5,\n    \"bottom\": 10\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, sans-serif\",\n    \"background\": \"transparent\",\n    \"axis\": {\n      \"domain\": false,\n      \"ticks\": false,\n      \"labelColor\": \"#8B95B0\",\n      \"labelFont\": \"Segoe UI Semibold\",\n      \"labelFontSize\": 11\n    }\n  },\n  \"encoding\": {\n    \"x\": {\n      \"field\": \"LapseWindow\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"M1\",\n        \"M2\",\n        \"M3\",\n        \"M4–6\",\n        \"M7–9\",\n        \"M10–12\"\n      ],\n      \"axis\": {\n        \"orient\": \"top\",\n        \"title\": null,\n        \"labelAngle\": 0,\n        \"labelColor\": \"#94A3B8\",\n        \"labelFontSize\": 11.5,\n        \"labelFont\": \"Segoe UI Semibold\",\n        \"labelPadding\": 8\n      }\n    },\n    \"y\": {\n      \"field\": \"CohortQuarter\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"2012 Q3\",\n        \"2012 Q4\",\n        \"2013 Q1\",\n        \"2013 Q2\",\n        \"2013 Q3\",\n        \"2013 Q4\",\n        \"2014 Q1\",\n        \"2014 Q2\"\n      ],\n      \"axis\": {\n        \"orient\": \"left\",\n        \"title\": null,\n        \"labelColor\": \"#94A3B8\",\n        \"labelFontSize\": 11.5,\n        \"labelFont\": \"Segoe UI Semibold\",\n        \"labelPadding\": 8\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"transform\": [\n        {\n          \"filter\": \"isValid(datum[''Cohort Repeat Rate'']) && datum[''Cohort Repeat Rate''] != null && datum[''Cohort Repeat Rate''] > 0\"\n        }\n      ],\n      \"mark\": {\n        \"type\": \"rect\",\n        \"cornerRadius\": 5,\n        \"stroke\": \"#131A2E\",\n        \"strokeWidth\": 3\n      },\n      \"encoding\": {\n        \"color\": {\n          \"field\": \"Cohort Repeat Rate\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0.001,\n              0.004,\n              0.008,\n              0.012,\n              0.018\n            ],\n            \"range\": [\n              \"#1A223F\",\n              \"#292C63\",\n              \"#4338CA\",\n              \"#6366F1\",\n              \"#8B5CF6\"\n            ]\n          },\n          \"legend\": null\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"CohortQuarter\",\n            \"title\": \"Cohort\"\n          },\n          {\n            \"field\": \"LapseWindow\",\n            \"title\": \"Window\"\n          },\n          {\n            \"field\": \"Cohort Repeat Rate Label\",\n            \"title\": \"Repeat Rate\"\n          }\n        ]\n      }\n    },\n    {\n      \"transform\": [\n        {\n          \"filter\": \"isValid(datum[''Cohort Repeat Rate Label'']) && datum[''Cohort Repeat Rate Label''] != null && datum[''Cohort Repeat Rate Label''] != ''''\"\n        }\n      ],\n      \"mark\": {\n        \"type\": \"text\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 11.5,\n        \"fontWeight\": 600\n      },\n      \"encoding\": {\n        \"text\": {\n          \"field\": \"Cohort Repeat Rate Label\",\n          \"type\": \"nominal\"\n        },\n        \"color\": {\n          \"condition\": [\n            {\n              \"test\": \"datum[''Cohort Repeat Rate''] >= 0.012\",\n              \"value\": \"#FDE047\"\n            },\n            {\n              \"test\": \"datum[''Cohort Repeat Rate''] >= 0.006\",\n              \"value\": \"#FFFFFF\"\n            }\n          ],\n          \"value\": \"#94A3B8\"\n        }\n      }\n    }\n  ]\n}'"
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": \"container\",\n  \"padding\": {\n    \"left\": 10,\n    \"right\": 10,\n    \"top\": 5,\n    \"bottom\": 10\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI, -apple-system, sans-serif\",\n    \"background\": \"transparent\",\n    \"axis\": {\n      \"domain\": false,\n      \"ticks\": false,\n      \"labelColor\": \"#475569\",\n      \"labelFont\": \"Segoe UI Semibold\",\n      \"labelFontSize\": 11\n    }\n  },\n  \"encoding\": {\n    \"x\": {\n      \"field\": \"LapseWindow\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"M1\",\n        \"M2\",\n        \"M3\",\n        \"M4–6\",\n        \"M7–9\",\n        \"M10–12\"\n      ],\n      \"axis\": {\n        \"orient\": \"top\",\n        \"title\": null,\n        \"labelAngle\": 0,\n        \"labelColor\": \"#0F172A\",\n        \"labelFontSize\": 11.5,\n        \"labelFont\": \"Segoe UI Semibold\",\n        \"labelPadding\": 8\n      }\n    },\n    \"y\": {\n      \"field\": \"CohortQuarter\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"2012 Q3\",\n        \"2012 Q4\",\n        \"2013 Q1\",\n        \"2013 Q2\",\n        \"2013 Q3\",\n        \"2013 Q4\",\n        \"2014 Q1\",\n        \"2014 Q2\"\n      ],\n      \"axis\": {\n        \"orient\": \"left\",\n        \"title\": null,\n        \"labelColor\": \"#0F172A\",\n        \"labelFontSize\": 11.5,\n        \"labelFont\": \"Segoe UI Semibold\",\n        \"labelPadding\": 8\n      }\n    }\n  },\n  \"layer\": [\n    {\n      \"transform\": [\n        {\n          \"filter\": \"isValid(datum[''Cohort Repeat Rate'']) && datum[''Cohort Repeat Rate''] != null && datum[''Cohort Repeat Rate''] > 0\"\n        }\n      ],\n      \"mark\": {\n        \"type\": \"rect\",\n        \"cornerRadius\": 5,\n        \"stroke\": \"#FFFFFF\",\n        \"strokeWidth\": 3\n      },\n      \"encoding\": {\n        \"color\": {\n          \"field\": \"Cohort Repeat Rate\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0.001,\n              0.004,\n              0.008,\n              0.012,\n              0.018\n            ],\n            \"range\": [\n              \"#EFF6FF\",\n              \"#DBEAFE\",\n              \"#93C5FD\",\n              \"#3B82F6\",\n              \"#1D4ED8\"\n            ]\n          },\n          \"legend\": null\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"CohortQuarter\",\n            \"title\": \"Cohort\"\n          },\n          {\n            \"field\": \"LapseWindow\",\n            \"title\": \"Window\"\n          },\n          {\n            \"field\": \"Cohort Repeat Rate Label\",\n            \"title\": \"Repeat Rate\"\n          }\n        ]\n      }\n    },\n    {\n      \"transform\": [\n        {\n          \"filter\": \"isValid(datum[''Cohort Repeat Rate Label'']) && datum[''Cohort Repeat Rate Label''] != null && datum[''Cohort Repeat Rate Label''] != ''''\"\n        }\n      ],\n      \"mark\": {\n        \"type\": \"text\",\n        \"baseline\": \"middle\",\n        \"fontSize\": 11.5,\n        \"fontWeight\": 600\n      },\n      \"encoding\": {\n        \"text\": {\n          \"field\": \"Cohort Repeat Rate Label\",\n          \"type\": \"nominal\"\n        },\n        \"color\": {\n          \"condition\": [\n            {\n              \"test\": \"datum[''Cohort Repeat Rate''] >= 0.012\",\n              \"value\": \"#FFFFFF\"\n            },\n            {\n              \"test\": \"datum[''Cohort Repeat Rate''] >= 0.006\",\n              \"value\": \"#FFFFFF\"\n            }\n          ],\n          \"value\": \"#0F172A\"\n        }\n      }\n    }\n  ]\n}'"
                 }
               }
             },
@@ -209,7 +209,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E6E9F2'"
+                      "Value": "'#0F172A'"
                     }
                   }
                 }
@@ -254,7 +254,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#8B95B0'"
+                      "Value": "'#64748B'"
                     }
                   }
                 }
@@ -278,7 +278,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#131A2E'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -309,7 +309,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#222C47'"
+                      "Value": "'#E2E8F0'"
                     }
                   }
                 }

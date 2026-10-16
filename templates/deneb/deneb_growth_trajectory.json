@@ -12,7 +12,7 @@
       "top": 10,
       "left": 10,
       "right": 20,
-      "bottom": 40
+      "bottom": 15
     }
   },
   "transform": [
@@ -101,14 +101,14 @@
           "condition": [
             {
               "test": "datum.is_sel == 1",
-              "value": 0.38
+              "value": 0.42
             },
             {
               "test": "datum.is_sel == 2",
-              "value": 0.12
+              "value": 0.25
             }
           ],
-          "value": 0.035
+          "value": 0.22
         }
       }
     },
@@ -148,7 +148,8 @@
         "type": "text",
         "y": 14,
         "fontWeight": 700,
-        "baseline": "top"
+        "baseline": "top",
+        "color": "#1E293B"
       },
       "encoding": {
         "x": {
@@ -159,9 +160,7 @@
           "field": "Chapter Name"
         },
         "color": {
-          "field": "Chapter Color",
-          "type": "nominal",
-          "scale": null
+          "value": "#1E293B"
         },
         "fontSize": {
           "condition": [
@@ -180,10 +179,10 @@
             },
             {
               "test": "datum.is_sel == 2",
-              "value": 0.85
+              "value": 0.95
             }
           ],
-          "value": 0.2
+          "value": 0.9
         }
       }
     },
@@ -223,9 +222,9 @@
           "axis": {
             "title": null,
             "format": "%b '%y",
-            "labelColor": "#8B95B0",
-            "tickColor": "#1A2342",
-            "domainColor": "#1A2342",
+            "labelColor": "#475569",
+            "tickColor": "#E2E8F0",
+            "domainColor": "#E2E8F0",
             "grid": false
           }
         },
@@ -234,10 +233,10 @@
           "type": "quantitative",
           "axis": {
             "title": null,
-            "labelColor": "#8B95B0",
-            "tickColor": "#1A2342",
-            "domainColor": "#1A2342",
-            "gridColor": "#1A2342",
+            "labelColor": "#475569",
+            "tickColor": "#E2E8F0",
+            "domainColor": "#E2E8F0",
+            "gridColor": "#E2E8F0",
             "gridDash": [
               3,
               3
@@ -286,15 +285,16 @@
               "Monthly"
             ],
             "range": [
-              "#2DD4BF",
-              "#2DD4BF",
-              "#2DD4BF",
-              "#2DD4BF",
-              "#94A3B8",
-              "#FBBF24",
-              "#94A3B8"
+              "#1D4ED8",
+              "#1D4ED8",
+              "#1D4ED8",
+              "#1D4ED8",
+              "#64748B",
+              "#D97706",
+              "#64748B"
             ]
-          }
+          },
+          "legend": null
         }
       }
     },
@@ -332,13 +332,13 @@
               "Monthly"
             ],
             "range": [
-              "#2DD4BF",
-              "#2DD4BF",
-              "#2DD4BF",
-              "#2DD4BF",
-              "#94A3B8",
-              "#FBBF24",
-              "#94A3B8"
+              "#1D4ED8",
+              "#1D4ED8",
+              "#1D4ED8",
+              "#1D4ED8",
+              "#64748B",
+              "#D97706",
+              "#64748B"
             ]
           },
           "legend": null
@@ -398,27 +398,16 @@
               "Monthly"
             ],
             "range": [
-              "#2DD4BF",
-              "#2DD4BF",
-              "#2DD4BF",
-              "#2DD4BF",
-              "#94A3B8",
-              "#FBBF24",
-              "#94A3B8"
+              "#1D4ED8",
+              "#1D4ED8",
+              "#1D4ED8",
+              "#1D4ED8",
+              "#64748B",
+              "#D97706",
+              "#64748B"
             ]
           },
-          "legend": {
-            "orient": "bottom-left",
-            "direction": "horizontal",
-            "title": null,
-            "labelColor": "#CBD5E1",
-            "labelFont": "Segoe UI, sans-serif",
-            "labelFontSize": 11,
-            "labelFontWeight": 600,
-            "symbolType": "circle",
-            "symbolSize": 70,
-            "offset": 12
-          }
+          "legend": null
         }
       }
     },
@@ -431,9 +420,9 @@
       ],
       "mark": {
         "type": "circle",
-        "color": "#2DD4BF",
-        "fill": "#0F1730",
-        "stroke": "#2DD4BF",
+        "color": "#1D4ED8",
+        "fill": "#FFFFFF",
+        "stroke": "#1D4ED8",
         "strokeWidth": 2
       },
       "encoding": {

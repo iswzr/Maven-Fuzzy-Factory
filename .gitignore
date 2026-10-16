@@ -1,5 +1,20 @@
+# Power BI temporary & local cache files
 **/.pbi/localSettings.json
 **/.pbi/cache.abf
-*.zip
+*.tmp
+*.temp
+
+# Python caches & temporary test scripts
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+inspect_*.py
+check_*.py
+scan_*.py
+find_*.py
+temp_*.py
+
+# Archives & OS metadata
+*.zip
+Thumbs.db
+.DS_Store

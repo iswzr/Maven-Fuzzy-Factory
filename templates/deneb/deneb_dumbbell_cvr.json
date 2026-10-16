@@ -53,7 +53,7 @@
         "domain": false,
         "ticks": false,
         "grid": false,
-        "labelColor": "#94A3B8",
+        "labelColor": "#1E293B",
         "labelFontSize": 12,
         "labelFontWeight": 500,
         "labelPadding": 12
@@ -103,9 +103,9 @@
             "domain": false,
             "ticks": false,
             "grid": true,
-            "gridColor": "#1E293B",
+            "gridColor": "#E2E8F0",
             "gridWidth": 1,
-            "labelColor": "#64748B",
+            "labelColor": "#475569",
             "labelFontSize": 11,
             "labelPadding": 8
           }
@@ -115,13 +115,13 @@
           "type": "nominal",
           "scale": {
             "domain": ["Mobile", "Desktop"],
-            "range": ["#FB7185", "#2DD4BF"]
+            "range": ["#D97706", "#1D4ED8"]
           },
           "legend": {
             "orient": "bottom-right",
             "direction": "horizontal",
             "title": null,
-            "labelColor": "#94A3B8",
+            "labelColor": "#1E293B",
             "labelFontSize": 12,
             "symbolType": "circle",
             "symbolSize": 90,
@@ -162,7 +162,7 @@
         "dx": 10,
         "fontSize": 11,
         "fontWeight": 600,
-        "color": "#2DD4BF"
+        "color": "#1D4ED8"
       },
       "encoding": {
         "x": {
@@ -178,3 +178,4 @@
     }
   ]
 }
+
