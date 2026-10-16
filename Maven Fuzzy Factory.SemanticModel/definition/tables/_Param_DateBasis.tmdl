@@ -1,0 +1,25 @@
+table _Param_DateBasis
+	lineageTag: 489e2101-7c9f-410a-8bf3-5e921d0a1b2c
+
+	column BasisID
+		dataType: int64
+		formatString: 0
+		lineageTag: 7192a013-8b4e-412f-912c-3b4e5f6a7b8c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [BasisID]
+
+	column Basis
+		dataType: string
+		lineageTag: 8a9b0c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Basis]
+		sortByColumn: BasisID
+
+	partition _Param_DateBasis = calculated
+		mode: import
+		source = DATATABLE("BasisID", INTEGER, "Basis", STRING, { {1, "Order date (cohort)"}, {2, "Refund date (cash)"} })
+
+	annotation PBI_Id = 9b8c7d6e-5f4a-3b2c-1d0e-f9a8b7c6d5e4
+

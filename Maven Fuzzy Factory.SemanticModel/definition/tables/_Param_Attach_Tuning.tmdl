@@ -1,0 +1,46 @@
+table _Param_Attach_Tuning
+	lineageTag: d1a2b3c4-d5e6-4789-0123-abcdef123457
+
+	column SortOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: d2b3c4d5-e6f7-4890-1234-bcdef1234568
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+	column Label
+		dataType: string
+		lineageTag: d3c4d5e6-f7a8-4901-2345-cdef12345679
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Label]
+		sortByColumn: SortOrder
+
+	column Value
+		dataType: double
+		formatString: +0 "pp";-0 "pp";0 "pp"
+		lineageTag: d4d5e6f7-a8b9-4012-3456-def123456790
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Param_Attach_Tuning = calculated
+		mode: import
+		source =
+				DATATABLE(
+					"SortOrder", INTEGER, "Label", STRING, "Value", DOUBLE,
+					{
+						{1, "0 pp", 0.00},
+						{2, "+2 pp", 0.02},
+						{3, "+4 pp", 0.04},
+						{4, "+6 pp", 0.06},
+						{5, "+8 pp", 0.08},
+						{6, "+10 pp", 0.10},
+						{7, "+15 pp", 0.15},
+						{8, "+20 pp", 0.20}
+					}
+				)
+
+	annotation PBI_Id = a1b2c3d4-e5f6-4789-0123-456789att001
+

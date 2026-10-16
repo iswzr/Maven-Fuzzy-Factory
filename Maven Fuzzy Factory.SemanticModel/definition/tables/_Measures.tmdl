@@ -767,7 +767,51 @@ table _Measures
 		lineageTag: cddeb816-1ebc-4e9e-aa69-3f535d4d2615
 
 	measure 'Header P2 HTML' =
-			VAR titleText = [Page Title P2]
+			VAR sess = [Total Sessions]
+			VAR unpPct = [Unpaid Session %]
+			VAR unpRev = [Unpaid Revenue]
+			VAR unpSess = [Unpaid Sessions]
+			VAR cvr = [Conversion Rate %]
+			VAR mobPct = [Mobile Traffic %]
+			VAR mobOrdPct = [Mobile Order %]
+			VAR cvrDesk = [CVR Desktop]
+			VAR cvrMob = [CVR Mobile]
+			
+			VAR unpPctStr = FORMAT(unpPct, "0.0%")
+			VAR cvrStr = FORMAT(cvr, "0.00%")
+			VAR sessStr = FORMAT(sess, "#,0")
+			VAR unpRevStr = IF(unpRev >= 1000000, "$" & FORMAT(unpRev / 1000000, "0.00") & "M", "$" & FORMAT(unpRev / 1000, "#,0") & "K")
+			VAR unpSessStr = FORMAT(unpSess, "#,0")
+			VAR mobPctStr = FORMAT(mobPct, "0.0%")
+			VAR mobOrdStr = FORMAT(mobOrdPct, "0.0%")
+			VAR cvrDeskStr = FORMAT(cvrDesk, "0.00%")
+			VAR cvrMobStr = FORMAT(cvrMob, "0.00%")
+			
+			VAR YearPart =
+				IF(
+					ISFILTERED(Dim_Date[Year]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>" & SELECTEDVALUE(Dim_Date[Year], "Multi-Year") & "</span>",
+					""
+				)
+			VAR DimPart =
+				IF(
+					ISFILTERED('_Param_Dim'[DimensionName]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#60A5FA;font-weight:700'>" & SELECTEDVALUE('_Param_Dim'[DimensionName]) & "</span>",
+					""
+				)
+			VAR DevicePart =
+				IF(
+					ISFILTERED(website_sessions[Device]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#FBBF24;font-weight:700'>" & SELECTEDVALUE(website_sessions[Device], "All Devices") & "</span>",
+					""
+				)
+			VAR TrafficPart =
+				IF(
+					ISFILTERED(website_sessions[Traffic Type]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#38BDF8;font-weight:700'>" & SELECTEDVALUE(website_sessions[Traffic Type], "All Traffic") & "</span>",
+					""
+				)
+			
 			RETURN
 			"<style>
 			  * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -778,8 +822,8 @@ table _Measures
 			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
 			</style>
 			<div class='hdr-wrap'>
-			  <div class='hdr-title'>" & titleText & "</div>
-			  <div class='hdr-sub'>Sample output of the dynamic title measure " & UNICHAR(183) & " data through 19 Mar 2015</div>
+			  <div class='hdr-title'>Acquisition <span style='color:#475569'>&bull;</span> <span style='color:#2DD4BF;font-weight:800'>" & unpPctStr & "</span> <span style='font-size:16px;font-weight:500;color:#94A3B8'>unpaid share</span> <span style='color:#475569'>&bull;</span> <span style='color:#38BDF8;font-weight:800'>" & cvrStr & "</span> <span style='font-size:16px;font-weight:500;color:#94A3B8'>CVR</span>" & YearPart & DimPart & DevicePart & TrafficPart & "</div>
+			  <div class='hdr-sub'>" & sessStr & " total sessions (" & unpSessStr & " unpaid) &bull; " & unpRevStr & " unpaid revenue &bull; " & mobPctStr & " mobile traffic (" & mobOrdStr & " orders) &bull; Desktop " & cvrDeskStr & " vs Mobile " & cvrMobStr & " &bull; data through 19 Mar 2015</div>
 			</div>"
 		displayFolder: 04 Page 2 - Acquisition
 		lineageTag: 15409b23-1d64-47c5-8bc7-cbcb4f4a4c19
@@ -1235,7 +1279,47 @@ table _Measures
 		lineageTag: cbbc7922-703f-4ae7-8d29-9aa6ddac15a8
 
 	measure 'Header P3 HTML' =
-			VAR titleText = [Page Title P3]
+			VAR landerCVR = [Lander CVR]
+			VAR bounceRate = [Lander Bounce Rate]
+			VAR landerSess = [Lander Sessions]
+			VAR landerOrders = [Lander Orders]
+			VAR bestLander = [Best Lander Name]
+			VAR bestLanderCVR = [Best Lander CVR]
+			VAR billingLift = [Billing Lift pp]
+			
+			VAR cvrStr = FORMAT(landerCVR, "0.00%")
+			VAR bounceStr = FORMAT(bounceRate, "0.0%")
+			VAR sessStr = FORMAT(landerSess, "#,0")
+			VAR ordersStr = FORMAT(landerOrders, "#,0")
+			VAR billingLiftStr = IF(ISBLANK(billingLift), "+14.8 pp", IF(billingLift >= 0, "+" & FORMAT(billingLift, "0.0") & " pp", FORMAT(billingLift, "0.0") & " pp"))
+			VAR bestLanderStr = IF(ISBLANK(bestLander), "/lander-1", bestLander)
+			VAR bestCVRStr = IF(ISBLANK(bestLanderCVR), "8.3%", FORMAT(bestLanderCVR, "0.0%"))
+			
+			VAR LanderPart =
+				IF(
+					ISFILTERED(website_sessions[Landing Page]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#2DD4BF;font-weight:700'>" & SELECTEDVALUE(website_sessions[Landing Page], "All Landers") & "</span>",
+					""
+				)
+			VAR YearPart =
+				IF(
+					ISFILTERED(Dim_Date[Year]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>" & SELECTEDVALUE(Dim_Date[Year], "Multi-Year") & "</span>",
+					""
+				)
+			VAR DevicePart =
+				IF(
+					ISFILTERED(website_sessions[Device]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#FBBF24;font-weight:700'>" & SELECTEDVALUE(website_sessions[Device], "All Devices") & "</span>",
+					""
+				)
+			VAR TrafficPart =
+				IF(
+					ISFILTERED(website_sessions[Traffic Type]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#38BDF8;font-weight:700'>" & SELECTEDVALUE(website_sessions[Traffic Type], "All Traffic") & "</span>",
+					""
+				)
+			
 			RETURN
 			"<style>
 			  * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1246,8 +1330,8 @@ table _Measures
 			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
 			</style>
 			<div class='hdr-wrap'>
-			  <div class='hdr-title'>" & titleText & "</div>
-			  <div class='hdr-sub'>Sample output of the dynamic title measure " & UNICHAR(183) & " data through 19 Mar 2015</div>
+			  <div class='hdr-title'>CRO Lab <span style='color:#475569'>&bull;</span> <span style='color:#2DD4BF;font-weight:800'>" & cvrStr & "</span> <span style='font-size:16px;font-weight:500;color:#94A3B8'>funnel CVR</span> <span style='color:#475569'>&bull;</span> <span style='color:#FB7185;font-weight:800'>" & bounceStr & "</span> <span style='font-size:16px;font-weight:500;color:#94A3B8'>bounce rate</span>" & LanderPart & YearPart & DevicePart & TrafficPart & "</div>
+			  <div class='hdr-sub'>" & sessStr & " total sessions (" & ordersStr & " orders) &bull; Best lander: " & bestLanderStr & " (" & bestCVRStr & " CVR) &bull; Billing-2 A/B test: <b style='color:#34D399'>" & billingLiftStr & "</b> lift &bull; data through 19 Mar 2015</div>
 			</div>"
 		displayFolder: 05 Page 3 - CRO Lab
 		lineageTag: 4577f806-5809-4d3e-bf26-dbc884d14d4f
@@ -2832,234 +2916,1459 @@ table _Measures
 		lineageTag: f406a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
 
 	measure 'Retention Callout HTML' =
-			VAR OneTimePct = FORMAT([One-Time Buyer %], "0.0%")
+			
+			VAR OneTime = [One-Time Buyer %]
+			VAR RepeatPct = 1 - OneTime
+			VAR OneTimePct = FORMAT(OneTime, "0.0%")
+			VAR RepeatPctStr = FORMAT(RepeatPct, "0.0%")
+			VAR Arc = FORMAT(OneTime * 251.3, "0.0") & " 251.3"
 			VAR RepeatBuyers = FORMAT(617, "#,0")
 			VAR TotalBuyers = FORMAT(31696, "#,0")
 			VAR OneTimeBuyers = FORMAT(31079, "#,0")
 			VAR AddOrders = "+317"
 			VAR AddRevenue = "+$19.0K"
 			RETURN
-			"<!DOCTYPE html>
-			<html>
-			<head>
-			<style>
-			  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, sans-serif; }
-			  body, html { width: 100%; height: 100%; overflow: hidden; background: transparent; }
-			  .callout-box {
-			    width: 100%; height: 100%;
-			    background: linear-gradient(135deg, #10172B 0%, #131D36 50%, #16203D 100%);
-			    border: 1px solid #222C47;
-			    border-radius: 10px;
-			    padding: 12px 18px;
-			    display: flex;
-			    flex-direction: column;
-			    justify-content: space-between;
-			    position: relative;
-			    overflow: hidden;
-			  }
-			  .callout-box::before {
-			    content: '';
-			    position: absolute;
-			    top: 0; left: 0; right: 0; height: 3px;
-			    background: linear-gradient(90deg, #FB7185 0%, #F59E0B 35%, #2DD4BF 70%, transparent 100%);
-			  }
-			  .hdr-row {
-			    display: flex;
-			    align-items: center;
-			    justify-content: space-between;
-			    margin-bottom: 6px;
-			  }
-			  .hdr-left {
-			    display: flex;
-			    align-items: center;
-			    gap: 8px;
-			  }
-			  .b-badge {
-			    width: 18px; height: 18px; border-radius: 50%;
-			    background: #FB7185; color: #FFFFFF; font-size: 10px;
-			    font-weight: 800; display: flex; align-items: center; justify-content: center;
-			  }
-			  .b-title {
-			    font-size: 12px; font-weight: 700; color: #F1F5F9; letter-spacing: 0.2px;
-			  }
-			  .pill-danger {
-			    background: rgba(251,113,133,0.18); border: 1px solid rgba(251,113,133,0.35);
-			    color: #FDA4AF; font-size: 8.5px; font-weight: 800; padding: 2px 7px;
-			    border-radius: 9999px; letter-spacing: 0.5px;
-			  }
-			  .b-right {
-			    font-size: 10.5px; color: #8B95B0; font-weight: 500;
-			  }
-			  .grid-3col {
-			    display: grid;
-			    grid-template-columns: 245px 1fr 305px;
-			    gap: 12px;
-			    height: calc(100% - 28px);
-			  }
-			  .col-card {
-			    border-radius: 8px;
-			    padding: 10px 12px;
-			    display: flex;
-			    flex-direction: column;
-			    justify-content: space-between;
-			  }
-			  .col-leak {
-			    background: rgba(251,113,133,0.06);
-			    border: 1px solid rgba(251,113,133,0.22);
-			  }
-			  .col-econ {
-			    background: rgba(19,26,46,0.65);
-			    border: 1px solid #222C47;
-			  }
-			  .col-act {
-			    background: rgba(45,212,191,0.05);
-			    border: 1px solid rgba(45,212,191,0.22);
-			  }
-			  .col-eye {
-			    font-size: 9px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 2px;
-			  }
-			  .leak-stat {
-			    font-size: 42px; font-weight: 900; line-height: 1; color: #FB7185;
-			    letter-spacing: -1.5px; text-shadow: 0 0 20px rgba(251,113,133,0.35);
-			  }
-			  .leak-lbl {
-			    font-size: 11px; font-weight: 700; color: #E2E8F0; margin-top: 2px;
-			  }
-			  .gauge-track {
-			    width: 100%; height: 6px; background: #1E293B; border-radius: 999px;
-			    display: flex; overflow: hidden; margin: 6px 0 4px;
-			  }
-			  .gauge-red {
-			    width: 98.1%; height: 100%; background: linear-gradient(90deg, #FB7185, #E11D48);
-			  }
-			  .gauge-green {
-			    width: 1.9%; height: 100%; background: #2DD4BF;
-			  }
-			  .leak-meta {
-			    display: flex; justify-content: space-between; font-size: 9.5px; color: #94A3B8; font-weight: 600;
-			  }
-			  .econ-kpis {
-			    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 5px;
-			  }
-			  .econ-kpi {
-			    background: rgba(15,23,42,0.6); border: 1px solid #263353; border-radius: 6px; padding: 5px 8px;
-			  }
-			  .kpi-val {
-			    font-size: 16px; font-weight: 800; line-height: 1.2;
-			  }
-			  .kpi-lbl {
-			    font-size: 9px; color: #94A3B8; margin-top: 1px; line-height: 1.3;
-			  }
-			  .kpi-lbl b { color: #E2E8F0; }
-			  .exec-narrative {
-			    font-size: 10.5px; line-height: 1.42; color: #94A3B8;
-			  }
-			  .exec-narrative b { color: #F1F5F9; }
-			  .exec-narrative i { color: #34D399; font-style: normal; font-weight: 700; }
-			  .act-list {
-			    display: flex; flex-direction: column; gap: 5px;
-			  }
-			  .act-item {
-			    background: rgba(15,23,42,0.5); border: 1px solid rgba(45,212,191,0.15); border-radius: 6px; padding: 5px 8px;
-			  }
-			  .act-title {
-			    font-size: 10px; font-weight: 700; color: #F1F5F9; display: flex; align-items: center; gap: 4px;
-			  }
-			  .act-desc {
-			    font-size: 9px; color: #94A3B8; margin-top: 1px; line-height: 1.3;
-			  }
-			  .act-desc b { color: #2DD4BF; }
-			  .btn-wrap {
-			    display: flex; flex-direction: column; gap: 3px; margin-top: 3px;
-			  }
-			  .sim-btn {
-			    background: linear-gradient(135deg, #2DD4BF 0%, #14B8A6 100%);
-			    color: #042F2E; font-size: 11px; font-weight: 800;
-			    padding: 6px 12px; border-radius: 6px; text-decoration: none;
-			    display: flex; align-items: center; justify-content: space-between;
-			    box-shadow: 0 0 16px rgba(45,212,191,0.3); transition: all 0.2s ease;
-			  }
-			  .sim-btn:hover {
-			    background: linear-gradient(135deg, #5EEAD4 0%, #2DD4BF 100%);
-			    box-shadow: 0 0 24px rgba(45,212,191,0.5);
-			  }
-			  .sim-arrow { font-size: 12px; font-weight: 900; }
-			  .sim-sub { font-size: 8.5px; color: #64748B; text-align: center; }
+			"<!DOCTYPE html><html><head><style>
+			* { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI Variable','Segoe UI',-apple-system,sans-serif; }
+			html,body { width:100%; height:100vh; overflow:hidden; background:transparent; user-select:none; }
+			svg { fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+			.box { width:100%; height:100vh; min-height:200px; padding:12px 16px 12px; display:flex; flex-direction:column; gap:10px; position:relative; overflow:hidden;
+			  background:radial-gradient(90% 120% at 0% 0%, rgba(251,113,133,.10), transparent 55%), radial-gradient(80% 120% at 100% 100%, rgba(45,212,191,.10), transparent 55%), linear-gradient(135deg,#10172B,#16203D);
+			  border:1px solid #222C47; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.35); }
+			.box::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#FB7185,#F59E0B 35%,#2DD4BF 70%,transparent); }
+			.hdr { display:flex; align-items:center; justify-content:space-between; flex:0 0 auto; }
+			.hl { display:flex; align-items:center; gap:8px; min-width:0; }
+			.ttl { font-size:13px; font-weight:700; color:#F1F5F9; white-space:nowrap; }
+			.pill { background:rgba(251,113,133,.16); border:1px solid rgba(251,113,133,.35); color:#FDA4AF; font-size:8.5px; font-weight:800; padding:2px 8px; border-radius:999px; letter-spacing:.6px; white-space:nowrap; }
+			.hr { font-size:10.5px; color:#8B95B0; white-space:nowrap; }
+			.grid { flex:1 1 auto; min-height:150px; display:grid; grid-template-columns:1.05fr 1.6fr 1.15fr; gap:12px; }
+			.col { min-height:0; min-width:0; border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:8px; overflow:hidden; }
+			.c1 { background:radial-gradient(100% 80% at 50% 55%, rgba(251,113,133,.14), transparent 70%), rgba(251,113,133,.05); border:1px solid rgba(251,113,133,.28); }
+			.c2 { background:rgba(19,26,46,.65); border:1px solid #222C47; }
+			.c3 { background:rgba(45,212,191,.05); border:1px solid rgba(45,212,191,.25); }
+			.eye { font-size:9px; font-weight:800; letter-spacing:.9px; text-transform:uppercase; flex:0 0 auto; }
+			.ring { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; flex:1 1 auto; min-height:0; }
+			.donut { position:relative; width:122px; height:122px; flex:0 0 auto; filter:drop-shadow(0 0 14px rgba(251,113,133,.35)); }
+			.donut svg { width:100%; height:100%; transform:rotate(-90deg); stroke-width:10; }
+			.donut .v { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:25px; font-weight:900; color:#FB7185; letter-spacing:-.8px; line-height:1; }
+			.donut .v small { font-size:8px; font-weight:700; color:#94A3B8; letter-spacing:.7px; text-transform:uppercase; margin-top:4px; }
+			.lg { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; }
+			.lg .h { font-size:11.5px; font-weight:700; color:#E2E8F0; }
+			.lgr { display:flex; gap:12px; }
+			.lg .r { display:flex; align-items:center; gap:5px; font-size:10px; color:#94A3B8; font-weight:600; white-space:nowrap; }
+			.dot { width:8px; height:8px; border-radius:50%; flex:0 0 auto; }
+			.kp { display:grid; grid-template-columns:1fr 1fr; gap:10px; flex:0 0 auto; }
+			.k { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; background:linear-gradient(145deg, var(--g), rgba(15,23,42,.7)); border:1px solid var(--b); box-shadow:inset 0 1px 0 rgba(255,255,255,.05); }
+			.ki { flex:0 0 auto; width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--c); background:var(--g); border:1px solid var(--b); box-shadow:0 0 14px var(--g); }
+			.ki svg { width:17px; height:17px; }
+			.kv { font-size:24px; font-weight:900; line-height:1.05; letter-spacing:-.6px; color:var(--c); text-shadow:0 0 16px var(--g); white-space:nowrap; }
+			.kl { font-size:10px; color:#94A3B8; line-height:1.3; margin-top:2px; }
+			.kl b { color:#E2E8F0; }
+			.bars { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:12px; padding:10px 14px; border-radius:10px; background:rgba(10,17,37,.55); border:1px solid #1E2A47; }
+			.bar { display:grid; grid-template-columns:78px 1fr 52px; align-items:center; gap:10px; font-size:11px; color:#CBD5E1; font-weight:700; }
+			.bar .t { height:14px; background:#16213D; border-radius:999px; overflow:hidden; box-shadow:inset 0 1px 3px rgba(0,0,0,.5); }
+			.bar .t i { display:block; height:100%; border-radius:999px; }
+			.bar b { font-size:14px; font-weight:900; text-align:right; letter-spacing:-.3px; }
+			.ch { display:flex; align-items:center; gap:6px; flex:0 0 auto; flex-wrap:wrap; }
+			.chip { font-size:9.5px; font-weight:600; color:#CBD5E1; background:rgba(56,189,248,.10); border:1px solid rgba(56,189,248,.25); padding:2px 8px; border-radius:999px; }
+			.chip b { color:#38BDF8; }
+			.chip.g { background:rgba(52,211,153,.12); border-color:rgba(52,211,153,.35); color:#34D399; font-weight:800; }
+			.act { display:flex; flex-direction:column; gap:6px; flex:1 1 auto; min-height:0; }
+			.it { display:flex; gap:8px; align-items:flex-start; background:rgba(15,23,42,.55); border:1px solid rgba(45,212,191,.16); border-radius:8px; padding:5px 8px; }
+			.ic { flex:0 0 auto; width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; color:#2DD4BF; background:rgba(45,212,191,.14); border:1px solid rgba(45,212,191,.3); }
+			.ic svg { width:12px; height:12px; }
+			.it .a { font-size:10.5px; font-weight:700; color:#F1F5F9; }
+			.it .d { font-size:9.5px; color:#94A3B8; line-height:1.3; }
+			.it .d b { color:#2DD4BF; }
+			.btn { flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; padding:7px 12px; border-radius:8px; font-size:11px; font-weight:800; color:#042F2E;
+			  background:linear-gradient(135deg,#2DD4BF,#14B8A6); box-shadow:0 0 16px rgba(45,212,191,.35); }
+			.btn svg { width:14px; height:14px; stroke-width:2.5; }
+			.btn .l { display:flex; align-items:center; gap:6px; }
+			.sub { flex:0 0 auto; font-size:8.5px; color:#64748B; text-align:center; margin-top:-3px; }
+			</style></head><body><div class='box'>
+			<div class='hdr'><div class='hl'><div class='ttl'>Retention Opportunity Analysis &amp; Strategic Levers</div><div class='pill'>PRIORITY GROWTH OPPORTUNITY</div></div>
+			<div class='hr'>" & TotalBuyers & " Total Buyers &bull; $59.99 AOV &bull; 3-Year Baseline</div></div>
+			<div class='grid'>
+			<div class='col c1'><div class='eye' style='color:#FB7185'>The Attrition Deficit</div>
+			  <div class='ring'><div class='donut'><svg viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' stroke='#2DD4BF' opacity='.9'/><circle cx='50' cy='50' r='40' stroke='#FB7185' stroke-linecap='butt' stroke-dasharray='" & Arc & "'/></svg><div class='v'>" & OneTimePct & "<small>never returned</small></div></div>
+			  <div class='lg'><div class='lgr'>
+			  <div class='r'><span class='dot' style='background:#FB7185'></span>" & OneTimeBuyers & " one-time</div>
+			  <div class='r'><span class='dot' style='background:#2DD4BF'></span><b style='color:#2DD4BF'>" & RepeatBuyers & " repeat (" & RepeatPctStr & ")</b></div></div></div></div></div>
+			<div class='col c2'><div class='eye' style='color:#38BDF8'>Conversion Intent &amp; Unit Sensitivity</div>
+			  <div class='kp'>
+			  <div class='k' style='--c:#2DD4BF;--g:rgba(45,212,191,.14);--b:rgba(45,212,191,.35)'><div class='ki'><svg viewBox='0 0 24 24'><path d='M22 7l-8.5 8.5-5-5L2 17M16 7h6v6'/></svg></div><div><div class='kv'>+18% Lift</div><div class='kl'>Repeat sessions convert <b>7.83%</b> vs <b>6.64%</b> new</div></div></div>
+			  <div class='k' style='--c:#34D399;--g:rgba(52,211,153,.14);--b:rgba(52,211,153,.35)'><div class='ki'><svg viewBox='0 0 24 24'><path d='M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/></svg></div><div><div class='kv'>" & AddRevenue & "</div><div class='kl'>Per +1 pp repeat rate: <b>" & AddOrders & " orders</b> @ $59.99</div></div></div></div>
+			  <div class='bars'>
+			  <div class='bar'><span>Repeat CVR</span><div class='t'><i style='width:100%;background:linear-gradient(90deg,#0D9488,#2DD4BF);box-shadow:0 0 12px rgba(45,212,191,.55)'></i></div><b style='color:#2DD4BF'>7.83%</b></div>
+			  <div class='bar'><span>New CVR</span><div class='t'><i style='width:84.8%;background:linear-gradient(90deg,#475569,#94A3B8)'></i></div><b style='color:#94A3B8'>6.64%</b></div></div>
+			  <div class='ch'><span style='font-size:9.5px;color:#8B95B0;font-weight:600'>Repeat traffic via</span><span class='chip'>Brand <b>31%</b></span><span class='chip'>Direct <b>26%</b></span><span class='chip'>Organic <b>22%</b></span><span class='chip g'>zero marginal ad spend</span></div></div>
+			<div class='col c3'><div class='eye' style='color:#2DD4BF'>Action Playbook &amp; What-If</div>
+			  <div class='act'>
+			  <div class='it'><div class='ic'><svg viewBox='0 0 24 24'><rect x='3' y='5' width='18' height='14' rx='2'/><path d='M3 7l9 6 9-6'/></svg></div><div><div class='a'>Day 2-7 Lifecycle Trigger</div><div class='d'><b>40%</b> of repeat buyers return in week 1. Automate post-purchase emails.</div></div></div>
+			  <div class='it'><div class='ic'><svg viewBox='0 0 24 24'><path d='M12 3v18M3 12h18'/><circle cx='12' cy='12' r='9'/></svg></div><div><div class='a'>Product 4 Cross-Sell</div><div class='d'>Promote Mini Bear add-ons to lift multi-order basket frequency.</div></div></div></div>
+			  <div class='btn'><span class='l'><svg viewBox='0 0 24 24'><path d='M13 2L4 14h7l-1 8 9-12h-7l1-8z'/></svg>Open What-If Simulator</span><svg viewBox='0 0 24 24'><path d='M5 12h14M13 6l6 6-6 6'/></svg></div>
+			  <div class='sub'>Model scenario revenue upside on Page 7</div></div>
+			</div></div></body></html>"
+		lineageTag: 6d5e0a12-7732-4952-8ece-a011af6778a7
+
+	measure 'Header P6 HTML' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR oItems = CALCULATETABLE(VALUES(order_items[order_item_id]), TREATAS(sid, orders[website_session_id]))
+			
+			VAR grossRev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR cogs = CALCULATE(SUM(order_items[cogs_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR grossProfit = grossRev - cogs
+			VAR grossMargin = DIVIDE(grossProfit, grossRev, 0)
+			
+			VAR isCashBasis = SELECTEDVALUE(_Param_DateBasis[BasisID], 1) = 2
+			VAR basisLabel = IF(isCashBasis, "refund date", "order date")
+			
+			VAR totalRefunds =
+				IF(
+					isCashBasis,
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd])),
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR refundCount =
+				IF(
+					isCashBasis,
+					CALCULATE(COUNTROWS(order_item_refunds)),
+					CALCULATE(COUNTROWS(order_item_refunds), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR unitsSold = CALCULATE(COUNTROWS(order_items), TREATAS(sid, orders[website_session_id]))
+			VAR refundRate = DIVIDE(refundCount, unitsSold, 0)
+			
+			VAR netRev = grossRev - totalRefunds
+			VAR netProfit = grossProfit - totalRefunds
+			VAR netMargin = DIVIDE(netProfit, netRev, 0)
+			
+			VAR NetMarginStr = FORMAT(netMargin, "0.0%")
+			VAR RefundsStr = FORMAT(totalRefunds, "$#,0")
+			VAR GrossProfitStr =
+				IF(grossProfit >= 1000000,
+				   "$" & FORMAT(grossProfit / 1000000, "0.00") & "M",
+				   "$" & FORMAT(grossProfit / 1000, "#,0") & "K")
+			VAR NetProfitStr =
+				IF(netProfit >= 1000000,
+				   "$" & FORMAT(netProfit / 1000000, "0.00") & "M",
+				   "$" & FORMAT(netProfit / 1000, "#,0") & "K")
+			VAR GrossMarginStr = FORMAT(grossMargin, "0.0%")
+			VAR RefundRateStr = FORMAT(refundRate, "0.00%")
+			VAR RefundCountStr = FORMAT(refundCount, "#,0")
+			
+			VAR YearPart =
+				IF(
+					ISFILTERED(Dim_Date[Year]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>" & SELECTEDVALUE(Dim_Date[Year], "Multi-Year") & "</span>",
+					""
+				)
+			VAR ProdPart =
+				IF(
+					ISFILTERED(products[product_name]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#60A5FA;font-weight:700'>" & SELECTEDVALUE(products[Short Name], SELECTEDVALUE(products[product_name], "All Products")) & "</span>",
+					""
+				)
+			VAR BasisPart =
+				IF(
+					ISFILTERED(_Param_DateBasis[Basis]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#2DD4BF;font-weight:700'>" & SELECTEDVALUE(_Param_DateBasis[Basis], "Cohort") & "</span>",
+					""
+				)
+			VAR DevicePart =
+				IF(
+					ISFILTERED(website_sessions[Device]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#FBBF24;font-weight:700'>" & SELECTEDVALUE(website_sessions[Device], "All Devices") & "</span>",
+					""
+				)
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .hdr-wrap { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 2px 4px; }
+			  .hdr-title { font-size: 22px; font-weight: 800; color: #F8FAFC; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 3px; }
+			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
 			</style>
-			</head>
-			<body>
-			  <div class='callout-box'>
-			    <div class='hdr-row'>
-			      <div class='hdr-left'>
-			        <div class='b-badge'>9</div>
-			        <div class='b-title'>Retention Opportunity Analysis &amp; Strategic Levers</div>
-			        <div class='pill-danger'>PRIORITY GROWTH OPPORTUNITY</div>
-			      </div>
-			      <div class='b-right'>" & TotalBuyers & " Total Buyers &bull; $59.99 AOV &bull; 3-Year Historical Baseline</div>
+			<div class='hdr-wrap'>
+			  <div class='hdr-title'>Financial health <span style='color:#475569'>&bull;</span> net margin <span style='color:#2DD4BF;font-weight:800'>" & NetMarginStr & "</span> <span style='color:#475569'>&bull;</span> refunds <span style='color:#FB7185;font-weight:800'>" & RefundsStr & "</span> by " & basisLabel & YearPart & ProdPart & BasisPart & DevicePart & "</div>
+			  <div class='hdr-sub'>" & NetProfitStr & " net profit (" & NetMarginStr & " net margin) &bull; " & GrossProfitStr & " gross profit (" & GrossMarginStr & " GM) &bull; " & RefundCountStr & " refunds (" & RefundRateStr & " rate) &bull; data through 19 Mar 2015</div>
+			</div>"
+		displayFolder: 08 Page 6 - Financial
+		lineageTag: d81b4dd6-a0ed-4810-b507-a51ca91aa309
+
+	measure 'KPI Strip P6 HTML' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR oItems = CALCULATETABLE(VALUES(order_items[order_item_id]), TREATAS(sid, orders[website_session_id]))
+			
+			VAR grossRev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR cogs = CALCULATE(SUM(order_items[cogs_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR grossProfit = grossRev - cogs
+			VAR grossMargin = DIVIDE(grossProfit, grossRev, 0)
+			
+			VAR isCashBasis = SELECTEDVALUE(_Param_DateBasis[BasisID], 1) = 2
+			VAR totalRefunds =
+				IF(
+					isCashBasis,
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd])),
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR refundCount =
+				IF(
+					isCashBasis,
+					CALCULATE(COUNTROWS(order_item_refunds)),
+					CALCULATE(COUNTROWS(order_item_refunds), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR unitsSold = CALCULATE(COUNTROWS(order_items), TREATAS(sid, orders[website_session_id]))
+			VAR refundRate = DIVIDE(refundCount, unitsSold, 0)
+			
+			VAR netRev = grossRev - totalRefunds
+			VAR netProfit = grossProfit - totalRefunds
+			VAR netMargin = DIVIDE(netProfit, netRev, 0)
+			
+			VAR avgLag =
+				IF(
+					isCashBasis,
+					CALCULATE(AVERAGE(order_item_refunds[Lag Days])),
+					CALCULATE(AVERAGE(order_item_refunds[Lag Days]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR minLag =
+				IF(
+					isCashBasis,
+					CALCULATE(MIN(order_item_refunds[Lag Days])),
+					CALCULATE(MIN(order_item_refunds[Lag Days]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR maxLag =
+				IF(
+					isCashBasis,
+					CALCULATE(MAX(order_item_refunds[Lag Days])),
+					CALCULATE(MAX(order_item_refunds[Lag Days]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			
+			VAR card1Val = IF(ISBLANK(grossMargin), "-", FORMAT(grossMargin, "0.00%"))
+			VAR card1Sub = "61.0%–63.4% range"
+			
+			VAR card2Val = IF(ISBLANK(netProfit), "-", IF(netProfit >= 1000000, "$" & FORMAT(netProfit / 1000000, "0.00") & "M", "$" & FORMAT(netProfit / 1000, "#,0") & "K"))
+			VAR card2Sub = "gross profit − refunds"
+			
+			VAR card3Val = IF(ISBLANK(netMargin), "-", FORMAT(netMargin, "0.00%"))
+			VAR card3Sub = "on net revenue"
+			
+			VAR card4Val = IF(ISBLANK(totalRefunds), "-", IF(totalRefunds >= 1000000, "$" & FORMAT(totalRefunds / 1000000, "0.00") & "M", "$" & FORMAT(totalRefunds / 1000, "0.0") & "K"))
+			VAR card4Sub = FORMAT(refundCount, "#,0") & " items"
+			
+			VAR card5Val = IF(ISBLANK(refundRate), "-", FORMAT(refundRate, "0.00%"))
+			VAR card5Sub = "by units"
+			
+			VAR card6Val = IF(ISBLANK(avgLag), "-", FORMAT(ROUND(avgLag, 1), "0.0") & " days")
+			VAR card6Sub = IF(ISBLANK(avgLag), "range N/A", "range " & minLag & "–" & maxLag)
+			
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; width: 100%; height: 100%; }
+			  .kpi-card {
+			    position: relative; overflow: hidden; min-width: 0; height: 100%;
+			    padding: 14px 16px 12px 18px; border-radius: 12px;
+			    display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 10px;
+			    background: radial-gradient(120% 100% at 100% 0%, var(--glow), transparent 62%),
+			                linear-gradient(160deg, #151F3F 0%, #0A1125 100%);
+			    border: 1px solid rgba(255,255,255,0.08);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 20px rgba(0,0,0,0.35);
+			    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+			  }
+			  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
+			    background: linear-gradient(90deg, var(--acc), transparent 85%); }
+			  .kpi-card:hover { border-color: var(--acc); transform: translateY(-1px);
+			    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 22px var(--glow); }
+			  .kpi-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 5px; }
+			  .kpi-label { font-size:10px; color:#8FA0BC; font-weight:700; text-transform:uppercase;
+			    letter-spacing:0.8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-value { font-size: clamp(20px, 2.1vw, 29px); font-weight:800; color:var(--val-col, #F8FAFC); line-height:1.05;
+			    letter-spacing:-.6px; font-variant-numeric:tabular-nums; white-space:nowrap;
+			    overflow:hidden; text-overflow:ellipsis; text-shadow: 0 0 18px var(--glow); }
+			  .kpi-sub { max-width:100%; font-size:10px; font-weight:600; color:#94A3B8;
+			    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			  .kpi-ico { flex: none; width: 40px; height: 40px; border-radius: 11px;
+			    display: flex; align-items: center; justify-content: center; color: var(--acc);
+			    background: linear-gradient(145deg, var(--soft), rgba(255,255,255,0.02));
+			    border: 1px solid var(--line); box-shadow: 0 0 16px var(--soft), inset 0 1px 0 rgba(255,255,255,0.08); }
+			  .kpi-ico svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8;
+			    stroke-linecap: round; stroke-linejoin: round; }
+			  @media (max-width: 900px) {
+			    .kpi-ico { width: 30px; height: 30px; border-radius: 8px; }
+			    .kpi-ico svg { width: 15px; height: 15px; }
+			  }
+			</style>
+			<div class='kpi-grid'>
+			
+			  <!-- CARD 1: GROSS MARGIN -->
+			  <div class='kpi-card' style='--acc:#34D399;--glow:rgba(52,211,153,.16);--soft:rgba(52,211,153,.14);--line:rgba(52,211,153,.38);--val-col:#34D399;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>GROSS MARGIN</div>
+			      <div class='kpi-value'>" & card1Val & "</div>
+			      <div class='kpi-sub'>" & card1Sub & "</div>
 			    </div>
-			    <div class='grid-3col'>
-			      <!-- Pillar 1: The Leak -->
-			      <div class='col-card col-leak'>
-			        <div>
-			          <div class='col-eye' style='color:#FB7185'>THE ATTRITION DEFICIT</div>
-			          <div class='leak-stat'>" & OneTimePct & "</div>
-			          <div class='leak-lbl'>of buyers never returned</div>
-			        </div>
-			        <div>
-			          <div class='gauge-track'>
-			            <div class='gauge-red'></div>
-			            <div class='gauge-green'></div>
-			          </div>
-			          <div class='leak-meta'>
-			            <span>" & OneTimeBuyers & " 1-time</span>
-			            <b style='color:#2DD4BF'>" & RepeatBuyers & " repeat (1.9%)</b>
-			          </div>
-			        </div>
-			      </div>
-			      <!-- Pillar 2: Core Economics -->
-			      <div class='col-card col-econ'>
-			        <div class='col-eye' style='color:#38BDF8'>CONVERSION INTENT &amp; UNIT SENSITIVITY</div>
-			        <div class='econ-kpis'>
-			          <div class='econ-kpi'>
-			            <div class='kpi-val' style='color:#2DD4BF'>+18% Lift</div>
-			            <div class='kpi-lbl'>Repeat sessions convert at <b>7.83%</b> vs <b>6.64%</b> new.</div>
-			          </div>
-			          <div class='econ-kpi'>
-			            <div class='kpi-val' style='color:#34D399'>" & AddRevenue & "</div>
-			            <div class='kpi-lbl'>Per +1 pp repeat rate: <b>" & AddOrders & " orders</b> at $59.99.</div>
-			          </div>
-			        </div>
-			        <div class='exec-narrative'>
-			          New visits are heavily paid search, but repeat sessions return organically via <b>Brand (31%)</b>, <b>Direct (26%)</b>, and <b>Organic (22%)</b> at <i>zero marginal ad spend</i>. Retention is Fuzzy Factory's highest-margin profit multiplier.
-			        </div>
-			      </div>
-			      <!-- Pillar 3: Tactical Action & What-If -->
-			      <div class='col-card col-act'>
-			        <div class='col-eye' style='color:#2DD4BF'>ACTION PLAYBOOK &amp; WHAT-IF</div>
-			        <div class='act-list'>
-			          <div class='act-item'>
-			            <div class='act-title'>✉️ Day 2–7 Lifecycle Trigger</div>
-			            <div class='act-desc'><b>40%</b> of repeat buyers return in week 1. Trigger automated post-purchase emails.</div>
-			          </div>
-			          <div class='act-item'>
-			            <div class='act-title'>🧸 Product 4 Cross-Sell</div>
-			            <div class='act-desc'>Promote Mini Bear add-ons to increase multi-order basket frequency.</div>
-			          </div>
-			        </div>
-			        <div class='btn-wrap'>
-			          <a class='sim-btn' href='#' onclick='return false;'>
-			            <span>⚡ Open What-If Simulator</span>
-			            <span class='sim-arrow'>&rarr;</span>
-			          </a>
-			          <div class='sim-sub'>Model scenario revenue upside on Page 7</div>
-			        </div>
-			      </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><polyline points='22 7 13.5 15.5 8.5 10.5 2 17'/><polyline points='16 7 22 7 22 13'/></svg></div>
+			  </div>
+			
+			  <!-- CARD 2: NET PROFIT -->
+			  <div class='kpi-card' style='--acc:#2DD4BF;--glow:rgba(45,212,191,.16);--soft:rgba(45,212,191,.14);--line:rgba(45,212,191,.38);--val-col:#2DD4BF;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>NET PROFIT</div>
+			      <div class='kpi-value'>" & card2Val & "</div>
+			      <div class='kpi-sub'>" & card2Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><rect x='2' y='6' width='20' height='12' rx='2'/><circle cx='12' cy='12' r='2.5'/><path d='M6 12h.01M18 12h.01'/></svg></div>
+			  </div>
+			
+			  <!-- CARD 3: NET MARGIN -->
+			  <div class='kpi-card' style='--acc:#38BDF8;--glow:rgba(56,189,248,.16);--soft:rgba(56,189,248,.14);--line:rgba(56,189,248,.38);--val-col:#38BDF8;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>NET MARGIN</div>
+			      <div class='kpi-value'>" & card3Val & "</div>
+			      <div class='kpi-sub'>" & card3Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><path d='M12 2a10 10 0 0 1 10 10'/><path d='m4.93 4.93 4.24 4.24'/><circle cx='12' cy='12' r='2'/></svg></div>
+			  </div>
+			
+			  <!-- CARD 4: REFUNDS -->
+			  <div class='kpi-card' style='--acc:#FB7185;--glow:rgba(251,113,133,.16);--soft:rgba(251,113,133,.14);--line:rgba(251,113,133,.38);--val-col:#FB7185;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>REFUNDS</div>
+			      <div class='kpi-value'>" & card4Val & "</div>
+			      <div class='kpi-sub'>" & card4Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M9 14l-4-4 4-4'/><path d='M5 10h11a4 4 0 1 1 0 8h-1'/></svg></div>
+			  </div>
+			
+			  <!-- CARD 5: REFUND RATE -->
+			  <div class='kpi-card' style='--acc:#F87171;--glow:rgba(248,113,113,.16);--soft:rgba(248,113,113,.14);--line:rgba(248,113,113,.38);--val-col:#F87171;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>REFUND RATE</div>
+			      <div class='kpi-value'>" & card5Val & "</div>
+			      <div class='kpi-sub'>" & card5Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/><line x1='12' y1='8' x2='12' y2='12'/><line x1='12' y1='16' x2='12.01' y2='16'/></svg></div>
+			  </div>
+			
+			  <!-- CARD 6: AVG REFUND LAG -->
+			  <div class='kpi-card' style='--acc:#FBBF24;--glow:rgba(251,191,36,.16);--soft:rgba(251,191,36,.14);--line:rgba(251,191,36,.38);--val-col:#FBBF24;'>
+			    <div class='kpi-txt'>
+			      <div class='kpi-label'>AVG REFUND LAG</div>
+			      <div class='kpi-value'>" & card6Val & "</div>
+			      <div class='kpi-sub'>" & card6Sub & "</div>
+			    </div>
+			    <div class='kpi-ico'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><polyline points='12 6 12 12 16 14'/></svg></div>
+			  </div>
+			
+			</div>"
+		displayFolder: 08 Page 6 - Financial
+		lineageTag: 7e75c62a-618c-4417-8376-9ad794708390
+
+	measure 'Refund Monitor Color' =
+			VAR pRate = [Product Refund Rate %]
+			VAR avgRate = 0.043248
+			RETURN IF(pRate >= avgRate, "#FB7185", "#34D399")
+		displayFolder: 08 Page 6 - Financial
+		lineageTag: e91706c4-b9d5-4d78-951d-26f06136a050
+
+	measure 'Bridge Amount' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR oItems = CALCULATETABLE(VALUES(order_items[order_item_id]), TREATAS(sid, orders[website_session_id]))
+			VAR grossRev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR cogs = CALCULATE(SUM(order_items[cogs_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR grossProfit = grossRev - cogs
+			VAR isCashBasis = SELECTEDVALUE(_Param_DateBasis[BasisID], 1) = 2
+			VAR totalRefunds =
+				IF(
+					isCashBasis,
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd])),
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR netProfit = grossProfit - totalRefunds
+			VAR step = SELECTEDVALUE(_Dim_MarginBridge[StepID], 1)
+			RETURN
+				SWITCH(
+					step,
+					1, grossRev,
+					2, cogs,
+					3, grossProfit,
+					4, totalRefunds,
+					5, netProfit,
+					BLANK()
+				)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 08 Page 6 - Financial\Margin Bridge
+		lineageTag: 33882b4c-a7a0-427f-a961-bb10c056f5b1
+
+	measure 'Bridge Base' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR oItems = CALCULATETABLE(VALUES(order_items[order_item_id]), TREATAS(sid, orders[website_session_id]))
+			VAR grossRev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR cogs = CALCULATE(SUM(order_items[cogs_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR grossProfit = grossRev - cogs
+			VAR isCashBasis = SELECTEDVALUE(_Param_DateBasis[BasisID], 1) = 2
+			VAR totalRefunds =
+				IF(
+					isCashBasis,
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd])),
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR netProfit = grossProfit - totalRefunds
+			VAR step = SELECTEDVALUE(_Dim_MarginBridge[StepID], 1)
+			RETURN
+				SWITCH(
+					step,
+					1, 0,
+					2, grossProfit,
+					3, 0,
+					4, netProfit,
+					5, 0,
+					0
+				)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 08 Page 6 - Financial\Margin Bridge
+		lineageTag: ec80cd7c-ba64-4407-85aa-8ae510f0cf13
+
+	measure 'Bridge Label' =
+			VAR val = [Bridge Amount]
+			VAR step = SELECTEDVALUE(_Dim_MarginBridge[StepID], 1)
+			VAR prefix = IF(step = 2 || step = 4, "-$", "$")
+			RETURN
+				IF(
+					ISBLANK(val),
+					BLANK(),
+					IF(
+						val >= 1000000,
+						prefix & FORMAT(val / 1000000, "0.00") & "M",
+						prefix & FORMAT(val / 1000, "#,0") & "K"
+					)
+				)
+		displayFolder: 08 Page 6 - Financial\Margin Bridge
+		lineageTag: 03818bbc-71eb-4de1-aa40-7298eeb35164
+
+	measure 'Bridge Addition' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR oItems = CALCULATETABLE(VALUES(order_items[order_item_id]), TREATAS(sid, orders[website_session_id]))
+			VAR grossRev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR cogs = CALCULATE(SUM(order_items[cogs_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR grossProfit = grossRev - cogs
+			VAR isCashBasis = SELECTEDVALUE(_Param_DateBasis[BasisID], 1) = 2
+			VAR totalRefunds =
+				IF(
+					isCashBasis,
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd])),
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR netProfit = grossProfit - totalRefunds
+			VAR step = SELECTEDVALUE(_Dim_MarginBridge[StepID], 1)
+			RETURN
+				SWITCH(
+					step,
+					1, grossRev,
+					3, grossProfit,
+					5, netProfit,
+					BLANK()
+				)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 08 Page 6 - Financial\Margin Bridge
+		lineageTag: 44993c5d-b8b1-438a-9a72-cc21d167f6c2
+
+	measure 'Bridge Deduction' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR oItems = CALCULATETABLE(VALUES(order_items[order_item_id]), TREATAS(sid, orders[website_session_id]))
+			VAR cogs = CALCULATE(SUM(order_items[cogs_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR isCashBasis = SELECTEDVALUE(_Param_DateBasis[BasisID], 1) = 2
+			VAR totalRefunds =
+				IF(
+					isCashBasis,
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd])),
+					CALCULATE(SUM(order_item_refunds[refund_amount_usd]), TREATAS(oItems, order_item_refunds[order_item_id]))
+				)
+			VAR step = SELECTEDVALUE(_Dim_MarginBridge[StepID], 1)
+			RETURN
+				SWITCH(
+					step,
+					2, cogs,
+					4, totalRefunds,
+					BLANK()
+				)
+		formatString: -\$#,0.00;-\$#,0.00;-\$#,0.00
+		displayFolder: 08 Page 6 - Financial\Margin Bridge
+		lineageTag: 55aa4d6e-c9c2-449b-ab83-dd32e278a7d3
+
+	measure 'CVR Lift Value' =
+			IF(
+				ISFILTERED(_Param_CVR_Tuning[Label]),
+				SELECTEDVALUE(_Param_CVR_Tuning[Value], 0.10),
+				IF(
+					ISFILTERED(_Param_CVR_Lift[Value]),
+					COALESCE(SELECTEDVALUE(_Param_CVR_Lift[Value]), MAX(_Param_CVR_Lift[Value])),
+					VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
+					RETURN
+						SWITCH(
+							p,
+							"Conservative", 0.05,
+							"Base", 0.10,
+							"Stretch", 0.20,
+							0.10
+						)
+				)
+			)
+		formatString: +0%;-0%;0%
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: a7b1c2d3-e4f5-4678-90ab-cdef12345670
+
+	measure 'XSell Uplift Value' =
+			IF(
+				ISFILTERED(_Param_Attach_Tuning[Label]),
+				SELECTEDVALUE(_Param_Attach_Tuning[Value], 0.08),
+				IF(
+					ISFILTERED(_Param_Attach[Value]),
+					COALESCE(SELECTEDVALUE(_Param_Attach[Value]), MAX(_Param_Attach[Value])),
+					VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
+					RETURN
+						SWITCH(
+							p,
+							"Conservative", 0.03,
+							"Base", 0.08,
+							"Stretch", 0.15,
+							0.08
+						)
+				)
+			)
+		formatString: +0 "pp";-0 "pp";0 "pp"
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: b8c2d3e4-f5a6-4789-01bc-def234567891
+
+	measure 'Refund Reduction Value' =
+			IF(
+				ISFILTERED(_Param_Refund_Tuning[Label]),
+				SELECTEDVALUE(_Param_Refund_Tuning[Value], 0.20),
+				IF(
+					ISFILTERED(_Param_Refund_Cut[Value]),
+					ABS(COALESCE(SELECTEDVALUE(_Param_Refund_Cut[Value]), MAX(_Param_Refund_Cut[Value]))),
+					VAR p = SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders")
+					RETURN
+						SWITCH(
+							p,
+							"Conservative", 0.10,
+							"Base", 0.20,
+							"Stretch", 0.35,
+							0.20
+						)
+				)
+			)
+		formatString: +0%;-0%;0%
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: c9d3e4f5-a6b7-4890-12cd-ef3456789012
+
+	measure 'Avg Cross-Sell Price' =
+			VAR xsellRev = CALCULATE(SUM(order_items[price_usd]), order_items[is_primary_item] = 0)
+			VAR xsellUnits = CALCULATE(COUNTROWS(order_items), order_items[is_primary_item] = 0)
+			RETURN DIVIDE(xsellRev, xsellUnits, 38.78)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: d0e4f5a6-b7c8-4901-23de-f45678901234
+
+	measure 'Refund Rate $' = DIVIDE([Total Refunds], [Gross Revenue], 0.044)
+		formatString: 0.00%
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: e1f5a6b7-c8d9-4012-34ef-567890123456
+
+	measure 'Scn Orders' = [Total Orders] * (1 + [CVR Lift Value])
+		formatString: #,0
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: f2a6b7c8-d9e0-4123-45f0-678901234567
+
+	measure 'Scn CVR Revenue' = [Total Orders] * [CVR Lift Value] * [Average Order Value]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: a3b7c8d9-e0f1-4234-56a1-789012345678
+
+	measure 'Scn Cross-Sell Revenue' = [Scn Orders] * [XSell Uplift Value] * [Avg Cross-Sell Price]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: b4c8d9e0-f1a2-4345-67b2-890123456789
+
+	measure 'Scn Incr Refunds' = ([Scn CVR Revenue] + [Scn Cross-Sell Revenue]) * [Refund Rate $]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: c5d9e0f1-a2b3-4456-78c3-901234567890
+
+	measure 'Scn Refund Savings' = ([Total Refunds] + [Scn Incr Refunds]) * [Refund Reduction Value]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: d6e0f1a2-b3c4-4567-89d4-012345678901
+
+	measure 'Scn Net Revenue' = [Net Revenue] + [Scn CVR Revenue] + [Scn Cross-Sell Revenue] - [Scn Incr Refunds] + [Scn Refund Savings]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: e7f1a2b3-c4d5-4678-90e5-123456789012
+
+	measure 'Scn Net Revenue Delta' = [Scn Net Revenue] - [Net Revenue]
+		formatString: +\$#,0;-\$#,0;\$0
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: f8a2b3c4-d5e6-4789-01f6-234567890123
+
+	measure 'Scn CVR' = DIVIDE([Scn Orders], [Total Sessions], 0)
+		formatString: 0.00%
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: a9b3c4d5-e6f7-4890-12a7-345678901234
+
+	measure 'Header P7 HTML' =
+			VAR sid = CALCULATETABLE(VALUES(website_sessions[website_session_id]))
+			VAR grossRev = CALCULATE(SUM(order_items[price_usd]), TREATAS(sid, orders[website_session_id]))
+			VAR netRev = CALCULATE([Net Revenue], TREATAS(sid, orders[website_session_id]))
+			VAR totalOrders = CALCULATE([Total Orders], TREATAS(sid, orders[website_session_id]))
+			VAR cvrVal = CALCULATE([Conversion Rate %], TREATAS(sid, orders[website_session_id]))
+			
+			VAR delta = [Scn Net Revenue Delta]
+			VAR deltaStr =
+				IF(
+					ABS(delta) >= 1000000,
+					(IF(delta >= 0, "+$", "-$") & FORMAT(ABS(delta) / 1000000, "0.00") & "M"),
+					IF(
+						ABS(delta) >= 1000,
+						(IF(delta >= 0, "+$", "-$") & FORMAT(ABS(delta) / 1000, "#,0") & "K"),
+						IF(delta >= 0, "+$", "-$") & FORMAT(ABS(delta), "#,0")
+					)
+				)
+			VAR deltaColor = IF(delta >= 0, "#2DD4BF", "#FB7185")
+			VAR upsideText =
+				IF(
+					delta = 0,
+					"net revenue upside vs baseline",
+					"<span style='color:" & deltaColor & ";font-weight:800'>" & deltaStr & "</span> net revenue upside vs baseline"
+				)
+			
+			VAR cvrLiftVal = [CVR Lift Value]
+			VAR attachVal = [XSell Uplift Value]
+			VAR refCutVal = [Refund Reduction Value]
+			
+			VAR cvrPart =
+				IF(
+					cvrLiftVal <> 0,
+					" <span style='color:#475569'>&bull;</span> <span style='color:#38BDF8;font-weight:700'>CVR " & IF(cvrLiftVal > 0, "+", "") & FORMAT(cvrLiftVal, "0%") & "</span>",
+					""
+				)
+			VAR attachPoints = ROUND(attachVal * 100, 0)
+			VAR attachPart =
+				IF(
+					attachVal <> 0,
+					" <span style='color:#475569'>&bull;</span> <span style='color:#FBBF24;font-weight:700'>Attach " & IF(attachPoints >= 0, "+", "") & FORMAT(attachPoints, "0") & " pp</span>",
+					""
+				)
+			VAR refundPart =
+				IF(
+					refCutVal <> 0,
+					" <span style='color:#475569'>&bull;</span> <span style='color:#FB7185;font-weight:700'>Refunds -" & FORMAT(refCutVal, "0%") & "</span>",
+					""
+				)
+			VAR targetPart =
+				IF(
+					ISFILTERED(_Param_Target[TargetName]),
+					" <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>" & SELECTEDVALUE(_Param_Target[TargetName]) & "</span>",
+					""
+				)
+			
+			VAR baselineNetRevStr =
+				IF(netRev >= 1000000,
+				   "$" & FORMAT(netRev / 1000000, "0.00") & "M",
+				   "$" & FORMAT(netRev / 1000, "#,0") & "K")
+			VAR baselineCVRStr = FORMAT(cvrVal, "0.00%")
+			VAR scnCVRStr = FORMAT([Scn CVR], "0.00%")
+			VAR scnOrdersStr = FORMAT([Scn Orders], "#,0")
+			
+			VAR subStats =
+				IF(
+					delta <> 0,
+					" &bull; scenario net rev <b style='color:#2DD4BF'>" & IF([Scn Net Revenue] >= 1000000, "$" & FORMAT([Scn Net Revenue] / 1000000, "0.00") & "M", "$" & FORMAT([Scn Net Revenue] / 1000, "#,0") & "K") & "</b> &bull; scn CVR <b style='color:#38BDF8'>" & scnCVRStr & "</b> &bull; orders <b style='color:#F8FAFC'>" & scnOrdersStr & "</b>",
+					""
+				)
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .hdr-wrap { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 2px 4px; }
+			  .hdr-title { font-size: 22px; font-weight: 800; color: #F8FAFC; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 3px; }
+			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
+			</style>
+			<div class='hdr-wrap'>
+			  <div class='hdr-title'>What-if <span style='color:#475569'>&bull;</span> " & upsideText & cvrPart & attachPart & refundPart & targetPart & "</div>
+			  <div class='hdr-sub'>Sample output of the dynamic title measure &bull; data through 19 Mar 2015" & subStats & "</div>
+			</div>"
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: b0c4d5e6-f7a8-4901-23b8-456789012345
+
+	measure 'Selected Benchmark Mode' = SELECTEDVALUE(_Param_BenchmarkTarget[ModeID], 1)
+		formatString: 0
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: da123456-7890-4abc-def1-234567890123
+
+	measure 'Benchmark CVR Target' =
+			VAR m = [Selected Benchmark Mode]
+			RETURN
+				SWITCH(
+					m,
+					1, 0.075,
+					2, 0.0722,
+					3, 0.050,
+					0.075
+				)
+		formatString: 0.00%
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: eb234567-8901-4bcd-ef12-345678901234
+
+	measure 'Benchmark Target Name' = SELECTEDVALUE(_Param_BenchmarkTarget[ModeName], "Company budget")
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: fc345678-9012-4cde-f123-456789012345
+
+	measure 'Scn Gross Revenue' = [Gross Revenue] + [Scn CVR Revenue] + [Scn Cross-Sell Revenue]
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: e8f1a2b3-c4d5-4678-90e5-123456789099
+
+	measure 'Scn Gross Revenue Delta' = [Scn Gross Revenue] - [Gross Revenue]
+		formatString: +\$#,0;-\$#,0;\$0
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: e9f1a2b3-c4d5-4678-90e5-123456789098
+
+	measure 'Scn Orders Delta' = [Scn Orders] - [Total Orders]
+		formatString: +#,0;-#,0;0
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: eaf1a2b3-c4d5-4678-90e5-123456789097
+
+	measure 'Baseline Summary P7 HTML' =
+			VAR baseOrders = [Total Orders]
+			VAR baseGross = [Gross Revenue]
+			VAR baseNet = [Net Revenue]
+			VAR baseCVR = [Conversion Rate %]
+			VAR baseAOV = [Average Order Value]
+			VAR baseAttach = [Cross-Sell Attach %]
+			VAR baseRefundRate = [Refund Rate %]
+			VAR avgXSellPrice = [Avg Cross-Sell Price]
+			
+			VAR cvrLift = [CVR Lift Value]
+			VAR xsellUplift = [XSell Uplift Value]
+			VAR refCut = [Refund Reduction Value]
+			
+			VAR scnOrders = [Scn Orders]
+			VAR scnOrdersDelta = scnOrders - baseOrders
+			VAR scnNetRev = [Scn Net Revenue]
+			VAR scnNetDelta = [Scn Net Revenue Delta]
+			VAR scnCVR = [Scn CVR]
+			
+			VAR cvrGain = [Scn CVR Revenue]
+			VAR xsellGain = [Scn Cross-Sell Revenue]
+			VAR netRefGain = [Scn Refund Savings] - [Scn Incr Refunds]
+			
+			VAR cvrGainStr = IF(cvrGain >= 1000, "+$" & FORMAT(cvrGain / 1000, "#,0") & "K", "+$" & FORMAT(cvrGain, "#,0"))
+			VAR xsellGainStr = IF(xsellGain >= 1000, "+$" & FORMAT(xsellGain / 1000, "#,0") & "K", "+$" & FORMAT(xsellGain, "#,0"))
+			VAR refGainStr = IF(netRefGain >= 0, "+$", "-$") & IF(ABS(netRefGain) >= 1000, FORMAT(ABS(netRefGain) / 1000, "#,0") & "K", FORMAT(ABS(netRefGain), "#,0"))
+			
+			VAR cvrBps = ROUND((scnCVR - baseCVR) * 10000, 0)
+			VAR cvrBpsStr = IF(cvrBps >= 0, "+", "") & FORMAT(cvrBps, "#,0") & " bps"
+			
+			VAR presetName =
+				IF(
+					ISFILTERED(_Param_ScenarioPreset[Preset]),
+					SELECTEDVALUE(_Param_ScenarioPreset[Preset], "Custom sliders"),
+					"Custom sliders"
+				)
+			VAR isTuningActive = ISFILTERED(_Param_CVR_Tuning[Label]) || ISFILTERED(_Param_Attach_Tuning[Label]) || ISFILTERED(_Param_Refund_Tuning[Label])
+			VAR isPresetActive = presetName <> "Custom sliders"
+			VAR badgeLabel = IF(isTuningActive, "CUSTOM TUNED", IF(isPresetActive, UPPER(presetName), "CUSTOM SLIDERS"))
+			VAR badgeColor = IF(isTuningActive, "#38BDF8", IF(isPresetActive, "#2DD4BF", "#38BDF8"))
+			
+			VAR cvrStr = IF(cvrLift >= 0, "+", "") & FORMAT(cvrLift, "0%")
+			VAR cvrPct = MAX(4, MIN(96, (cvrLift - (-0.20)) / 0.70 * 100))
+			
+			VAR attachVal = ROUND(xsellUplift * 100, 0)
+			VAR attachStr = IF(attachVal >= 0, "+", "") & FORMAT(attachVal, "0") & " pp"
+			VAR attachPct = MAX(4, MIN(96, xsellUplift / 0.40 * 100))
+			
+			VAR refCutStr = IF(refCut >= 0, "+", "") & FORMAT(refCut, "0%")
+			VAR refCutPct = MAX(4, MIN(96, refCut / 0.50 * 100))
+			
+			VAR netDeltaStr =
+				IF(
+					ABS(scnNetDelta) >= 1000000,
+					(IF(scnNetDelta >= 0, "+$", "-$") & FORMAT(ABS(scnNetDelta) / 1000000, "0.00") & "M"),
+					IF(
+						ABS(scnNetDelta) >= 1000,
+						(IF(scnNetDelta >= 0, "+$", "-$") & FORMAT(ABS(scnNetDelta) / 1000, "#,0") & "K"),
+						IF(scnNetDelta >= 0, "+$", "-$") & FORMAT(ABS(scnNetDelta), "#,0")
+					)
+				)
+			VAR netPctGrowth = DIVIDE(scnNetDelta, baseNet, 0)
+			VAR totGain = MAX(1, ABS(cvrGain) + ABS(xsellGain) + ABS(netRefGain))
+			VAR cvrShare = FORMAT(ABS(cvrGain) / totGain * 100, "0")
+			VAR attShare = FORMAT(ABS(xsellGain) / totGain * 100, "0")
+			VAR refShare = FORMAT(ABS(netRefGain) / totGain * 100, "0")
+			VAR growthStr = IF(netPctGrowth >= 0, "+", "") & FORMAT(netPctGrowth, "0.0%")
+			
+			VAR basePct = MIN(100, DIVIDE(baseNet, scnNetRev, 1) * 100)
+			VAR basePctStr = FORMAT(basePct, "0.0")
+			VAR upPctStr = FORMAT(100 - basePct, "0.0")
+			VAR baseNetStr = "$" & FORMAT(baseNet / 1000000, "0.00") & "M"
+			
+			RETURN
+			
+			"<style>
+			* { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI Variable','Segoe UI',-apple-system,sans-serif; }
+			html,body { width:100%; height:100vh; overflow:hidden; background:transparent; user-select:none; }
+			svg { fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+			.wrap { width:100%; height:100vh; min-height:420px; padding:16px 18px; display:flex; flex-direction:column; gap:12px; position:relative; overflow:hidden;
+			  background:radial-gradient(90% 50% at 100% 0%, rgba(56,189,248,.14), transparent 60%), radial-gradient(90% 50% at 0% 100%, rgba(45,212,191,.14), transparent 60%), linear-gradient(180deg,#0F1730,#0A1020);
+			  border:1px solid #1D2749; border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.5); }
+			.wrap::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#38BDF8,#FBBF24 50%,#34D399); }
+			.hdr { display:flex; align-items:center; justify-content:space-between; flex:0 0 auto; }
+			.hl { display:flex; align-items:center; gap:10px; }
+			.hi { width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#2DD4BF; background:rgba(45,212,191,.14); border:1px solid rgba(45,212,191,.35); box-shadow:0 0 16px rgba(45,212,191,.3); }
+			.hi svg { width:17px; height:17px; }
+			.ht { font-size:15px; font-weight:800; color:#F8FAFC; letter-spacing:-.2px; line-height:1.1; }
+			.hs { font-size:9.5px; color:#64748B; font-weight:600; margin-top:2px; }
+			.badge { padding:4px 11px; border-radius:999px; font-size:9.5px; font-weight:800; letter-spacing:.7px; background:" & badgeColor & "20; color:" & badgeColor & "; border:1px solid " & badgeColor & "60; box-shadow:0 0 14px " & badgeColor & "30; }
+			.sl { display:flex; flex-direction:column; gap:12px; flex:0 0 auto; }
+			.s { padding:10px 12px; border-radius:11px; background:rgba(19,29,61,.45); border:1px solid #1E2A4D; }
+			.sm { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+			.sl-l { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:600; color:#CBD5E1; }
+			.sl-l i { width:7px; height:7px; border-radius:50%; background:var(--c); box-shadow:0 0 8px var(--c); }
+			.sv { font-size:17px; font-weight:900; color:var(--c); letter-spacing:-.3px; text-shadow:0 0 14px var(--c); }
+			.tw { position:relative; height:18px; display:flex; align-items:center; }
+			.tb { position:absolute; left:0; right:0; height:8px; border-radius:999px; background:#16213D; box-shadow:inset 0 1px 3px rgba(0,0,0,.6); }
+			.tk { position:absolute; left:0; right:0; height:8px; border-radius:999px; background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), rgba(255,255,255,.08) calc(10% - 1px) 10%); }
+			.tf { position:absolute; left:0; height:8px; border-radius:999px; background:linear-gradient(90deg, color-mix(in srgb,var(--c) 45%,#0A1020), var(--c)); box-shadow:0 0 12px var(--c); }
+			.th { position:absolute; top:50%; width:20px; height:20px; border-radius:50%; transform:translate(-50%,-50%); background:radial-gradient(circle at 35% 30%, #fff, var(--c) 60%); border:2px solid #0F1730; box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent), 0 0 14px var(--c); }
+			.dr { flex:0 0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+			.d { padding:9px 10px; border-radius:11px; background:linear-gradient(150deg, color-mix(in srgb,var(--c) 14%,transparent), rgba(15,23,42,.6)); border:1px solid color-mix(in srgb,var(--c) 35%,transparent); }
+			.dl { display:flex; align-items:center; gap:5px; font-size:9px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:.5px; }
+			.dl svg { width:11px; height:11px; color:var(--c); }
+			.dv { font-size:18px; font-weight:900; color:var(--c); margin:3px 0 6px; letter-spacing:-.4px; text-shadow:0 0 14px color-mix(in srgb,var(--c) 50%,transparent); }
+			.db { height:4px; border-radius:999px; background:#16213D; overflow:hidden; }
+			.db i { display:block; height:100%; border-radius:999px; background:var(--c); }
+			.dp { font-size:8.5px; color:#64748B; font-weight:600; margin-top:3px; }
+			.bs { flex:0 0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+			.bc { padding:6px 8px; border-radius:8px; background:rgba(10,17,37,.6); border:1px solid #1B2645; text-align:center; }
+			.bc span { display:block; font-size:8.5px; color:#64748B; font-weight:700; letter-spacing:.5px; text-transform:uppercase; }
+			.bc b { font-size:12.5px; color:#E2E8F0; font-weight:800; }
+			.bt { flex:0 0 auto; font-size:9.5px; font-weight:800; color:#8B95B0; letter-spacing:.8px; text-transform:uppercase; margin-bottom:-6px; }
+			.hero { flex:1 1 auto; min-height:110px; padding:14px 16px; border-radius:14px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden;
+			  background:radial-gradient(80% 100% at 100% 0%, rgba(45,212,191,.28), transparent 60%), linear-gradient(135deg, rgba(20,184,166,.16), rgba(15,23,48,.9));
+			  border:1px solid rgba(45,212,191,.45); box-shadow:0 0 26px rgba(45,212,191,.18), inset 0 1px 0 rgba(255,255,255,.07); }
+			.ht2 { display:flex; justify-content:space-between; align-items:flex-start; }
+			.hl2 { font-size:10px; font-weight:800; color:#94A3B8; letter-spacing:.9px; text-transform:uppercase; }
+			.gp { padding:3px 10px; border-radius:999px; font-size:11px; font-weight:800; color:#34D399; background:rgba(52,211,153,.14); border:1px solid rgba(52,211,153,.4); }
+			.hv { font-size:40px; font-weight:900; line-height:1; letter-spacing:-1.5px; color:#2DD4BF; text-shadow:0 0 24px rgba(45,212,191,.55); margin:6px 0; }
+			.mx { margin:2px 0 0; }
+			.mxl { display:flex; justify-content:space-between; font-size:9px; font-weight:800; color:#8B95B0; letter-spacing:.7px; text-transform:uppercase; margin-bottom:5px; }
+			.mxb { display:flex; gap:3px; height:12px; }
+			.mxb i { display:block; height:100%; border-radius:999px; min-width:6px; box-shadow:0 0 10px rgba(255,255,255,.12); }
+			.lgd { display:flex; justify-content:space-between; margin-top:5px; font-size:9.5px; font-weight:700; color:#94A3B8; }
+			.lgd u { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; text-decoration:none; }
+			.bd { display:flex; height:16px; border-radius:999px; overflow:hidden; background:#16213D; box-shadow:inset 0 1px 3px rgba(0,0,0,.6); }
+			.bd i { display:block; height:100%; }
+			.bdl { display:flex; justify-content:space-between; margin-top:5px; font-size:9.5px; font-weight:700; color:#94A3B8; }
+			.bdl b { color:#F8FAFC; }
+			.hm { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+			.hm div { padding:6px 8px; border-radius:8px; background:rgba(8,13,28,.55); border:1px solid rgba(255,255,255,.06); font-size:8.5px; color:#64748B; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+			.hm b { display:block; font-size:13px; color:#F8FAFC; font-weight:800; letter-spacing:0; text-transform:none; margin-top:1px; }
+			.hm small { font-size:9.5px; font-weight:700; }
+			.ft { flex:0 0 auto; display:flex; align-items:center; gap:7px; font-size:9.5px; color:#64748B; }
+			.pd { width:7px; height:7px; border-radius:50%; background:#2DD4BF; box-shadow:0 0 0 0 rgba(45,212,191,.7); animation:p 2s infinite; }
+			@keyframes p { 70% { box-shadow:0 0 0 7px rgba(45,212,191,0); } 100% { box-shadow:0 0 0 0 rgba(45,212,191,0); } }
+			</style>
+			<div class='wrap'>
+			<div class='hdr'><div class='hl'><div class='hi'><svg viewBox='0 0 24 24'><path d='M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6'/></svg></div>
+			<div><div class='ht'>What-if controls</div><div class='hs'>Scenario simulator</div></div></div>
+			<span class='badge'>" & badgeLabel & "</span></div>
+			
+			<div class='sl'>
+			<div class='s' style='--c:#38BDF8'><div class='sm'><span class='sl-l'><i></i>CVR lift (relative)</span><span class='sv'>" & cvrStr & "</span></div>
+			<div class='tw'><div class='tb'></div><div class='tf' style='width:" & FORMAT(cvrPct, "0.0") & "%'></div><div class='tk'></div><div class='th' style='left:" & FORMAT(cvrPct, "0.0") & "%'></div></div></div>
+			<div class='s' style='--c:#FBBF24'><div class='sm'><span class='sl-l'><i></i>Cross-sell attach uplift</span><span class='sv'>" & attachStr & "</span></div>
+			<div class='tw'><div class='tb'></div><div class='tf' style='width:" & FORMAT(attachPct, "0.0") & "%'></div><div class='tk'></div><div class='th' style='left:" & FORMAT(attachPct, "0.0") & "%'></div></div></div>
+			<div class='s' style='--c:#34D399'><div class='sm'><span class='sl-l'><i></i>Refund reduction (relative)</span><span class='sv'>" & refCutStr & "</span></div>
+			<div class='tw'><div class='tb'></div><div class='tf' style='width:" & FORMAT(refCutPct, "0.0") & "%'></div><div class='tk'></div><div class='th' style='left:" & FORMAT(refCutPct, "0.0") & "%'></div></div></div>
+			</div>
+			
+			<div class='dr'>
+			<div class='d' style='--c:#38BDF8'><div class='dl'><svg viewBox='0 0 24 24'><path d='M22 7l-8.5 8.5-5-5L2 17M16 7h6v6'/></svg>CVR lift</div><div class='dv'>" & cvrGainStr & "</div><div class='db'><i style='width:" & cvrShare & "%'></i></div><div class='dp'>" & cvrShare & "% of upside</div></div>
+			<div class='d' style='--c:#FBBF24'><div class='dl'><svg viewBox='0 0 24 24'><circle cx='9' cy='20' r='1.5'/><circle cx='18' cy='20' r='1.5'/><path d='M2 3h3l2.7 11.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 7H6'/></svg>Attach</div><div class='dv'>" & xsellGainStr & "</div><div class='db'><i style='width:" & attShare & "%'></i></div><div class='dp'>" & attShare & "% of upside</div></div>
+			<div class='d' style='--c:#34D399'><div class='dl'><svg viewBox='0 0 24 24'><path d='M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5'/></svg>Refund cut</div><div class='dv'>" & refGainStr & "</div><div class='db'><i style='width:" & refShare & "%'></i></div><div class='dp'>" & refShare & "% of upside</div></div>
+			</div>
+			
+			<div class='bt'>Baseline (full period)</div>
+			<div class='bs'>
+			<div class='bc'><span>CVR</span><b>" & FORMAT(baseCVR, "0.00%") & "</b></div>
+			<div class='bc'><span>AOV</span><b>$" & FORMAT(baseAOV, "0.00") & "</b></div>
+			<div class='bc'><span>Attach</span><b>" & FORMAT(baseAttach, "0.00%") & "</b></div>
+			<div class='bc'><span>Refunds</span><b>" & FORMAT(baseRefundRate, "0.00%") & "</b></div>
+			</div>
+			
+			<div class='hero'>
+			<div><div class='ht2'><span class='hl2'>Scenario net upside</span><span class='gp'>" & growthStr & " vs base</span></div>
+			<div class='hv'>" & netDeltaStr & "</div></div>
+			
+			<div class='mx'><div class='mxl'><span>Upside mix</span><span>Share of gain</span></div>
+			<div class='mxb'><i style='flex:" & cvrShare & ";background:linear-gradient(90deg,#0EA5E9,#38BDF8)'></i><i style='flex:" & attShare & ";background:linear-gradient(90deg,#F59E0B,#FBBF24)'></i><i style='flex:" & refShare & ";background:linear-gradient(90deg,#10B981,#34D399)'></i></div>
+			<div class='lgd'><span><u style='background:#38BDF8'></u>CVR " & cvrShare & "%</span><span><u style='background:#FBBF24'></u>Attach " & attShare & "%</span><span><u style='background:#34D399'></u>Refund " & refShare & "%</span></div></div>
+			
+			<div class='mx'><div class='mxl'><span>Net revenue build</span><span>Baseline + upside</span></div>
+			<div class='bd'><i style='width:" & basePctStr & "%;background:linear-gradient(90deg,#334155,#64748B)'></i><i style='width:" & upPctStr & "%;background:linear-gradient(90deg,#14B8A6,#2DD4BF);box-shadow:0 0 14px rgba(45,212,191,.8)'></i></div>
+			<div class='bdl'><span>Base <b>" & baseNetStr & "</b></span><span>Scenario <b style='color:#2DD4BF'>$" & FORMAT(scnNetRev / 1000000, "0.00") & "M</b></span></div></div>
+			
+			<div class='hm'>
+			<div>Net revenue<b>$" & FORMAT(scnNetRev / 1000000, "0.00") & "M</b></div>
+			<div>Scenario CVR<b style='color:#38BDF8'>" & FORMAT(scnCVR, "0.00%") & " <small>" & cvrBpsStr & "</small></b></div>
+			<div>Orders<b>" & FORMAT(scnOrders, "#,0") & " <small style='color:#2DD4BF'>" & IF(scnOrdersDelta >= 0, "+", "") & FORMAT(scnOrdersDelta, "#,0") & "</small></b></div>
+			</div></div>
+			
+			<div class='ft'><div class='pd'></div><span>Active simulation &bull; data through 19 Mar 2015</span></div>
+			</div>"
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: ebf1a2b3-c4d5-4678-90e5-123456789096
+
+	measure 'Scenario KPI Strip P7 HTML' =
+			VAR baseOrders = [Total Orders]
+			VAR scnOrders = [Scn Orders]
+			VAR deltaOrders = scnOrders - baseOrders
+			VAR pctOrders = DIVIDE(deltaOrders, baseOrders, 0)
+			
+			VAR baseGross = [Gross Revenue]
+			VAR scnGross = [Scn Gross Revenue]
+			VAR deltaGross = scnGross - baseGross
+			VAR pctGross = DIVIDE(deltaGross, baseGross, 0)
+			
+			VAR baseNet = [Net Revenue]
+			VAR scnNet = [Scn Net Revenue]
+			VAR deltaNet = scnNet - baseNet
+			VAR pctNet = DIVIDE(deltaNet, baseNet, 0)
+			
+			VAR baseCVR = [Conversion Rate %]
+			VAR scnCVR = [Scn CVR]
+			VAR bpsCVR = ROUND((scnCVR - baseCVR) * 10000, 0)
+			
+			VAR scnOrdersStr = FORMAT(scnOrders, "#,0")
+			VAR baseOrdersStr = FORMAT(baseOrders, "#,0")
+			VAR deltaOrdersStr = IF(deltaOrders >= 0, "+", "") & FORMAT(deltaOrders, "#,0")
+			VAR pctOrdersStr = IF(pctOrders >= 0, "+", "") & FORMAT(pctOrders, "0.0%")
+			
+			VAR scnGrossStr = "$" & FORMAT(scnGross / 1000000, "0.00") & "M"
+			VAR baseGrossStr = "$" & FORMAT(baseGross / 1000000, "0.00") & "M"
+			VAR deltaGrossStr =
+				IF(
+					ABS(deltaGross) >= 1000000,
+					IF(deltaGross >= 0, "+$", "-$") & FORMAT(ABS(deltaGross) / 1000000, "0.00") & "M",
+					IF(
+						ABS(deltaGross) >= 1000,
+						IF(deltaGross >= 0, "+$", "-$") & FORMAT(ABS(deltaGross) / 1000, "#,0") & "K",
+						IF(deltaGross >= 0, "+$", "-$") & FORMAT(ABS(deltaGross), "#,0")
+					)
+				)
+			VAR pctGrossStr = IF(pctGross >= 0, "+", "") & FORMAT(pctGross, "0.0%")
+			
+			VAR scnNetStr = "$" & FORMAT(scnNet / 1000000, "0.00") & "M"
+			VAR baseNetStr = "$" & FORMAT(baseNet / 1000000, "0.00") & "M"
+			VAR deltaNetStr =
+				IF(
+					ABS(deltaNet) >= 1000000,
+					IF(deltaNet >= 0, "+$", "-$") & FORMAT(ABS(deltaNet) / 1000000, "0.00") & "M",
+					IF(
+						ABS(deltaNet) >= 1000,
+						IF(deltaNet >= 0, "+$", "-$") & FORMAT(ABS(deltaNet) / 1000, "#,0") & "K",
+						IF(deltaNet >= 0, "+$", "-$") & FORMAT(ABS(deltaNet), "#,0")
+					)
+				)
+			VAR pctNetStr = IF(pctNet >= 0, "+", "") & FORMAT(pctNet, "0.0%")
+			
+			VAR scnCVRStr = FORMAT(scnCVR, "0.00%")
+			VAR baseCVRStr = FORMAT(baseCVR, "0.00%")
+			VAR bpsCVRStr = IF(bpsCVR >= 0, "+", "") & FORMAT(bpsCVR, "#,0") & " bps"
+			
+			VAR tgtCVR = [Benchmark CVR Target]
+			VAR tgtName = [Benchmark Target Name]
+			VAR tgtDiffBps = ROUND((scnCVR - tgtCVR) * 10000, 0)
+			VAR tgtDiffStr = IF(tgtDiffBps >= 0, "+", "") & FORMAT(tgtDiffBps, "#,0") & " bps"
+			VAR tgtColor = IF(tgtDiffBps >= 0, "#10B981", "#FB7185")
+			
+			RETURN
+			"<style>
+			* { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI Variable','Segoe UI',-apple-system,sans-serif; }
+			html,body { width:100%; height:100vh; overflow:hidden; background:transparent; user-select:none; }
+			svg { fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+			.cards-grid { width:100%; height:100vh; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+			.card { height:100%; border-radius:14px; padding:13px 16px 14px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden;
+			  background:radial-gradient(110% 80% at 100% 0%, color-mix(in srgb,var(--c) 12%,transparent), transparent 70%), linear-gradient(180deg,#0F1730,#0A1020);
+			  border:1px solid #1D2749; border-top:3px solid var(--c);
+			  box-shadow:0 8px 22px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
+			  transition:transform .18s ease, border-color .18s ease; }
+			.card:hover { transform:translateY(-2px); border-color:var(--c); }
+			.hd { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+			.hl { display:flex; align-items:center; gap:9px; min-width:0; }
+			.ico { flex:0 0 auto; width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; color:var(--c);
+			  background:color-mix(in srgb,var(--c) 14%,transparent); border:1px solid color-mix(in srgb,var(--c) 35%,transparent); }
+			.ico svg { width:16px; height:16px; }
+			.lbl { font-size:10.5px; font-weight:750; color:#8B95B0; letter-spacing:.7px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+			.pill { flex:0 0 auto; display:flex; align-items:center; gap:3px; font-size:9.5px; font-weight:800; padding:3px 8px; border-radius:999px; color:var(--c);
+			  background:color-mix(in srgb,var(--c) 14%,transparent); border:1px solid color-mix(in srgb,var(--c) 35%,transparent); }
+			.pill svg { width:9px; height:9px; stroke-width:3; }
+			.val { font-size:30px; font-weight:900; color:var(--c); letter-spacing:-.8px; line-height:1.1; margin:4px 0 2px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+			.sub { display:flex; align-items:center; gap:7px; font-size:11px; font-weight:600; color:#94A3B8; padding-top:8px; border-top:1px solid rgba(255,255,255,.06); }
+			.sub em { font-style:normal; font-size:8.5px; font-weight:700; color:#64748B; letter-spacing:.6px; text-transform:uppercase; }
+			.sub .dl { font-weight:800; color:var(--c); margin-left:auto; }
+			</style>
+			<div class='cards-grid'>
+			
+			<div class='card' style='--c:#10B981'>
+			  <div class='hd'><div class='hl'><div class='ico'><svg viewBox='0 0 24 24'><path d='M21 8l-9-5-9 5v8l9 5 9-5V8z'/><path d='M3 8l9 5 9-5M12 13v8'/></svg></div><span class='lbl'>Orders</span></div>
+			  <span class='pill'><svg viewBox='0 0 24 24'><path d='M12 19V5M5 12l7-7 7 7'/></svg>" & pctOrdersStr & "</span></div>
+			  <div class='val'>" & scnOrdersStr & "</div>
+			  <div class='sub'><em>Base</em><span>" & baseOrdersStr & "</span><span class='dl'>" & deltaOrdersStr & "</span></div>
+			</div>
+			
+			<div class='card' style='--c:#3B82F6'>
+			  <div class='hd'><div class='hl'><div class='ico'><svg viewBox='0 0 24 24'><rect x='2' y='6' width='20' height='12' rx='2'/><circle cx='12' cy='12' r='3'/><path d='M6 12h.01M18 12h.01'/></svg></div><span class='lbl'>Gross revenue</span></div>
+			  <span class='pill'><svg viewBox='0 0 24 24'><path d='M12 19V5M5 12l7-7 7 7'/></svg>" & pctGrossStr & "</span></div>
+			  <div class='val'>" & scnGrossStr & "</div>
+			  <div class='sub'><em>Base</em><span>" & baseGrossStr & "</span><span class='dl'>" & deltaGrossStr & "</span></div>
+			</div>
+			
+			<div class='card' style='--c:#2DD4BF'>
+			  <div class='hd'><div class='hl'><div class='ico'><svg viewBox='0 0 24 24'><circle cx='8' cy='8' r='6'/><path d='M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4M16.71 13.88l.7.71-2.82 2.82'/></svg></div><span class='lbl'>Net revenue</span></div>
+			  <span class='pill'><svg viewBox='0 0 24 24'><path d='M12 19V5M5 12l7-7 7 7'/></svg>" & pctNetStr & "</span></div>
+			  <div class='val'>" & scnNetStr & "</div>
+			  <div class='sub'><em>Base</em><span>" & baseNetStr & "</span><span class='dl'>" & deltaNetStr & "</span></div>
+			</div>
+			
+			<div class='card' style='--c:#F59E0B'>
+			  <div class='hd'><div class='hl'><div class='ico'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><circle cx='12' cy='12' r='6'/><circle cx='12' cy='12' r='2'/></svg></div><span class='lbl'>Scenario CVR</span></div>
+			  <span class='pill'><svg viewBox='0 0 24 24'><path d='M12 19V5M5 12l7-7 7 7'/></svg>" & bpsCVRStr & "</span></div>
+			  <div class='val'>" & scnCVRStr & "</div>
+			  <div class='sub'><em>Base</em><span>" & baseCVRStr & "</span><span class='dl' style='color:" & tgtColor & "'>vs " & tgtName & " " & tgtDiffStr & "</span></div>
+			</div>
+			
+			</div>"
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: f1a2b3c4-d5e6-4789-a012-345678901234
+
+	measure 'What-If Deep Dive P7 HTML' =
+			VAR baseOrders = [Total Orders]
+			VAR baseGross = [Gross Revenue]
+			VAR baseNet = [Net Revenue]
+			VAR baseCVR = [Conversion Rate %]
+			VAR baseAOV = [Average Order Value]
+			VAR avgPrice = [Avg Cross-Sell Price]
+			VAR baseRefunds = [Total Refunds]
+			VAR refCutVal = [Refund Reduction Value]
+			VAR rfRate = [Refund Rate $]
+			
+			VAR cvrLift = [CVR Lift Value]
+			VAR xsellUplift = [XSell Uplift Value]
+			
+			VAR scnOrders = [Scn Orders]
+			VAR scnNet = [Scn Net Revenue]
+			VAR scnCVR = [Scn CVR]
+			
+			VAR cvrGain = [Scn CVR Revenue]
+			VAR xsellGain = [Scn Cross-Sell Revenue]
+			VAR incrRef = [Scn Incr Refunds]
+			VAR refSav = [Scn Refund Savings]
+			VAR netRefVal = refSav - incrRef
+			
+			VAR tgtCVR = [Benchmark CVR Target]
+			VAR tgtName = [Benchmark Target Name]
+			VAR tgtDiffPp = (scnCVR - tgtCVR) * 100
+			VAR tgtDiffBps = ROUND((scnCVR - tgtCVR) * 10000, 0)
+			VAR tgtColor = IF(tgtDiffBps >= 0, "#10B981", "#FB7185")
+			
+			-- Q1: WATERFALL VALUES (5-Bar 1:1 Lever Bridge: Baseline -> CVR Lift -> Cross-sell -> Refund Cut -> Scenario)
+			VAR baseNetFmt = "$" & FORMAT(baseNet / 1000000, "0.00") & "M"
+			VAR cvrGainFmt = IF(cvrGain >= 1000, "+$" & FORMAT(cvrGain / 1000, "#,0") & "K", "+$" & FORMAT(cvrGain, "#,0"))
+			VAR xsellGainFmt = IF(xsellGain >= 1000, "+$" & FORMAT(xsellGain / 1000, "#,0") & "K", "+$" & FORMAT(xsellGain, "#,0"))
+			VAR scnNetFmt = "$" & FORMAT(scnNet / 1000000, "0.00") & "M"
+			VAR netRefFmt = IF(netRefVal >= 0, "+$", "-$") & IF(ABS(netRefVal) >= 1000, FORMAT(ABS(netRefVal) / 1000, "0.0") & "K", FORMAT(ABS(netRefVal), "#,0"))
+			VAR netRefColor = IF(netRefVal >= 0, "#34D399", "#FB7185")
+			VAR netRefGrad = IF(netRefVal >= 0, "url(#gGrad)", "url(#rGrad)")
+			
+			VAR wfFloor = baseNet * 0.40
+			VAR wfCeil = MAX(baseNet, scnNet) * 1.08
+			VAR wfRange = MAX(1000.0, wfCeil - wfFloor)
+			VAR wfH = 215.0
+			VAR wfYBase = 245.0
+			
+			-- Bar 1: Base
+			VAR y1 = ROUND(wfYBase - (baseNet - wfFloor) / wfRange * wfH, 1)
+			VAR h1 = ROUND(wfYBase - y1, 1)
+			
+			-- Bar 2: CVR Lift (bridges up)
+			VAR y2_top = ROUND(y1 - (cvrGain / wfRange * wfH), 1)
+			VAR h2 = ROUND(MAX(4.0, y1 - y2_top), 1)
+			
+			-- Bar 3: Cross-sell Attach (bridges up)
+			VAR y3_top = ROUND(y2_top - (xsellGain / wfRange * wfH), 1)
+			VAR h3 = ROUND(MAX(4.0, y2_top - y3_top), 1)
+			
+			-- Bar 4: Refund Cut / Net Impact (bridges up if positive, down if negative)
+			VAR y4_top = IF(netRefVal >= 0, ROUND(y3_top - (netRefVal / wfRange * wfH), 1), y3_top)
+			VAR h4 = ROUND(MAX(4.0, ABS(netRefVal) / wfRange * wfH), 1)
+			VAR y4_bot = y4_top + h4
+			VAR y4_next = IF(netRefVal >= 0, y4_top, y4_bot)
+			
+			-- Bar 5: Scenario
+			VAR y5 = ROUND(wfYBase - (scnNet - wfFloor) / wfRange * wfH, 1)
+			VAR h5 = ROUND(wfYBase - y5, 1)
+			
+			-- Q2: DYNAMIC LEVER IMPACT (Filtered in real-time by active sliders)
+			VAR maxImpact = MAX(1000.0, MAX(ABS(cvrGain), MAX(ABS(xsellGain), ABS(netRefVal))))
+			VAR cvrBarPct = MIN(100.0, MAX(6.0, DIVIDE(ABS(cvrGain), maxImpact, 0) * 100))
+			VAR xsellBarPct = MIN(100.0, MAX(6.0, DIVIDE(ABS(xsellGain), maxImpact, 0) * 100))
+			VAR refBarPct = MIN(100.0, MAX(6.0, DIVIDE(ABS(netRefVal), maxImpact, 0) * 100))
+			
+			VAR cvrLbl = "CVR lift (" & IF(cvrLift >= 0, "+", "") & FORMAT(cvrLift, "0%") & ")"
+			VAR xsellValPp = ROUND(xsellUplift * 100, 0)
+			VAR xsellLbl = "Cross-sell (" & IF(xsellValPp >= 0, "+", "") & FORMAT(xsellValPp, "0") & " pp)"
+			VAR refCutPctVal = ROUND(refCutVal * 100, 0)
+			VAR refLbl = "Refund cut (" & IF(refCutPctVal >= 0, "-", "+") & FORMAT(ABS(refCutPctVal), "0") & "%)"
+			
+			VAR cvrValFmt = IF(cvrGain >= 0, "+$", "-$") & IF(ABS(cvrGain) >= 1000, FORMAT(ABS(cvrGain) / 1000, "#,0") & "K", FORMAT(ABS(cvrGain), "#,0"))
+			VAR xsellValFmt = IF(xsellGain >= 0, "+$", "-$") & IF(ABS(xsellGain) >= 1000, FORMAT(ABS(xsellGain) / 1000, "#,0") & "K", FORMAT(ABS(xsellGain), "#,0"))
+			VAR refValFmt = IF(netRefVal >= 0, "+$", "-$") & IF(ABS(netRefVal) >= 1000, FORMAT(ABS(netRefVal) / 1000, "0.0") & "K", FORMAT(ABS(netRefVal), "#,0"))
+			
+			VAR totNetUpside = cvrGain + xsellGain + netRefVal
+			VAR totNetUpsideFmt = IF(totNetUpside >= 0, "+$", "-$") & IF(ABS(totNetUpside) >= 1000000, FORMAT(ABS(totNetUpside) / 1000000, "0.00") & "M", IF(ABS(totNetUpside) >= 1000, FORMAT(ABS(totNetUpside) / 1000, "#,0") & "K", FORMAT(ABS(totNetUpside), "#,0")))
+			
+			-- Q3: SENSITIVITY GRID (5x5)
+			VAR o0 = baseOrders
+			VAR o1 = baseOrders * 1.10
+			VAR o2 = baseOrders * 1.20
+			VAR o3 = baseOrders * 1.30
+			VAR o4 = baseOrders * 1.40
+			
+			VAR cg0 = 0.0
+			VAR cg1 = baseOrders * 0.10 * baseAOV
+			VAR cg2 = baseOrders * 0.20 * baseAOV
+			VAR cg3 = baseOrders * 0.30 * baseAOV
+			VAR cg4 = baseOrders * 0.40 * baseAOV
+			
+			-- Row 0: xs = 0.00
+			VAR g00 = cg0 + (0) - ((cg0 + 0) * rfRate) + ((baseRefunds + (cg0 + 0) * rfRate) * refCutVal)
+			VAR g01 = cg1 + (0) - ((cg1 + 0) * rfRate) + ((baseRefunds + (cg1 + 0) * rfRate) * refCutVal)
+			VAR g02 = cg2 + (0) - ((cg2 + 0) * rfRate) + ((baseRefunds + (cg2 + 0) * rfRate) * refCutVal)
+			VAR g03 = cg3 + (0) - ((cg3 + 0) * rfRate) + ((baseRefunds + (cg3 + 0) * rfRate) * refCutVal)
+			VAR g04 = cg4 + (0) - ((cg4 + 0) * rfRate) + ((baseRefunds + (cg4 + 0) * rfRate) * refCutVal)
+			
+			-- Row 1: xs = 0.05
+			VAR g10 = cg0 + (o0 * 0.05 * avgPrice) - ((cg0 + o0 * 0.05 * avgPrice) * rfRate) + ((baseRefunds + (cg0 + o0 * 0.05 * avgPrice) * rfRate) * refCutVal)
+			VAR g11 = cg1 + (o1 * 0.05 * avgPrice) - ((cg1 + o1 * 0.05 * avgPrice) * rfRate) + ((baseRefunds + (cg1 + o1 * 0.05 * avgPrice) * rfRate) * refCutVal)
+			VAR g12 = cg2 + (o2 * 0.05 * avgPrice) - ((cg2 + o2 * 0.05 * avgPrice) * rfRate) + ((baseRefunds + (cg2 + o2 * 0.05 * avgPrice) * rfRate) * refCutVal)
+			VAR g13 = cg3 + (o3 * 0.05 * avgPrice) - ((cg3 + o3 * 0.05 * avgPrice) * rfRate) + ((baseRefunds + (cg3 + o3 * 0.05 * avgPrice) * rfRate) * refCutVal)
+			VAR g14 = cg4 + (o4 * 0.05 * avgPrice) - ((cg4 + o4 * 0.05 * avgPrice) * rfRate) + ((baseRefunds + (cg4 + o4 * 0.05 * avgPrice) * rfRate) * refCutVal)
+			
+			-- Row 2: xs = 0.10
+			VAR g20 = cg0 + (o0 * 0.10 * avgPrice) - ((cg0 + o0 * 0.10 * avgPrice) * rfRate) + ((baseRefunds + (cg0 + o0 * 0.10 * avgPrice) * rfRate) * refCutVal)
+			VAR g21 = cg1 + (o1 * 0.10 * avgPrice) - ((cg1 + o1 * 0.10 * avgPrice) * rfRate) + ((baseRefunds + (cg1 + o1 * 0.10 * avgPrice) * rfRate) * refCutVal)
+			VAR g22 = cg2 + (o2 * 0.10 * avgPrice) - ((cg2 + o2 * 0.10 * avgPrice) * rfRate) + ((baseRefunds + (cg2 + o2 * 0.10 * avgPrice) * rfRate) * refCutVal)
+			VAR g23 = cg3 + (o3 * 0.10 * avgPrice) - ((cg3 + o3 * 0.10 * avgPrice) * rfRate) + ((baseRefunds + (cg3 + o3 * 0.10 * avgPrice) * rfRate) * refCutVal)
+			VAR g24 = cg4 + (o4 * 0.10 * avgPrice) - ((cg4 + o4 * 0.10 * avgPrice) * rfRate) + ((baseRefunds + (cg4 + o4 * 0.10 * avgPrice) * rfRate) * refCutVal)
+			
+			-- Row 3: xs = 0.15
+			VAR g30 = cg0 + (o0 * 0.15 * avgPrice) - ((cg0 + o0 * 0.15 * avgPrice) * rfRate) + ((baseRefunds + (cg0 + o0 * 0.15 * avgPrice) * rfRate) * refCutVal)
+			VAR g31 = cg1 + (o1 * 0.15 * avgPrice) - ((cg1 + o1 * 0.15 * avgPrice) * rfRate) + ((baseRefunds + (cg1 + o1 * 0.15 * avgPrice) * rfRate) * refCutVal)
+			VAR g32 = cg2 + (o2 * 0.15 * avgPrice) - ((cg2 + o2 * 0.15 * avgPrice) * rfRate) + ((baseRefunds + (cg2 + o2 * 0.15 * avgPrice) * rfRate) * refCutVal)
+			VAR g33 = cg3 + (o3 * 0.15 * avgPrice) - ((cg3 + o3 * 0.15 * avgPrice) * rfRate) + ((baseRefunds + (cg3 + o3 * 0.15 * avgPrice) * rfRate) * refCutVal)
+			VAR g34 = cg4 + (o4 * 0.15 * avgPrice) - ((cg4 + o4 * 0.15 * avgPrice) * rfRate) + ((baseRefunds + (cg4 + o4 * 0.15 * avgPrice) * rfRate) * refCutVal)
+			
+			-- Row 4: xs = 0.20
+			VAR g40 = cg0 + (o0 * 0.20 * avgPrice) - ((cg0 + o0 * 0.20 * avgPrice) * rfRate) + ((baseRefunds + (cg0 + o0 * 0.20 * avgPrice) * rfRate) * refCutVal)
+			VAR g41 = cg1 + (o1 * 0.20 * avgPrice) - ((cg1 + o1 * 0.20 * avgPrice) * rfRate) + ((baseRefunds + (cg1 + o1 * 0.20 * avgPrice) * rfRate) * refCutVal)
+			VAR g42 = cg2 + (o2 * 0.20 * avgPrice) - ((cg2 + o2 * 0.20 * avgPrice) * rfRate) + ((baseRefunds + (cg2 + o2 * 0.20 * avgPrice) * rfRate) * refCutVal)
+			VAR g43 = cg3 + (o3 * 0.20 * avgPrice) - ((cg3 + o3 * 0.20 * avgPrice) * rfRate) + ((baseRefunds + (cg3 + o3 * 0.20 * avgPrice) * rfRate) * refCutVal)
+			VAR g44 = cg4 + (o4 * 0.20 * avgPrice) - ((cg4 + o4 * 0.20 * avgPrice) * rfRate) + ((baseRefunds + (cg4 + o4 * 0.20 * avgPrice) * rfRate) * refCutVal)
+			
+			VAR maxG = MAX(1000.0, g44)
+			VAR minG = MIN(0.0, g00)
+			VAR gRange = maxG - minG
+			
+			-- Active cell index
+			VAR actCol = ROUND(cvrLift / 0.10, 0)
+			VAR actRow = ROUND(xsellUplift / 0.05, 0)
+			
+			-- Q4: BULLET GRAPH
+			VAR bMin = 0.040
+			VAR bMax = 0.095
+			VAR bRange = bMax - bMin
+			
+			VAR baseCVRPct = MIN(100, MAX(0, (baseCVR - bMin) / bRange * 100))
+			VAR scnCVRPct = MIN(100, MAX(0, (scnCVR - bMin) / bRange * 100))
+			VAR tgtCVRPct = MIN(100, MAX(0, (tgtCVR - bMin) / bRange * 100))
+			
+			VAR baseCVRFmt = FORMAT(baseCVR, "0.00%")
+			VAR scnCVRFmt = FORMAT(scnCVR, "0.00%")
+			VAR tgtCVRFmt = FORMAT(tgtCVR, "0.00%")
+			VAR tgtDeltaFmt = IF(tgtDiffPp >= 0, "+", "") & FORMAT(tgtDiffPp, "0.00") & " pp vs target"
+			
+			RETURN
+			"<style>
+			* { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI Variable','Segoe UI',-apple-system,sans-serif; }
+			html,body { width:100%; height:100vh; overflow:hidden; background:transparent; user-select:none; }
+			svg { overflow:visible; }
+			.deep-grid { width:100%; height:100vh; display:grid; grid-template-columns:1.08fr 0.92fr; grid-template-rows:1fr 1fr; gap:14px; }
+			.qc { height:100%; border-radius:14px; padding:14px 16px 12px; display:flex; flex-direction:column; justify-content:space-between;
+			  background:linear-gradient(180deg,#0F1730 0%,#0A1020 100%); border:1px solid #1D2749; position:relative; overflow:hidden;
+			  box-shadow:0 10px 28px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05); transition:border-color .18s ease; }
+			.qc:hover { border-color:#2A3B66; }
+			.qc-hdr { display:flex; align-items:center; justify-content:flex-start; flex:0 0 auto; margin-bottom:8px; }
+			.qc-title { font-size:13px; font-weight:750; color:#F8FAFC; letter-spacing:-.15px; }
+			
+			/* Q1 Waterfall */
+			.wf-wrap { flex:1 1 auto; width:100%; display:flex; align-items:center; justify-content:center; }
+			.wl { font-size:11px; font-weight:800; font-variant-numeric:tabular-nums; }
+			.xl { font-size:10px; font-weight:600; fill:#94A3B8; }
+			.xs { font-size:8px; font-weight:600; fill:#64748B; font-style:italic; }
+			.wcl { stroke:#334155; stroke-dasharray:3 3; stroke-width:1; }
+			
+			/* Q2 Tornado */
+			.t-wrap { flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; gap:16px; padding:4px 6px; }
+			.t-row { display:flex; align-items:center; gap:12px; }
+			.t-lbl { flex:0 0 135px; font-size:11.5px; font-weight:700; color:#CBD5E1; }
+			.t-track { flex:1 1 auto; height:24px; border-radius:6px; background:#16213D; overflow:hidden; position:relative; box-shadow:inset 0 1px 3px rgba(0,0,0,.5); }
+			.t-bar { height:100%; border-radius:5px; transition:width .3s ease; }
+			.t-val { flex:0 0 65px; font-size:13px; font-weight:900; text-align:right; font-variant-numeric:tabular-nums; }
+			.t-foot { font-size:9.5px; color:#64748B; padding-top:6px; border-top:1px solid rgba(255,255,255,.05); display:flex; justify-content:space-between; }
+			
+			/* Q3 Heatmap */
+			.h-table { width:100%; border-collapse:separate; border-spacing:3px; flex:1 1 auto; }
+			.h-table th { font-size:9.5px; font-weight:750; color:#8B95B0; text-align:center; padding:4px 2px; text-transform:uppercase; letter-spacing:.4px; }
+			.h-table th.rh { text-align:left; font-size:9px; color:#94A3B8; white-space:nowrap; padding-right:6px; }
+			.h-table td { font-size:11px; font-weight:800; text-align:center; padding:7px 2px; border-radius:6px; font-variant-numeric:tabular-nums; border:1px solid rgba(255,255,255,.05); transition:transform .15s ease; color:#F8FAFC; }
+			.h-table td:hover { transform:scale(1.05); z-index:5; box-shadow:0 0 12px rgba(45,212,191,.6); border-color:#2DD4BF; }
+			.h-table td.act { border:2px solid #FBBF24 !important; box-shadow:0 0 14px rgba(251,191,36,.8) !important; position:relative; }
+			
+			/* Q4 Bullet */
+			.b-wrap { flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; gap:22px; padding:8px 8px; }
+			.b-row { display:flex; flex-direction:column; gap:6px; }
+			.b-info { display:flex; justify-content:space-between; align-items:center; }
+			.b-lbl { font-size:11.5px; font-weight:700; color:#94A3B8; }
+			.b-val { font-size:14px; font-weight:900; color:#E2E8F0; font-variant-numeric:tabular-nums; }
+			.b-track { width:100%; height:14px; border-radius:999px; background:#16213D; position:relative; box-shadow:inset 0 1px 3px rgba(0,0,0,.6); }
+			.b-fill { height:100%; border-radius:999px; }
+			.b-fill.base { background:linear-gradient(90deg,#334155,#64748B); }
+			.b-fill.scn { background:linear-gradient(90deg,#0D9488,#2DD4BF); box-shadow:0 0 14px rgba(45,212,191,.6); }
+			.b-tgt { position:absolute; top:-6px; bottom:-6px; width:3px; border-radius:2px; background:#FBBF24; box-shadow:0 0 10px #FBBF24; transform:translateX(-50%); z-index:3; }
+			.b-sub { display:flex; align-items:center; gap:8px; font-size:11px; padding-top:10px; border-top:1px solid rgba(255,255,255,.06); color:#94A3B8; }
+			.b-pip { width:3px; height:14px; border-radius:2px; background:#FBBF24; box-shadow:0 0 8px #FBBF24; }
+			</style>
+			
+			<div class='deep-grid'>
+			
+			  <!-- Q1: NET REVENUE BRIDGE (5 Levers: Base -> CVR Lift -> Cross-sell -> Refund Cut -> Scenario) -->
+			  <div class='qc'>
+			    <div class='qc-hdr'>
+			      <div class='qc-title'>Net revenue bridge: baseline &rarr; scenario</div>
+			    </div>
+			    <div class='wf-wrap'>
+			      <svg viewBox='0 0 540 282' width='100%' height='100%'>
+			        <defs>
+			          <linearGradient id='bGrad' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='#60A5FA'/><stop offset='100%' stop-color='#2563EB'/></linearGradient>
+			          <linearGradient id='gGrad' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='#34D399'/><stop offset='100%' stop-color='#059669'/></linearGradient>
+			          <linearGradient id='rGrad' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='#FB7185'/><stop offset='100%' stop-color='#E11D48'/></linearGradient>
+			          <linearGradient id='tGrad' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='#38BDF8'/><stop offset='100%' stop-color='#0284C7'/></linearGradient>
+			        </defs>
+			        <line x1='16' y1='245' x2='518' y2='245' stroke='#1E2A4D' stroke-width='1'/>
+			
+			        <!-- Bar 1: Base -->
+			        <rect x='28' y='" & y1 & "' width='64' height='" & h1 & "' rx='4' fill='url(#bGrad)'/>
+			        <text x='60' y='" & (y1 - 7) & "' text-anchor='middle' class='wl' fill='#93C5FD'>" & baseNetFmt & "</text>
+			        <line x1='92' y1='" & y1 & "' x2='132' y2='" & y1 & "' class='wcl'/>
+			
+			        <!-- Bar 2: CVR Lift -->
+			        <rect x='132' y='" & y2_top & "' width='64' height='" & h2 & "' rx='4' fill='url(#gGrad)'/>
+			        <text x='164' y='" & (y2_top - 7) & "' text-anchor='middle' class='wl' fill='#34D399'>" & cvrGainFmt & "</text>
+			        <line x1='196' y1='" & y2_top & "' x2='236' y2='" & y2_top & "' class='wcl'/>
+			
+			        <!-- Bar 3: Cross-sell Attach -->
+			        <rect x='236' y='" & y3_top & "' width='64' height='" & h3 & "' rx='4' fill='url(#gGrad)'/>
+			        <text x='268' y='" & (y3_top - 7) & "' text-anchor='middle' class='wl' fill='#34D399'>" & xsellGainFmt & "</text>
+			        <line x1='300' y1='" & y3_top & "' x2='340' y2='" & y3_top & "' class='wcl'/>
+			
+			        <!-- Bar 4: Refund Cut (Directly filtered by Refund Reduction slider) -->
+			        <rect x='340' y='" & y4_top & "' width='64' height='" & h4 & "' rx='4' fill='" & netRefGrad & "'/>
+			        <text x='372' y='" & (y4_top - 7) & "' text-anchor='middle' class='wl' fill='" & netRefColor & "'>" & netRefFmt & "</text>
+			        <line x1='404' y1='" & y4_next & "' x2='444' y2='" & y4_next & "' class='wcl'/>
+			
+			        <!-- Bar 5: Scenario -->
+			        <rect x='444' y='" & y5 & "' width='64' height='" & h5 & "' rx='4' fill='url(#tGrad)'/>
+			        <text x='476' y='" & (y5 - 7) & "' text-anchor='middle' class='wl' fill='#38BDF8'>" & scnNetFmt & "</text>
+			
+			        <!-- X Labels -->
+			        <text x='60' y='262' text-anchor='middle' class='xl'>Baseline</text>
+			        <text x='164' y='262' text-anchor='middle' class='xl'>CVR lift</text>
+			        <text x='268' y='262' text-anchor='middle' class='xl'>Cross-sell</text>
+			        <text x='372' y='262' text-anchor='middle' class='xl'>Refund cut</text>
+			        <text x='476' y='262' text-anchor='middle' class='xl'>Scenario</text>
+			        <text x='476' y='275' text-anchor='middle' class='xs'>axis truncated</text>
+			      </svg>
 			    </div>
 			  </div>
-			</body>
-			</html>"
-		displayFolder: 07 Page 5 - Retention
-		lineageTag: f407a1b2-3c4d-5e6f-7a8b-9c0d1e2f3a4b
+			
+			  <!-- Q2: LEVER IMPACT -->
+			  <div class='qc'>
+			    <div class='qc-hdr'>
+			      <div class='qc-title'>Lever impact</div>
+			    </div>
+			    <div class='t-wrap'>
+			      <div class='t-row'>
+			        <span class='t-lbl'>" & cvrLbl & "</span>
+			        <div class='t-track'><div class='t-bar' style='width:" & FORMAT(cvrBarPct, "0.0") & "%;background:linear-gradient(90deg,#059669,#10B981);box-shadow:0 0 12px rgba(16,185,129,.4)'></div></div>
+			        <span class='t-val' style='color:#10B981'>" & cvrValFmt & "</span>
+			      </div>
+			      <div class='t-row'>
+			        <span class='t-lbl'>" & xsellLbl & "</span>
+			        <div class='t-track'><div class='t-bar' style='width:" & FORMAT(xsellBarPct, "0.0") & "%;background:linear-gradient(90deg,#D97706,#F59E0B);box-shadow:0 0 12px rgba(245,158,11,.4)'></div></div>
+			        <span class='t-val' style='color:#F59E0B'>" & xsellValFmt & "</span>
+			      </div>
+			      <div class='t-row'>
+			        <span class='t-lbl'>" & refLbl & "</span>
+			        <div class='t-track'><div class='t-bar' style='width:" & FORMAT(refBarPct, "0.0") & "%;background:linear-gradient(90deg,#0D9488,#2DD4BF);box-shadow:0 0 12px rgba(45,212,191,.4)'></div></div>
+			        <span class='t-val' style='color:#2DD4BF'>" & refValFmt & "</span>
+			      </div>
+			    </div>
+			    <div class='t-foot'><span>Active slider net contribution</span><span>Net upside: " & totNetUpsideFmt & "</span></div>
+			  </div>
+			
+			  <!-- Q3: SENSITIVITY GRID -->
+			  <div class='qc'>
+			    <div class='qc-hdr'>
+			      <div class='qc-title'>Sensitivity grid: CVR lift &times; cross-sell uplift</div>
+			    </div>
+			    <table class='h-table'>
+			      <tr><th></th><th>CVR +0%</th><th>CVR +10%</th><th>CVR +20%</th><th>CVR +30%</th><th>CVR +40%</th></tr>
+			
+			      <!-- Row 0 -->
+			      <tr><th class='rh'>XSell +0pp</th>
+			        <td class='" & IF(actRow=0 && actCol=0, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g00/maxG)), "0.00") & ")'>" & IF(g00>=1000000, "$" & FORMAT(g00/1000000, "0.00") & "M", "$" & FORMAT(g00/1000, "0.0") & "K") & "</td>
+			        <td class='" & IF(actRow=0 && actCol=1, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g01/maxG)), "0.00") & ")'>" & IF(g01>=1000000, "$" & FORMAT(g01/1000000, "0.00") & "M", "$" & FORMAT(g01/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=0 && actCol=2, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g02/maxG)), "0.00") & ")'>" & IF(g02>=1000000, "$" & FORMAT(g02/1000000, "0.00") & "M", "$" & FORMAT(g02/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=0 && actCol=3, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g03/maxG)), "0.00") & ")'>" & IF(g03>=1000000, "$" & FORMAT(g03/1000000, "0.00") & "M", "$" & FORMAT(g03/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=0 && actCol=4, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g04/maxG)), "0.00") & ")'>" & IF(g04>=1000000, "$" & FORMAT(g04/1000000, "0.00") & "M", "$" & FORMAT(g04/1000, "#,0") & "K") & "</td>
+			      </tr>
+			
+			      <!-- Row 1 -->
+			      <tr><th class='rh'>XSell +5pp</th>
+			        <td class='" & IF(actRow=1 && actCol=0, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g10/maxG)), "0.00") & ")'>" & IF(g10>=1000000, "$" & FORMAT(g10/1000000, "0.00") & "M", "$" & FORMAT(g10/1000, "0.0") & "K") & "</td>
+			        <td class='" & IF(actRow=1 && actCol=1, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g11/maxG)), "0.00") & ")'>" & IF(g11>=1000000, "$" & FORMAT(g11/1000000, "0.00") & "M", "$" & FORMAT(g11/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=1 && actCol=2, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g12/maxG)), "0.00") & ")'>" & IF(g12>=1000000, "$" & FORMAT(g12/1000000, "0.00") & "M", "$" & FORMAT(g12/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=1 && actCol=3, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g13/maxG)), "0.00") & ")'>" & IF(g13>=1000000, "$" & FORMAT(g13/1000000, "0.00") & "M", "$" & FORMAT(g13/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=1 && actCol=4, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g14/maxG)), "0.00") & ")'>" & IF(g14>=1000000, "$" & FORMAT(g14/1000000, "0.00") & "M", "$" & FORMAT(g14/1000, "#,0") & "K") & "</td>
+			      </tr>
+			
+			      <!-- Row 2 -->
+			      <tr><th class='rh'>XSell +10pp</th>
+			        <td class='" & IF(actRow=2 && actCol=0, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g20/maxG)), "0.00") & ")'>" & IF(g20>=1000000, "$" & FORMAT(g20/1000000, "0.00") & "M", "$" & FORMAT(g20/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=2 && actCol=1, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g21/maxG)), "0.00") & ")'>" & IF(g21>=1000000, "$" & FORMAT(g21/1000000, "0.00") & "M", "$" & FORMAT(g21/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=2 && actCol=2, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g22/maxG)), "0.00") & ")'>" & IF(g22>=1000000, "$" & FORMAT(g22/1000000, "0.00") & "M", "$" & FORMAT(g22/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=2 && actCol=3, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g23/maxG)), "0.00") & ")'>" & IF(g23>=1000000, "$" & FORMAT(g23/1000000, "0.00") & "M", "$" & FORMAT(g23/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=2 && actCol=4, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g24/maxG)), "0.00") & ")'>" & IF(g24>=1000000, "$" & FORMAT(g24/1000000, "0.00") & "M", "$" & FORMAT(g24/1000, "0.00") & "M") & "</td>
+			      </tr>
+			
+			      <!-- Row 3 -->
+			      <tr><th class='rh'>XSell +15pp</th>
+			        <td class='" & IF(actRow=3 && actCol=0, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g30/maxG)), "0.00") & ")'>" & IF(g30>=1000000, "$" & FORMAT(g30/1000000, "0.00") & "M", "$" & FORMAT(g30/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=3 && actCol=1, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g31/maxG)), "0.00") & ")'>" & IF(g31>=1000000, "$" & FORMAT(g31/1000000, "0.00") & "M", "$" & FORMAT(g31/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=3 && actCol=2, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g32/maxG)), "0.00") & ")'>" & IF(g32>=1000000, "$" & FORMAT(g32/1000000, "0.00") & "M", "$" & FORMAT(g32/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=3 && actCol=3, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g33/maxG)), "0.00") & ")'>" & IF(g33>=1000000, "$" & FORMAT(g33/1000000, "0.00") & "M", "$" & FORMAT(g33/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=3 && actCol=4, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g34/maxG)), "0.00") & ")'>" & IF(g34>=1000000, "$" & FORMAT(g34/1000000, "0.00") & "M", "$" & FORMAT(g34/1000, "0.00") & "M") & "</td>
+			      </tr>
+			
+			      <!-- Row 4 -->
+			      <tr><th class='rh'>XSell +20pp</th>
+			        <td class='" & IF(actRow=4 && actCol=0, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g40/maxG)), "0.00") & ")'>" & IF(g40>=1000000, "$" & FORMAT(g40/1000000, "0.00") & "M", "$" & FORMAT(g40/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=4 && actCol=1, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g41/maxG)), "0.00") & ")'>" & IF(g41>=1000000, "$" & FORMAT(g41/1000000, "0.00") & "M", "$" & FORMAT(g41/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=4 && actCol=2, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g42/maxG)), "0.00") & ")'>" & IF(g42>=1000000, "$" & FORMAT(g42/1000000, "0.00") & "M", "$" & FORMAT(g42/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=4 && actCol=3, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g43/maxG)), "0.00") & ")'>" & IF(g43>=1000000, "$" & FORMAT(g43/1000000, "0.00") & "M", "$" & FORMAT(g43/1000, "#,0") & "K") & "</td>
+			        <td class='" & IF(actRow=4 && actCol=4, "act", "") & "' style='background:rgba(45,212,191," & FORMAT(MIN(0.85, MAX(0.10, g44/maxG)), "0.00") & ")'>" & IF(g44>=1000000, "$" & FORMAT(g44/1000000, "0.00") & "M", "$" & FORMAT(g44/1000, "0.00") & "M") & "</td>
+			      </tr>
+			    </table>
+			  </div>
+			
+			  <!-- Q4: SCENARIO CVR VS BENCHMARK -->
+			  <div class='qc'>
+			    <div class='qc-hdr'>
+			      <div class='qc-title'>Scenario CVR vs benchmark</div>
+			    </div>
+			    <div class='b-wrap'>
+			      <div class='b-row'>
+			        <div class='b-info'><span class='b-lbl'>Baseline CVR</span><b class='b-val'>" & baseCVRFmt & "</b></div>
+			        <div class='b-track'>
+			          <div class='b-fill base' style='width:" & FORMAT(baseCVRPct, "0.0") & "%'></div>
+			          <div class='b-tgt' style='left:" & FORMAT(tgtCVRPct, "0.0") & "%'></div>
+			        </div>
+			      </div>
+			      <div class='b-row'>
+			        <div class='b-info'><span class='b-lbl' style='color:#F8FAFC'>Scenario CVR</span><b class='b-val' style='color:#2DD4BF'>" & scnCVRFmt & "</b></div>
+			        <div class='b-track'>
+			          <div class='b-fill scn' style='width:" & FORMAT(scnCVRPct, "0.0") & "%'></div>
+			          <div class='b-tgt' style='left:" & FORMAT(tgtCVRPct, "0.0") & "%'></div>
+			        </div>
+			      </div>
+			    </div>
+			    <div class='b-sub'>
+			      <div class='b-pip'></div>
+			      <span><b style='color:#FBBF24'>" & tgtName & " " & tgtCVRFmt & "</b> &bull; <b style='color:" & tgtColor & "'>" & tgtDeltaFmt & " (" & (IF(tgtDiffBps >= 0, "+", "") & FORMAT(tgtDiffBps, "#,0") & " bps)") & "</b></span>
+			    </div>
+			  </div>
+			
+			</div>"
+		displayFolder: 09 Page 7 - What-If
+		lineageTag: c1d2e3f4-a5b6-4789-9012-345678909876
+
+	measure 'Header P1 HTML' =
+			VAR ch = SELECTEDVALUE(_Param_Story[ChapterName], "All 3 Years")
+			VAR isAll = (ch = "All 3 Years" || ISBLANK(ch))
+			
+			VAR rev = [Revenue (Chapter)]
+			VAR cvr = [Conversion Rate % (Chapter)]
+			VAR ords = [Orders (Chapter)]
+			VAR sess = [Sessions (Chapter)]
+			VAR aov = [AOV (Chapter)]
+			VAR margin = [Gross Margin % (Chapter)]
+			
+			VAR revStr = IF(rev >= 1000000, "$" & FORMAT(rev / 1000000, "0.00") & "M", "$" & FORMAT(rev / 1000, "#,0") & "K")
+			VAR cvrStr = FORMAT(cvr, "0.00%")
+			VAR ordsStr = FORMAT(ords, "#,0")
+			VAR sessStr = FORMAT(sess, "#,0")
+			VAR aovStr = FORMAT(aov, "$#,0.00")
+			VAR marginStr = FORMAT(margin, "0.0%")
+			
+			VAR ChapterPart =
+				IF(
+					NOT isAll,
+					" <span style='color:#475569'>&bull;</span> <span style='color:#FBBF24;font-weight:700'>" & ch & "</span>",
+					" <span style='color:#475569'>&bull;</span> <span style='color:#A78BFA;font-weight:700'>2012–2015</span>"
+				)
+			
+			VAR Headline = [Story Headline Text]
+			
+			RETURN
+			"<style>
+			  * { box-sizing: border-box; margin: 0; padding: 0; }
+			  html, body { width: 100%; height: 100%; overflow: hidden; background: transparent;
+			    font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, sans-serif; user-select: none; }
+			  .hdr-wrap { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 2px 4px; }
+			  .hdr-title { font-size: 22px; font-weight: 800; color: #F8FAFC; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 3px; }
+			  .hdr-sub { font-size: 11.5px; color: #8B95B0; font-weight: 500; }
+			</style>
+			<div class='hdr-wrap'>
+			  <div class='hdr-title'>Storyboard <span style='color:#475569'>&bull;</span> <span style='color:#2DD4BF;font-weight:800'>" & revStr & "</span> <span style='font-size:16px;font-weight:500;color:#94A3B8'>net rev</span> <span style='color:#475569'>&bull;</span> <span style='color:#38BDF8;font-weight:800'>" & cvrStr & "</span> <span style='font-size:16px;font-weight:500;color:#94A3B8'>CVR</span>" & ChapterPart & "</div>
+			  <div class='hdr-sub'>" & ordsStr & " orders (" & aovStr & " AOV) &bull; " & sessStr & " sessions &bull; " & marginStr & " margin &bull; " & Headline & "</div>
+			</div>"
+		displayFolder: 02 Page 1 - Storyboard
+		lineageTag: e1a2b3c4-5d6e-4789-9012-345678901201
 
 	column Dummy
 		lineageTag: 3ce5026e-32f8-4521-831e-9fe6f7d36d85

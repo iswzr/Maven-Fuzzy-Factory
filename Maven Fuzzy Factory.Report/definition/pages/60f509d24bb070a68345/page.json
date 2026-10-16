@@ -4,5 +4,17 @@
   "displayName": "3 · CRO Lab",
   "displayOption": "FitToPage",
   "height": 1080,
-  "width": 1920
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "3a4b5c6d7e8f901234b3",
+      "target": "4b5c6d7e8f901234a5b6",
+      "type": "DataFilter"
+    },
+    {
+      "source": "3a4b5c6d7e8f901234b3",
+      "target": "5c6d7e8f901234a5b6c7",
+      "type": "DataFilter"
+    }
+  ]
 }

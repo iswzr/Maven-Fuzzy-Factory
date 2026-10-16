@@ -1,19 +1,19 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "0ce495acc98a223a0998",
   "position": {
-    "x": 0,
+    "x": 7.5590551181102361,
     "y": 0,
-    "z": 0,
-    "height": 64.1891891891892,
-    "width": 814.18918918918928,
-    "tabOrder": 0
+    "z": 1000,
+    "height": 86.173228346456682,
+    "width": 938.83464566929126,
+    "tabOrder": 1000
   },
   "visual": {
-    "visualType": "cardVisual",
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
     "query": {
       "queryState": {
-        "Data": {
+        "content": {
           "projections": [
             {
               "field": {
@@ -23,46 +23,27 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Page Title P1"
+                  "Property": "Header P1 HTML"
                 }
               },
-              "queryRef": "_Measures.Page Title P1",
-              "nativeQueryRef": "Page Title P1"
+              "queryRef": "_Measures.Header P1 HTML",
+              "nativeQueryRef": "Header P1 HTML"
             }
           ]
         }
       }
     },
     "objects": {
-      "label": [
+      "compatibility": [
         {
           "properties": {
-            "show": {
+            "legacyRendering": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             }
-          },
-          "selector": {
-            "id": "default"
-          }
-        }
-      ],
-      "outline": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          },
-          "selector": {
-            "id": "default"
           }
         }
       ]
@@ -84,14 +65,23 @@
       "border": [
         {
           "properties": {
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#222934'"
-                    }
-                  }
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

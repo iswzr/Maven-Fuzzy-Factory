@@ -3,7 +3,7 @@ table _Param_CVR_Lift
 
 	column Value
 		dataType: double
-		formatString: 0.00%
+		formatString: +0%;-0%;0%
 		lineageTag: f27b38fe-2019-4faa-a62b-c89690e89c6e
 		summarizeBy: none
 		isNameInferred

@@ -1,0 +1,49 @@
+table _Param_BenchmarkTarget
+	lineageTag: f5a6b7c8-d9e0-4123-4567-890abcdef124
+
+	column ModeID
+		dataType: int64
+		formatString: 0
+		lineageTag: a2b3c4d5-e6f7-4890-1234-567890abcdef
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ModeID]
+
+	column ModeName
+		dataType: string
+		lineageTag: b3c4d5e6-f7a8-4901-2345-67890abcdef1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ModeName]
+		sortByColumn: ModeID
+
+	column 'CVR Target'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: c4d5e6f7-a8b9-4012-3456-7890abcdef12
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CVR Target]
+
+	column 'AOV Target'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: d5e6f7a8-b9c0-4123-4567-890abcdef123
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [AOV Target]
+
+	partition _Param_BenchmarkTarget = calculated
+		mode: import
+		source =
+				DATATABLE(
+					"ModeID", INTEGER, "ModeName", STRING, "CVR Target", DOUBLE, "AOV Target", DOUBLE,
+					{
+						{1, "Company budget", 0.075, 62.0},
+						{2, "Prior year", 0.0722, 55.0},
+						{3, "Industry DTC", 0.050, 55.0}
+					}
+				)
+
+	annotation PBI_Id = 8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e
+

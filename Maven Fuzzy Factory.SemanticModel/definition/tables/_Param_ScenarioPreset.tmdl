@@ -1,0 +1,58 @@
+table _Param_ScenarioPreset
+	lineageTag: e4f5a6b7-c8d9-4012-34ef-567890abcdef
+
+	column PresetID
+		dataType: int64
+		formatString: 0
+		lineageTag: a1b2c3d4-e5f6-4789-0123-456789abcdef
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [PresetID]
+
+	column Preset
+		dataType: string
+		lineageTag: b2c3d4e5-f6a7-4890-1234-567890abcdef
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Preset]
+		sortByColumn: PresetID
+
+	column 'CVR Lift'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: c3d4e5f6-a7b8-4901-2345-67890abcdef1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CVR Lift]
+
+	column 'XSell Uplift'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: d4e5f6a7-b8c9-4012-3456-7890abcdef12
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [XSell Uplift]
+
+	column 'Refund Reduction'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: e5f6a7b8-c9d0-4123-4567-890abcdef123
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Refund Reduction]
+
+	partition _Param_ScenarioPreset = calculated
+		mode: import
+		source =
+				DATATABLE(
+					"PresetID", INTEGER, "Preset", STRING, "CVR Lift", DOUBLE, "XSell Uplift", DOUBLE, "Refund Reduction", DOUBLE,
+					{
+						{0, "Custom sliders", 0.00, 0.00, 0.00},
+						{1, "Conservative", 0.05, 0.03, 0.10},
+						{2, "Base", 0.10, 0.08, 0.20},
+						{3, "Stretch", 0.20, 0.15, 0.35}
+					}
+				)
+
+	annotation PBI_Id = 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d
+

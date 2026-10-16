@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "e5f6a7b8c9012345a6b7",
   "position": {
-    "x": 10.574628235726086,
-    "y": 179.76868000734348,
+    "x": 10.052356020942408,
+    "y": 168.01795063575167,
     "z": 2000,
-    "height": 145.92986965302,
-    "width": 1899.2032311364053,
+    "height": 130.68062827225131,
+    "width": 1899.895287958115,
     "tabOrder": 2000
   },
   "visual": {
@@ -82,6 +82,26 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
                 }
               }
             }

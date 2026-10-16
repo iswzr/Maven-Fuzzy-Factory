@@ -3,7 +3,7 @@ table _Param_Refund_Cut
 
 	column Value
 		dataType: double
-		formatString: 0.00%
+		formatString: +0%;-0%;0%
 		lineageTag: 0b15cb43-8d3c-4418-9bcb-b38537dcc65f
 		summarizeBy: none
 		isNameInferred
@@ -11,7 +11,7 @@ table _Param_Refund_Cut
 
 	partition _Param_Refund_Cut = calculated
 		mode: import
-		source = GENERATESERIES(-0.50, 0.00, 0.01)
+		source = GENERATESERIES(0.00, 0.50, 0.01)
 
 	annotation PBI_Id = dab63cef-4af0-456c-942b-7da22cc8c170
 

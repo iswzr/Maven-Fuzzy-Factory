@@ -1,0 +1,32 @@
+table _Dim_MarginBridge
+	lineageTag: b1c2d3e4-5f6a-7b8c-9d0e-1f2a3b4c5d6e
+
+	column StepID
+		dataType: int64
+		formatString: 0
+		lineageTag: c2d3e4f5-6a7b-8c9d-0e1f-2a3b4c5d6e7f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [StepID]
+
+	column Step
+		dataType: string
+		lineageTag: d3e4f5a6-7b8c-9d0e-1f2a-3b4c5d6e7f8a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step]
+		sortByColumn: StepID
+
+	column Type
+		dataType: string
+		lineageTag: e4f5a6b7-8c9d-0e1f-2a3b-4c5d6e7f8a9b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Type]
+
+	partition _Dim_MarginBridge = calculated
+		mode: import
+		source = DATATABLE("StepID", INTEGER, "Step", STRING, "Type", STRING, { {1, "Gross rev", "Pillar"}, {2, "COGS", "Deduction"}, {3, "Gross profit", "Subtotal"}, {4, "Refunds", "Deduction"}, {5, "Net profit", "Pillar"} })
+
+	annotation PBI_Id = a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+

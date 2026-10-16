@@ -3,7 +3,7 @@ table _Param_Attach
 
 	column Value
 		dataType: double
-		formatString: 0.00%
+		formatString: +0 "pp";-0 "pp";0 "pp"
 		lineageTag: 16ce1e9a-adac-4e63-b25f-812e17cb3bd7
 		summarizeBy: none
 		isNameInferred

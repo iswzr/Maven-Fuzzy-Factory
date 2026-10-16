@@ -4,5 +4,22 @@
   "displayName": "4 · Products",
   "displayOption": "FitToPage",
   "height": 1080,
-  "width": 1920
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "6b7c8d9e0f1a2345b6c7",
+      "target": "3c4d5e6f7a8b901234cd",
+      "type": "DataFilter"
+    },
+    {
+      "source": "6b7c8d9e0f1a2345b6c7",
+      "target": "becac8f6f20dde4ab354",
+      "type": "DataFilter"
+    },
+    {
+      "source": "6b7c8d9e0f1a2345b6c7",
+      "target": "5f6a7b8c9d0e1234f5a6",
+      "type": "DataFilter"
+    }
+  ]
 }

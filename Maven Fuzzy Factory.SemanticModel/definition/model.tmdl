@@ -45,6 +45,13 @@ ref table _Dim_BillingVariant
 ref table Dim_OrderFrequency
 ref table Dim_TimeToReturn
 ref table Cohort_Heatmap
+ref table _Param_DateBasis
+ref table _Dim_MarginBridge
+ref table _Param_ScenarioPreset
+ref table _Param_BenchmarkTarget
+ref table _Param_CVR_Tuning
+ref table _Param_Attach_Tuning
+ref table _Param_Refund_Tuning
 
 ref cultureInfo en-US
 

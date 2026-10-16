@@ -1,0 +1,46 @@
+table _Param_Refund_Tuning
+	lineageTag: e1a2b3c4-d5e6-4789-0123-abcdef123458
+
+	column SortOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: e2b3c4d5-e6f7-4890-1234-bcdef1234569
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+	column Label
+		dataType: string
+		lineageTag: e3c4d5e6-f7a8-4901-2345-cdef12345680
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Label]
+		sortByColumn: SortOrder
+
+	column Value
+		dataType: double
+		formatString: +0%;-0%;0%
+		lineageTag: e4d5e6f7-a8b9-4012-3456-def123456791
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Param_Refund_Tuning = calculated
+		mode: import
+		source =
+				DATATABLE(
+					"SortOrder", INTEGER, "Label", STRING, "Value", DOUBLE,
+					{
+						{1, "0%", 0.00},
+						{2, "+5%", 0.05},
+						{3, "+10%", 0.10},
+						{4, "+15%", 0.15},
+						{5, "+20%", 0.20},
+						{6, "+25%", 0.25},
+						{7, "+30%", 0.30},
+						{8, "+35%", 0.35}
+					}
+				)
+
+	annotation PBI_Id = a1b2c3d4-e5f6-4789-0123-456789ref001
+
