@@ -68,8 +68,7 @@ table order_item_refunds
 		source =
 				let
 				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
-			LocalDataPath = if Text.EndsWith(LocalPath, "data\") or Text.EndsWith(LocalPath, "data/") then LocalPath else LocalPath & "data\",
-				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/data/order_item_refunds.csv") else File.Contents(LocalDataPath & "order_item_refunds.csv"),
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/data/order_item_refunds.csv") else File.Contents(LocalPath & "data\order_item_refunds.csv"),
 				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"order_item_refund_id", Int64.Type}, {"created_at", type datetime}, {"order_item_id", Int64.Type}, {"order_id", Int64.Type}, {"refund_amount_usd", type number}}),

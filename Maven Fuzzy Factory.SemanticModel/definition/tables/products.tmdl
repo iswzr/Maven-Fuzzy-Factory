@@ -69,8 +69,7 @@ table products
 		source =
 				let
 				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
-			LocalDataPath = if Text.EndsWith(LocalPath, "data\") or Text.EndsWith(LocalPath, "data/") then LocalPath else LocalPath & "data\",
-				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/data/products.csv") else File.Contents(LocalDataPath & "products.csv"),
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/data/products.csv") else File.Contents(LocalPath & "data\products.csv"),
 				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 3, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"product_id", Int64.Type}, {"created_at", type datetime}, {"product_name", type text}}),

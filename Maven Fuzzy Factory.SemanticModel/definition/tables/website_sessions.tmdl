@@ -213,8 +213,7 @@ table website_sessions
 		source =
 				let
 				  LocalPath = if Text.EndsWith(LocalFolderPath, "\") or Text.EndsWith(LocalFolderPath, "/") then LocalFolderPath else LocalFolderPath & "\",
-			LocalDataPath = if Text.EndsWith(LocalPath, "data\") or Text.EndsWith(LocalPath, "data/") then LocalPath else LocalPath & "data\",
-				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/data/website_sessions.csv") else File.Contents(LocalDataPath & "website_sessions.csv"),
+				  SourceBinary = if DataSourceType = "GitHub" then Web.Contents("https://raw.githubusercontent.com/iswzr/Maven-Fuzzy-Factory/main/data/website_sessions.csv") else File.Contents(LocalPath & "data\website_sessions.csv"),
 				  Source = Csv.Document(SourceBinary, [Delimiter = ",", Columns = 9, QuoteStyle = QuoteStyle.None]),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"website_session_id", Int64.Type}, {"created_at", type datetime}, {"user_id", Int64.Type}, {"is_repeat_session", Int64.Type}, {"utm_source", type text}, {"utm_campaign", type text}, {"utm_content", type text}, {"device_type", type text}, {"http_referer", type text}}),
